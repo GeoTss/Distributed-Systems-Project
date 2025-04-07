@@ -1,0 +1,29 @@
+{
+  "StoreName": "Wild Pit",
+  "Latitude": 2.106601,
+  "Longitude": 81.461452,
+  "FoodCategory": "sushi",
+  "Stars": 4.8,
+  "NoOfVotes": 329,
+  "StoreLogo": "/images/wild_pit_logo.png",
+  "Products": [
+    {
+      "ProductName": "California Roll",
+      "ProductType": "sushi",
+      "Available Amount": 555,
+      "Price": 6.08
+    },
+    {
+      "ProductName": "Spicy Tuna Roll",
+      "ProductType": "sushi",
+      "Available Amount": 174,
+      "Price": 4.07
+    },
+    {
+      "ProductName": "Salmon Nigiri",
+      "ProductType": "sushi",
+      "Available Amount": 408,
+      "Price": 13.66
+    }
+  ]
+}

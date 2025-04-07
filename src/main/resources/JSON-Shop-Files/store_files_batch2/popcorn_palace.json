@@ -1,0 +1,29 @@
+{
+  "StoreName": "Popcorn Palace",
+  "Latitude": -55.177073,
+  "Longitude": 139.042241,
+  "FoodCategory": "coffee",
+  "Stars": 4.9,
+  "NoOfVotes": 348,
+  "StoreLogo": "/images/popcorn_palace_logo.png",
+  "Products": [
+    {
+      "ProductName": "Iced Latte",
+      "ProductType": "coffee",
+      "Available Amount": 280,
+      "Price": 2.03
+    },
+    {
+      "ProductName": "Espresso",
+      "ProductType": "coffee",
+      "Available Amount": 487,
+      "Price": 9.0
+    },
+    {
+      "ProductName": "Cappuccino",
+      "ProductType": "coffee",
+      "Available Amount": 652,
+      "Price": 11.45
+    }
+  ]
+}

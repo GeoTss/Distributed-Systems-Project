@@ -1,0 +1,29 @@
+{
+  "StoreName": "Savory Bite",
+  "Latitude": 51.493884,
+  "Longitude": -176.784515,
+  "FoodCategory": "coffee",
+  "Stars": 3.8,
+  "NoOfVotes": 369,
+  "StoreLogo": "/images/savory_bite_logo.png",
+  "Products": [
+    {
+      "ProductName": "Espresso",
+      "ProductType": "coffee",
+      "Available Amount": 304,
+      "Price": 6.01
+    },
+    {
+      "ProductName": "Iced Latte",
+      "ProductType": "coffee",
+      "Available Amount": 666,
+      "Price": 6.65
+    },
+    {
+      "ProductName": "Cappuccino",
+      "ProductType": "coffee",
+      "Available Amount": 192,
+      "Price": 14.0
+    }
+  ]
+}

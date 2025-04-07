@@ -1,0 +1,29 @@
+{
+  "StoreName": "Juicy Corner",
+  "Latitude": -56.473163,
+  "Longitude": -64.950618,
+  "FoodCategory": "coffee",
+  "Stars": 4.3,
+  "NoOfVotes": 269,
+  "StoreLogo": "/images/juicy_corner_logo.png",
+  "Products": [
+    {
+      "ProductName": "Iced Latte",
+      "ProductType": "coffee",
+      "Available Amount": 542,
+      "Price": 12.08
+    },
+    {
+      "ProductName": "Espresso",
+      "ProductType": "coffee",
+      "Available Amount": 504,
+      "Price": 13.27
+    },
+    {
+      "ProductName": "Cappuccino",
+      "ProductType": "coffee",
+      "Available Amount": 647,
+      "Price": 2.5
+    }
+  ]
+}

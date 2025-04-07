@@ -1,0 +1,29 @@
+{
+  "StoreName": "Juicy Platter",
+  "Latitude": -55.012309,
+  "Longitude": 57.756672,
+  "FoodCategory": "salad",
+  "Stars": 4.6,
+  "NoOfVotes": 444,
+  "StoreLogo": "/images/juicy_platter_logo.png",
+  "Products": [
+    {
+      "ProductName": "Quinoa Salad",
+      "ProductType": "salad",
+      "Available Amount": 990,
+      "Price": 14.1
+    },
+    {
+      "ProductName": "Greek Salad",
+      "ProductType": "salad",
+      "Available Amount": 447,
+      "Price": 10.68
+    },
+    {
+      "ProductName": "Caesar Salad",
+      "ProductType": "salad",
+      "Available Amount": 807,
+      "Price": 14.85
+    }
+  ]
+}

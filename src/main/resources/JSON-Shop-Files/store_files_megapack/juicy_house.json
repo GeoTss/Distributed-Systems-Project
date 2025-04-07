@@ -1,0 +1,29 @@
+{
+  "StoreName": "Juicy House",
+  "Latitude": 68.259504,
+  "Longitude": -2.622504,
+  "FoodCategory": "bbq",
+  "Stars": 4.6,
+  "NoOfVotes": 51,
+  "StoreLogo": "/images/juicy_house_logo.png",
+  "Products": [
+    {
+      "ProductName": "BBQ Ribs",
+      "ProductType": "bbq",
+      "Available Amount": 903,
+      "Price": 14.15
+    },
+    {
+      "ProductName": "Brisket Plate",
+      "ProductType": "bbq",
+      "Available Amount": 784,
+      "Price": 12.92
+    },
+    {
+      "ProductName": "Pulled Pork Sandwich",
+      "ProductType": "bbq",
+      "Available Amount": 265,
+      "Price": 11.76
+    }
+  ]
+}

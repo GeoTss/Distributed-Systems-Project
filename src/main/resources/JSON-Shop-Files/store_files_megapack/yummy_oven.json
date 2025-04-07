@@ -1,0 +1,29 @@
+{
+  "StoreName": "Yummy Oven",
+  "Latitude": -13.432191,
+  "Longitude": 71.009126,
+  "FoodCategory": "coffee",
+  "Stars": 2.6,
+  "NoOfVotes": 34,
+  "StoreLogo": "/images/yummy_oven_logo.png",
+  "Products": [
+    {
+      "ProductName": "Espresso",
+      "ProductType": "coffee",
+      "Available Amount": 688,
+      "Price": 8.21
+    },
+    {
+      "ProductName": "Iced Latte",
+      "ProductType": "coffee",
+      "Available Amount": 735,
+      "Price": 10.52
+    },
+    {
+      "ProductName": "Cappuccino",
+      "ProductType": "coffee",
+      "Available Amount": 496,
+      "Price": 12.92
+    }
+  ]
+}

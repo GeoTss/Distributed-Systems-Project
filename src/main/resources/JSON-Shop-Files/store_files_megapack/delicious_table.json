@@ -1,0 +1,29 @@
+{
+  "StoreName": "Delicious Table",
+  "Latitude": 16.481454,
+  "Longitude": -134.743051,
+  "FoodCategory": "bbq",
+  "Stars": 3.5,
+  "NoOfVotes": 299,
+  "StoreLogo": "/images/delicious_table_logo.png",
+  "Products": [
+    {
+      "ProductName": "Pulled Pork Sandwich",
+      "ProductType": "bbq",
+      "Available Amount": 284,
+      "Price": 8.24
+    },
+    {
+      "ProductName": "Brisket Plate",
+      "ProductType": "bbq",
+      "Available Amount": 228,
+      "Price": 7.77
+    },
+    {
+      "ProductName": "BBQ Ribs",
+      "ProductType": "bbq",
+      "Available Amount": 429,
+      "Price": 3.92
+    }
+  ]
+}

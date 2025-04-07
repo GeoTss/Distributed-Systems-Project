@@ -1,0 +1,29 @@
+{
+  "StoreName": "Sushi Express",
+  "Latitude": -32.907865,
+  "Longitude": -64.490442,
+  "FoodCategory": "pizza",
+  "Stars": 4.9,
+  "NoOfVotes": 256,
+  "StoreLogo": "/images/sushi_express_logo.png",
+  "Products": [
+    {
+      "ProductName": "Pepperoni Pizza",
+      "ProductType": "pizza",
+      "Available Amount": 862,
+      "Price": 13.65
+    },
+    {
+      "ProductName": "Margherita Pizza",
+      "ProductType": "pizza",
+      "Available Amount": 761,
+      "Price": 10.27
+    },
+    {
+      "ProductName": "BBQ Chicken Pizza",
+      "ProductType": "pizza",
+      "Available Amount": 376,
+      "Price": 4.8
+    }
+  ]
+}

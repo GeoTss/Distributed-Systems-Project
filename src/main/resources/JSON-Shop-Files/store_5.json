@@ -1,0 +1,29 @@
+{
+  "StoreName": "Kebab Kingdom",
+  "Latitude": -10.331576,
+  "Longitude": -2.8289,
+  "FoodCategory": "burger",
+  "Stars": 4.9,
+  "NoOfVotes": 344,
+  "StoreLogo": "/images/kebab_kingdom_logo.png",
+  "Products": [
+    {
+      "ProductName": "Bacon Double Cheeseburger",
+      "ProductType": "burger",
+      "Available Amount": 134,
+      "Price": 10.06
+    },
+    {
+      "ProductName": "Classic Burger",
+      "ProductType": "burger",
+      "Available Amount": 678,
+      "Price": 4.53
+    },
+    {
+      "ProductName": "Veggie Burger",
+      "ProductType": "burger",
+      "Available Amount": 417,
+      "Price": 14.07
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "StoreName": "Naan Nook",
+  "Latitude": 66.710387,
+  "Longitude": -52.128445,
+  "FoodCategory": "vegan",
+  "Stars": 3.1,
+  "NoOfVotes": 247,
+  "StoreLogo": "/images/naan_nook_logo.png",
+  "Products": [
+    {
+      "ProductName": "Vegan Bowl",
+      "ProductType": "vegan",
+      "Available Amount": 193,
+      "Price": 12.19
+    },
+    {
+      "ProductName": "Vegan Burger",
+      "ProductType": "vegan",
+      "Available Amount": 465,
+      "Price": 11.82
+    },
+    {
+      "ProductName": "Tofu Salad",
+      "ProductType": "vegan",
+      "Available Amount": 550,
+      "Price": 13.12
+    }
+  ]
+}

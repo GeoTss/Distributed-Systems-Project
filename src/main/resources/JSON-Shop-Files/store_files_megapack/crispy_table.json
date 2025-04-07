@@ -1,0 +1,29 @@
+{
+  "StoreName": "Crispy Table",
+  "Latitude": 22.912933,
+  "Longitude": 112.338879,
+  "FoodCategory": "vegan",
+  "Stars": 4.8,
+  "NoOfVotes": 149,
+  "StoreLogo": "/images/crispy_table_logo.png",
+  "Products": [
+    {
+      "ProductName": "Vegan Burger",
+      "ProductType": "vegan",
+      "Available Amount": 409,
+      "Price": 9.68
+    },
+    {
+      "ProductName": "Vegan Bowl",
+      "ProductType": "vegan",
+      "Available Amount": 655,
+      "Price": 4.66
+    },
+    {
+      "ProductName": "Tofu Salad",
+      "ProductType": "vegan",
+      "Available Amount": 815,
+      "Price": 7.63
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "StoreName": "Heavenly Platter",
+  "Latitude": -27.132984,
+  "Longitude": -50.490997,
+  "FoodCategory": "dessert",
+  "Stars": 3.7,
+  "NoOfVotes": 157,
+  "StoreLogo": "/images/heavenly_platter_logo.png",
+  "Products": [
+    {
+      "ProductName": "Ice Cream Sundae",
+      "ProductType": "dessert",
+      "Available Amount": 315,
+      "Price": 8.35
+    },
+    {
+      "ProductName": "Chocolate Cake",
+      "ProductType": "dessert",
+      "Available Amount": 171,
+      "Price": 4.15
+    },
+    {
+      "ProductName": "Fruit Tart",
+      "ProductType": "dessert",
+      "Available Amount": 298,
+      "Price": 4.44
+    }
+  ]
+}

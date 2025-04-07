@@ -1,0 +1,29 @@
+{
+  "StoreName": "Buttery Spoon",
+  "Latitude": -36.6652,
+  "Longitude": 104.283631,
+  "FoodCategory": "vegan",
+  "Stars": 3.0,
+  "NoOfVotes": 399,
+  "StoreLogo": "/images/buttery_spoon_logo.png",
+  "Products": [
+    {
+      "ProductName": "Vegan Burger",
+      "ProductType": "vegan",
+      "Available Amount": 675,
+      "Price": 7.35
+    },
+    {
+      "ProductName": "Tofu Salad",
+      "ProductType": "vegan",
+      "Available Amount": 712,
+      "Price": 10.72
+    },
+    {
+      "ProductName": "Vegan Bowl",
+      "ProductType": "vegan",
+      "Available Amount": 770,
+      "Price": 3.85
+    }
+  ]
+}

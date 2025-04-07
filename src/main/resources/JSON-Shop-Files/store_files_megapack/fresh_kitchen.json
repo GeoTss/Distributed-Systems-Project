@@ -1,0 +1,29 @@
+{
+  "StoreName": "Fresh Kitchen",
+  "Latitude": 30.204667,
+  "Longitude": -111.316911,
+  "FoodCategory": "pizza",
+  "Stars": 4.9,
+  "NoOfVotes": 105,
+  "StoreLogo": "/images/fresh_kitchen_logo.png",
+  "Products": [
+    {
+      "ProductName": "BBQ Chicken Pizza",
+      "ProductType": "pizza",
+      "Available Amount": 315,
+      "Price": 8.91
+    },
+    {
+      "ProductName": "Pepperoni Pizza",
+      "ProductType": "pizza",
+      "Available Amount": 142,
+      "Price": 11.72
+    },
+    {
+      "ProductName": "Margherita Pizza",
+      "ProductType": "pizza",
+      "Available Amount": 578,
+      "Price": 12.46
+    }
+  ]
+}

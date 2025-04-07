@@ -1,0 +1,29 @@
+{
+  "StoreName": "Buttery Pit",
+  "Latitude": -21.298457,
+  "Longitude": -150.038705,
+  "FoodCategory": "kebab",
+  "Stars": 3.5,
+  "NoOfVotes": 387,
+  "StoreLogo": "/images/buttery_pit_logo.png",
+  "Products": [
+    {
+      "ProductName": "Chicken Kebab",
+      "ProductType": "kebab",
+      "Available Amount": 672,
+      "Price": 6.7
+    },
+    {
+      "ProductName": "Falafel Wrap",
+      "ProductType": "kebab",
+      "Available Amount": 162,
+      "Price": 6.61
+    },
+    {
+      "ProductName": "Lamb Shawarma",
+      "ProductType": "kebab",
+      "Available Amount": 633,
+      "Price": 12.64
+    }
+  ]
+}

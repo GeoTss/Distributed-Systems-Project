@@ -1,0 +1,29 @@
+{
+  "StoreName": "Crispy Platter",
+  "Latitude": -18.841914,
+  "Longitude": 13.454918,
+  "FoodCategory": "bbq",
+  "Stars": 4.0,
+  "NoOfVotes": 123,
+  "StoreLogo": "/images/crispy_platter_logo.png",
+  "Products": [
+    {
+      "ProductName": "Brisket Plate",
+      "ProductType": "bbq",
+      "Available Amount": 456,
+      "Price": 14.1
+    },
+    {
+      "ProductName": "BBQ Ribs",
+      "ProductType": "bbq",
+      "Available Amount": 454,
+      "Price": 5.07
+    },
+    {
+      "ProductName": "Pulled Pork Sandwich",
+      "ProductType": "bbq",
+      "Available Amount": 869,
+      "Price": 9.26
+    }
+  ]
+}

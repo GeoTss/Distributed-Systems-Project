@@ -1,0 +1,29 @@
+{
+  "StoreName": "Curry Corner",
+  "Latitude": -29.5362,
+  "Longitude": -160.600307,
+  "FoodCategory": "pasta",
+  "Stars": 3.9,
+  "NoOfVotes": 43,
+  "StoreLogo": "/images/curry_corner_logo.png",
+  "Products": [
+    {
+      "ProductName": "Penne Alfredo",
+      "ProductType": "pasta",
+      "Available Amount": 910,
+      "Price": 14.11
+    },
+    {
+      "ProductName": "Spaghetti Bolognese",
+      "ProductType": "pasta",
+      "Available Amount": 981,
+      "Price": 12.6
+    },
+    {
+      "ProductName": "Lasagna",
+      "ProductType": "pasta",
+      "Available Amount": 644,
+      "Price": 7.28
+    }
+  ]
+}

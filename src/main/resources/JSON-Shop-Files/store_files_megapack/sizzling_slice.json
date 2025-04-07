@@ -1,0 +1,29 @@
+{
+  "StoreName": "Sizzling Slice",
+  "Latitude": -78.342455,
+  "Longitude": 75.522325,
+  "FoodCategory": "salad",
+  "Stars": 3.3,
+  "NoOfVotes": 459,
+  "StoreLogo": "/images/sizzling_slice_logo.png",
+  "Products": [
+    {
+      "ProductName": "Quinoa Salad",
+      "ProductType": "salad",
+      "Available Amount": 507,
+      "Price": 14.88
+    },
+    {
+      "ProductName": "Caesar Salad",
+      "ProductType": "salad",
+      "Available Amount": 760,
+      "Price": 10.61
+    },
+    {
+      "ProductName": "Greek Salad",
+      "ProductType": "salad",
+      "Available Amount": 383,
+      "Price": 7.63
+    }
+  ]
+}

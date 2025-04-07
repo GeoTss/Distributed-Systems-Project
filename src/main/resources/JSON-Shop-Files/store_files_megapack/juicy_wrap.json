@@ -1,0 +1,29 @@
+{
+  "StoreName": "Juicy Wrap",
+  "Latitude": 55.858531,
+  "Longitude": -14.575856,
+  "FoodCategory": "pasta",
+  "Stars": 4.8,
+  "NoOfVotes": 38,
+  "StoreLogo": "/images/juicy_wrap_logo.png",
+  "Products": [
+    {
+      "ProductName": "Lasagna",
+      "ProductType": "pasta",
+      "Available Amount": 435,
+      "Price": 3.48
+    },
+    {
+      "ProductName": "Spaghetti Bolognese",
+      "ProductType": "pasta",
+      "Available Amount": 694,
+      "Price": 9.91
+    },
+    {
+      "ProductName": "Penne Alfredo",
+      "ProductType": "pasta",
+      "Available Amount": 724,
+      "Price": 9.8
+    }
+  ]
+}

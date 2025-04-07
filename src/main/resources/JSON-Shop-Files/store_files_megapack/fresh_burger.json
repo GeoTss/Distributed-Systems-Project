@@ -1,0 +1,29 @@
+{
+  "StoreName": "Fresh Burger",
+  "Latitude": -16.627932,
+  "Longitude": 174.025806,
+  "FoodCategory": "burger",
+  "Stars": 4.9,
+  "NoOfVotes": 259,
+  "StoreLogo": "/images/fresh_burger_logo.png",
+  "Products": [
+    {
+      "ProductName": "Classic Burger",
+      "ProductType": "burger",
+      "Available Amount": 514,
+      "Price": 10.72
+    },
+    {
+      "ProductName": "Bacon Double Cheeseburger",
+      "ProductType": "burger",
+      "Available Amount": 103,
+      "Price": 3.49
+    },
+    {
+      "ProductName": "Veggie Burger",
+      "ProductType": "burger",
+      "Available Amount": 826,
+      "Price": 6.77
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "StoreName": "Buttery Slice",
+  "Latitude": -18.222649,
+  "Longitude": 27.045876,
+  "FoodCategory": "pasta",
+  "Stars": 4.6,
+  "NoOfVotes": 70,
+  "StoreLogo": "/images/buttery_slice_logo.png",
+  "Products": [
+    {
+      "ProductName": "Penne Alfredo",
+      "ProductType": "pasta",
+      "Available Amount": 818,
+      "Price": 11.87
+    },
+    {
+      "ProductName": "Spaghetti Bolognese",
+      "ProductType": "pasta",
+      "Available Amount": 318,
+      "Price": 10.64
+    },
+    {
+      "ProductName": "Lasagna",
+      "ProductType": "pasta",
+      "Available Amount": 334,
+      "Price": 7.39
+    }
+  ]
+}

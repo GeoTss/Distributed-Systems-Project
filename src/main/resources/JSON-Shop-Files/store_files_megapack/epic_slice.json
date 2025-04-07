@@ -1,0 +1,29 @@
+{
+  "StoreName": "Epic Slice",
+  "Latitude": -61.051122,
+  "Longitude": -172.453215,
+  "FoodCategory": "burger",
+  "Stars": 3.4,
+  "NoOfVotes": 298,
+  "StoreLogo": "/images/epic_slice_logo.png",
+  "Products": [
+    {
+      "ProductName": "Classic Burger",
+      "ProductType": "burger",
+      "Available Amount": 131,
+      "Price": 8.61
+    },
+    {
+      "ProductName": "Bacon Double Cheeseburger",
+      "ProductType": "burger",
+      "Available Amount": 686,
+      "Price": 9.98
+    },
+    {
+      "ProductName": "Veggie Burger",
+      "ProductType": "burger",
+      "Available Amount": 118,
+      "Price": 3.86
+    }
+  ]
+}

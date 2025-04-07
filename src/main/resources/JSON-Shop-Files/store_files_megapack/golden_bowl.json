@@ -1,0 +1,29 @@
+{
+  "StoreName": "Golden Bowl",
+  "Latitude": 80.625847,
+  "Longitude": -164.851532,
+  "FoodCategory": "kebab",
+  "Stars": 2.7,
+  "NoOfVotes": 317,
+  "StoreLogo": "/images/golden_bowl_logo.png",
+  "Products": [
+    {
+      "ProductName": "Chicken Kebab",
+      "ProductType": "kebab",
+      "Available Amount": 993,
+      "Price": 13.54
+    },
+    {
+      "ProductName": "Falafel Wrap",
+      "ProductType": "kebab",
+      "Available Amount": 337,
+      "Price": 2.49
+    },
+    {
+      "ProductName": "Lamb Shawarma",
+      "ProductType": "kebab",
+      "Available Amount": 514,
+      "Price": 14.98
+    }
+  ]
+}

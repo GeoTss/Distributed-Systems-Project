@@ -1,0 +1,29 @@
+{
+  "StoreName": "Crispy Cup",
+  "Latitude": -74.161596,
+  "Longitude": -95.381852,
+  "FoodCategory": "salad",
+  "Stars": 4.4,
+  "NoOfVotes": 384,
+  "StoreLogo": "/images/crispy_cup_logo.png",
+  "Products": [
+    {
+      "ProductName": "Greek Salad",
+      "ProductType": "salad",
+      "Available Amount": 975,
+      "Price": 7.92
+    },
+    {
+      "ProductName": "Quinoa Salad",
+      "ProductType": "salad",
+      "Available Amount": 986,
+      "Price": 8.67
+    },
+    {
+      "ProductName": "Caesar Salad",
+      "ProductType": "salad",
+      "Available Amount": 593,
+      "Price": 13.64
+    }
+  ]
+}

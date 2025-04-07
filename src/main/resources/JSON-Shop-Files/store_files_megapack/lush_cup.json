@@ -1,0 +1,29 @@
+{
+  "StoreName": "Lush Cup",
+  "Latitude": 10.715528,
+  "Longitude": -105.674131,
+  "FoodCategory": "bbq",
+  "Stars": 2.5,
+  "NoOfVotes": 319,
+  "StoreLogo": "/images/lush_cup_logo.png",
+  "Products": [
+    {
+      "ProductName": "Pulled Pork Sandwich",
+      "ProductType": "bbq",
+      "Available Amount": 476,
+      "Price": 11.36
+    },
+    {
+      "ProductName": "BBQ Ribs",
+      "ProductType": "bbq",
+      "Available Amount": 106,
+      "Price": 10.2
+    },
+    {
+      "ProductName": "Brisket Plate",
+      "ProductType": "bbq",
+      "Available Amount": 511,
+      "Price": 8.89
+    }
+  ]
+}

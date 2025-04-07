@@ -1,0 +1,29 @@
+{
+  "StoreName": "Rice Bowl",
+  "Latitude": -71.728725,
+  "Longitude": 178.23739,
+  "FoodCategory": "pizza",
+  "Stars": 4.3,
+  "NoOfVotes": 48,
+  "StoreLogo": "/images/rice_bowl_logo.png",
+  "Products": [
+    {
+      "ProductName": "Pepperoni Pizza",
+      "ProductType": "pizza",
+      "Available Amount": 618,
+      "Price": 10.96
+    },
+    {
+      "ProductName": "Margherita Pizza",
+      "ProductType": "pizza",
+      "Available Amount": 838,
+      "Price": 6.21
+    },
+    {
+      "ProductName": "BBQ Chicken Pizza",
+      "ProductType": "pizza",
+      "Available Amount": 654,
+      "Price": 9.3
+    }
+  ]
+}

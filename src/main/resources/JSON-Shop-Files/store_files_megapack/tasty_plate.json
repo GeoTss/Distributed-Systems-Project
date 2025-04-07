@@ -1,0 +1,29 @@
+{
+  "StoreName": "Tasty Plate",
+  "Latitude": 86.630877,
+  "Longitude": -85.568466,
+  "FoodCategory": "dessert",
+  "Stars": 3.6,
+  "NoOfVotes": 445,
+  "StoreLogo": "/images/tasty_plate_logo.png",
+  "Products": [
+    {
+      "ProductName": "Chocolate Cake",
+      "ProductType": "dessert",
+      "Available Amount": 497,
+      "Price": 10.53
+    },
+    {
+      "ProductName": "Ice Cream Sundae",
+      "ProductType": "dessert",
+      "Available Amount": 987,
+      "Price": 3.09
+    },
+    {
+      "ProductName": "Fruit Tart",
+      "ProductType": "dessert",
+      "Available Amount": 621,
+      "Price": 7.35
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "StoreName": "Sweet Spoon",
+  "Latitude": 72.205772,
+  "Longitude": -86.461195,
+  "FoodCategory": "kebab",
+  "Stars": 3.0,
+  "NoOfVotes": 254,
+  "StoreLogo": "/images/sweet_spoon_logo.png",
+  "Products": [
+    {
+      "ProductName": "Lamb Shawarma",
+      "ProductType": "kebab",
+      "Available Amount": 919,
+      "Price": 3.61
+    },
+    {
+      "ProductName": "Chicken Kebab",
+      "ProductType": "kebab",
+      "Available Amount": 744,
+      "Price": 12.99
+    },
+    {
+      "ProductName": "Falafel Wrap",
+      "ProductType": "kebab",
+      "Available Amount": 159,
+      "Price": 5.15
+    }
+  ]
+}

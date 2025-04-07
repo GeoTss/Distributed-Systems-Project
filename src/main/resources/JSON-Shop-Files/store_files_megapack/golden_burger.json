@@ -1,0 +1,29 @@
+{
+  "StoreName": "Golden Burger",
+  "Latitude": -12.659699,
+  "Longitude": 56.100555,
+  "FoodCategory": "dessert",
+  "Stars": 4.7,
+  "NoOfVotes": 13,
+  "StoreLogo": "/images/golden_burger_logo.png",
+  "Products": [
+    {
+      "ProductName": "Ice Cream Sundae",
+      "ProductType": "dessert",
+      "Available Amount": 781,
+      "Price": 5.3
+    },
+    {
+      "ProductName": "Chocolate Cake",
+      "ProductType": "dessert",
+      "Available Amount": 254,
+      "Price": 3.91
+    },
+    {
+      "ProductName": "Fruit Tart",
+      "ProductType": "dessert",
+      "Available Amount": 726,
+      "Price": 12.98
+    }
+  ]
+}

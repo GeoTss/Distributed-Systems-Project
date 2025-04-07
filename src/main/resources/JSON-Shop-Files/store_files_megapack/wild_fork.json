@@ -1,0 +1,29 @@
+{
+  "StoreName": "Wild Fork",
+  "Latitude": -39.070895,
+  "Longitude": -61.096046,
+  "FoodCategory": "pizza",
+  "Stars": 3.9,
+  "NoOfVotes": 379,
+  "StoreLogo": "/images/wild_fork_logo.png",
+  "Products": [
+    {
+      "ProductName": "Margherita Pizza",
+      "ProductType": "pizza",
+      "Available Amount": 601,
+      "Price": 10.51
+    },
+    {
+      "ProductName": "BBQ Chicken Pizza",
+      "ProductType": "pizza",
+      "Available Amount": 214,
+      "Price": 13.33
+    },
+    {
+      "ProductName": "Pepperoni Pizza",
+      "ProductType": "pizza",
+      "Available Amount": 512,
+      "Price": 8.22
+    }
+  ]
+}

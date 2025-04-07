@@ -1,0 +1,29 @@
+{
+  "StoreName": "Fiery Burger",
+  "Latitude": 22.847278,
+  "Longitude": 72.991529,
+  "FoodCategory": "pizza",
+  "Stars": 4.3,
+  "NoOfVotes": 272,
+  "StoreLogo": "/images/fiery_burger_logo.png",
+  "Products": [
+    {
+      "ProductName": "Pepperoni Pizza",
+      "ProductType": "pizza",
+      "Available Amount": 434,
+      "Price": 11.86
+    },
+    {
+      "ProductName": "BBQ Chicken Pizza",
+      "ProductType": "pizza",
+      "Available Amount": 653,
+      "Price": 8.29
+    },
+    {
+      "ProductName": "Margherita Pizza",
+      "ProductType": "pizza",
+      "Available Amount": 103,
+      "Price": 4.69
+    }
+  ]
+}

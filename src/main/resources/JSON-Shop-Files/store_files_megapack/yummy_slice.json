@@ -1,0 +1,29 @@
+{
+  "StoreName": "Yummy Slice",
+  "Latitude": -25.256206,
+  "Longitude": -28.227957,
+  "FoodCategory": "vegan",
+  "Stars": 4.1,
+  "NoOfVotes": 499,
+  "StoreLogo": "/images/yummy_slice_logo.png",
+  "Products": [
+    {
+      "ProductName": "Vegan Burger",
+      "ProductType": "vegan",
+      "Available Amount": 892,
+      "Price": 11.05
+    },
+    {
+      "ProductName": "Vegan Bowl",
+      "ProductType": "vegan",
+      "Available Amount": 361,
+      "Price": 6.04
+    },
+    {
+      "ProductName": "Tofu Salad",
+      "ProductType": "vegan",
+      "Available Amount": 975,
+      "Price": 6.04
+    }
+  ]
+}

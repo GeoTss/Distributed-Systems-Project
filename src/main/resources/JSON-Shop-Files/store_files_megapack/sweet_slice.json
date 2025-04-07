@@ -1,0 +1,29 @@
+{
+  "StoreName": "Sweet Slice",
+  "Latitude": -86.124487,
+  "Longitude": 61.49304,
+  "FoodCategory": "salad",
+  "Stars": 3.7,
+  "NoOfVotes": 335,
+  "StoreLogo": "/images/sweet_slice_logo.png",
+  "Products": [
+    {
+      "ProductName": "Quinoa Salad",
+      "ProductType": "salad",
+      "Available Amount": 909,
+      "Price": 4.97
+    },
+    {
+      "ProductName": "Greek Salad",
+      "ProductType": "salad",
+      "Available Amount": 968,
+      "Price": 8.83
+    },
+    {
+      "ProductName": "Caesar Salad",
+      "ProductType": "salad",
+      "Available Amount": 948,
+      "Price": 11.61
+    }
+  ]
+}

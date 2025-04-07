@@ -1,0 +1,29 @@
+{
+  "StoreName": "Wild Grill",
+  "Latitude": 43.527927,
+  "Longitude": -170.049868,
+  "FoodCategory": "coffee",
+  "Stars": 3.9,
+  "NoOfVotes": 378,
+  "StoreLogo": "/images/wild_grill_logo.png",
+  "Products": [
+    {
+      "ProductName": "Cappuccino",
+      "ProductType": "coffee",
+      "Available Amount": 933,
+      "Price": 6.01
+    },
+    {
+      "ProductName": "Iced Latte",
+      "ProductType": "coffee",
+      "Available Amount": 436,
+      "Price": 3.25
+    },
+    {
+      "ProductName": "Espresso",
+      "ProductType": "coffee",
+      "Available Amount": 138,
+      "Price": 11.69
+    }
+  ]
+}

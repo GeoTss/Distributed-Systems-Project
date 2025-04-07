@@ -1,0 +1,29 @@
+{
+  "StoreName": "Tangy Fork",
+  "Latitude": -79.623418,
+  "Longitude": 144.390577,
+  "FoodCategory": "pasta",
+  "Stars": 3.7,
+  "NoOfVotes": 32,
+  "StoreLogo": "/images/tangy_fork_logo.png",
+  "Products": [
+    {
+      "ProductName": "Lasagna",
+      "ProductType": "pasta",
+      "Available Amount": 894,
+      "Price": 6.0
+    },
+    {
+      "ProductName": "Penne Alfredo",
+      "ProductType": "pasta",
+      "Available Amount": 305,
+      "Price": 10.91
+    },
+    {
+      "ProductName": "Spaghetti Bolognese",
+      "ProductType": "pasta",
+      "Available Amount": 601,
+      "Price": 3.55
+    }
+  ]
+}

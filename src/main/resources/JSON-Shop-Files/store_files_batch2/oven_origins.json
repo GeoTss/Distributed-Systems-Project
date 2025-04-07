@@ -1,0 +1,29 @@
+{
+  "StoreName": "Oven Origins",
+  "Latitude": -11.073122,
+  "Longitude": -129.493101,
+  "FoodCategory": "pizza",
+  "Stars": 4.1,
+  "NoOfVotes": 352,
+  "StoreLogo": "/images/oven_origins_logo.png",
+  "Products": [
+    {
+      "ProductName": "Pepperoni Pizza",
+      "ProductType": "pizza",
+      "Available Amount": 905,
+      "Price": 10.42
+    },
+    {
+      "ProductName": "BBQ Chicken Pizza",
+      "ProductType": "pizza",
+      "Available Amount": 107,
+      "Price": 4.26
+    },
+    {
+      "ProductName": "Margherita Pizza",
+      "ProductType": "pizza",
+      "Available Amount": 351,
+      "Price": 4.06
+    }
+  ]
+}

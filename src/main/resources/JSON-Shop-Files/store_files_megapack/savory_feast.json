@@ -1,0 +1,29 @@
+{
+  "StoreName": "Savory Feast",
+  "Latitude": 66.439176,
+  "Longitude": 145.433909,
+  "FoodCategory": "salad",
+  "Stars": 3.3,
+  "NoOfVotes": 363,
+  "StoreLogo": "/images/savory_feast_logo.png",
+  "Products": [
+    {
+      "ProductName": "Greek Salad",
+      "ProductType": "salad",
+      "Available Amount": 966,
+      "Price": 6.62
+    },
+    {
+      "ProductName": "Quinoa Salad",
+      "ProductType": "salad",
+      "Available Amount": 868,
+      "Price": 13.82
+    },
+    {
+      "ProductName": "Caesar Salad",
+      "ProductType": "salad",
+      "Available Amount": 744,
+      "Price": 8.0
+    }
+  ]
+}

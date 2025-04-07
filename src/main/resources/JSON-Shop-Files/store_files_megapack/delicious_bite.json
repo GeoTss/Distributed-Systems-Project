@@ -1,0 +1,29 @@
+{
+  "StoreName": "Delicious Bite",
+  "Latitude": -4.098976,
+  "Longitude": -128.323885,
+  "FoodCategory": "bbq",
+  "Stars": 3.6,
+  "NoOfVotes": 249,
+  "StoreLogo": "/images/delicious_bite_logo.png",
+  "Products": [
+    {
+      "ProductName": "Pulled Pork Sandwich",
+      "ProductType": "bbq",
+      "Available Amount": 124,
+      "Price": 3.34
+    },
+    {
+      "ProductName": "Brisket Plate",
+      "ProductType": "bbq",
+      "Available Amount": 767,
+      "Price": 14.9
+    },
+    {
+      "ProductName": "BBQ Ribs",
+      "ProductType": "bbq",
+      "Available Amount": 603,
+      "Price": 9.48
+    }
+  ]
+}

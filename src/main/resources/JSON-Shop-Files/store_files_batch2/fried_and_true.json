@@ -1,0 +1,29 @@
+{
+  "StoreName": "Fried & True",
+  "Latitude": -59.855034,
+  "Longitude": 140.06331,
+  "FoodCategory": "pizza",
+  "Stars": 3.6,
+  "NoOfVotes": 347,
+  "StoreLogo": "/images/fried_&_true_logo.png",
+  "Products": [
+    {
+      "ProductName": "Pepperoni Pizza",
+      "ProductType": "pizza",
+      "Available Amount": 585,
+      "Price": 7.43
+    },
+    {
+      "ProductName": "Margherita Pizza",
+      "ProductType": "pizza",
+      "Available Amount": 944,
+      "Price": 2.95
+    },
+    {
+      "ProductName": "BBQ Chicken Pizza",
+      "ProductType": "pizza",
+      "Available Amount": 827,
+      "Price": 7.43
+    }
+  ]
+}

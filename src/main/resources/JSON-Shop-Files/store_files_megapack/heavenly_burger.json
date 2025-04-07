@@ -1,0 +1,29 @@
+{
+  "StoreName": "Heavenly Burger",
+  "Latitude": -19.401214,
+  "Longitude": -96.902509,
+  "FoodCategory": "sushi",
+  "Stars": 4.5,
+  "NoOfVotes": 406,
+  "StoreLogo": "/images/heavenly_burger_logo.png",
+  "Products": [
+    {
+      "ProductName": "Spicy Tuna Roll",
+      "ProductType": "sushi",
+      "Available Amount": 807,
+      "Price": 11.49
+    },
+    {
+      "ProductName": "Salmon Nigiri",
+      "ProductType": "sushi",
+      "Available Amount": 529,
+      "Price": 3.65
+    },
+    {
+      "ProductName": "California Roll",
+      "ProductType": "sushi",
+      "Available Amount": 137,
+      "Price": 13.49
+    }
+  ]
+}

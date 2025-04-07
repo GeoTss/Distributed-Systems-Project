@@ -1,0 +1,29 @@
+{
+  "StoreName": "Heavenly Bowl",
+  "Latitude": 28.455651,
+  "Longitude": 121.76605,
+  "FoodCategory": "salad",
+  "Stars": 3.8,
+  "NoOfVotes": 417,
+  "StoreLogo": "/images/heavenly_bowl_logo.png",
+  "Products": [
+    {
+      "ProductName": "Caesar Salad",
+      "ProductType": "salad",
+      "Available Amount": 662,
+      "Price": 6.11
+    },
+    {
+      "ProductName": "Greek Salad",
+      "ProductType": "salad",
+      "Available Amount": 318,
+      "Price": 7.56
+    },
+    {
+      "ProductName": "Quinoa Salad",
+      "ProductType": "salad",
+      "Available Amount": 912,
+      "Price": 5.39
+    }
+  ]
+}

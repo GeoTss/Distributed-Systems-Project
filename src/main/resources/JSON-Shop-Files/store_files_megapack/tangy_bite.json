@@ -1,0 +1,29 @@
+{
+  "StoreName": "Tangy Bite",
+  "Latitude": 55.534105,
+  "Longitude": 57.04349,
+  "FoodCategory": "sushi",
+  "Stars": 3.0,
+  "NoOfVotes": 274,
+  "StoreLogo": "/images/tangy_bite_logo.png",
+  "Products": [
+    {
+      "ProductName": "Spicy Tuna Roll",
+      "ProductType": "sushi",
+      "Available Amount": 217,
+      "Price": 13.85
+    },
+    {
+      "ProductName": "Salmon Nigiri",
+      "ProductType": "sushi",
+      "Available Amount": 822,
+      "Price": 13.08
+    },
+    {
+      "ProductName": "California Roll",
+      "ProductType": "sushi",
+      "Available Amount": 610,
+      "Price": 6.41
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "StoreName": "Wild Bowl",
+  "Latitude": 71.151406,
+  "Longitude": 131.028206,
+  "FoodCategory": "bbq",
+  "Stars": 3.0,
+  "NoOfVotes": 57,
+  "StoreLogo": "/images/wild_bowl_logo.png",
+  "Products": [
+    {
+      "ProductName": "BBQ Ribs",
+      "ProductType": "bbq",
+      "Available Amount": 1000,
+      "Price": 2.3
+    },
+    {
+      "ProductName": "Brisket Plate",
+      "ProductType": "bbq",
+      "Available Amount": 435,
+      "Price": 13.59
+    },
+    {
+      "ProductName": "Pulled Pork Sandwich",
+      "ProductType": "bbq",
+      "Available Amount": 715,
+      "Price": 5.78
+    }
+  ]
+}

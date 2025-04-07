@@ -1,0 +1,29 @@
+{
+  "StoreName": "Golden Kitchen",
+  "Latitude": -12.447164,
+  "Longitude": 53.008732,
+  "FoodCategory": "dessert",
+  "Stars": 4.0,
+  "NoOfVotes": 418,
+  "StoreLogo": "/images/golden_kitchen_logo.png",
+  "Products": [
+    {
+      "ProductName": "Fruit Tart",
+      "ProductType": "dessert",
+      "Available Amount": 339,
+      "Price": 13.99
+    },
+    {
+      "ProductName": "Chocolate Cake",
+      "ProductType": "dessert",
+      "Available Amount": 635,
+      "Price": 3.87
+    },
+    {
+      "ProductName": "Ice Cream Sundae",
+      "ProductType": "dessert",
+      "Available Amount": 717,
+      "Price": 11.18
+    }
+  ]
+}

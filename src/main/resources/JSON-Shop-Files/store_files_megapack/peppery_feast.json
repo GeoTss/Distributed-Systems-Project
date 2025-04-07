@@ -1,0 +1,29 @@
+{
+  "StoreName": "Peppery Feast",
+  "Latitude": -26.516826,
+  "Longitude": 103.283271,
+  "FoodCategory": "kebab",
+  "Stars": 4.3,
+  "NoOfVotes": 341,
+  "StoreLogo": "/images/peppery_feast_logo.png",
+  "Products": [
+    {
+      "ProductName": "Lamb Shawarma",
+      "ProductType": "kebab",
+      "Available Amount": 300,
+      "Price": 9.77
+    },
+    {
+      "ProductName": "Chicken Kebab",
+      "ProductType": "kebab",
+      "Available Amount": 794,
+      "Price": 12.42
+    },
+    {
+      "ProductName": "Falafel Wrap",
+      "ProductType": "kebab",
+      "Available Amount": 361,
+      "Price": 13.88
+    }
+  ]
+}

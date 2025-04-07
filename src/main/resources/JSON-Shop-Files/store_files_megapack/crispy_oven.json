@@ -1,0 +1,29 @@
+{
+  "StoreName": "Crispy Oven",
+  "Latitude": 54.711171,
+  "Longitude": -94.912498,
+  "FoodCategory": "bbq",
+  "Stars": 5.0,
+  "NoOfVotes": 171,
+  "StoreLogo": "/images/crispy_oven_logo.png",
+  "Products": [
+    {
+      "ProductName": "BBQ Ribs",
+      "ProductType": "bbq",
+      "Available Amount": 484,
+      "Price": 13.26
+    },
+    {
+      "ProductName": "Pulled Pork Sandwich",
+      "ProductType": "bbq",
+      "Available Amount": 618,
+      "Price": 4.03
+    },
+    {
+      "ProductName": "Brisket Plate",
+      "ProductType": "bbq",
+      "Available Amount": 811,
+      "Price": 7.07
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "StoreName": "Peppery Grill",
+  "Latitude": -10.065098,
+  "Longitude": -132.960574,
+  "FoodCategory": "pizza",
+  "Stars": 4.4,
+  "NoOfVotes": 180,
+  "StoreLogo": "/images/peppery_grill_logo.png",
+  "Products": [
+    {
+      "ProductName": "Margherita Pizza",
+      "ProductType": "pizza",
+      "Available Amount": 341,
+      "Price": 11.34
+    },
+    {
+      "ProductName": "Pepperoni Pizza",
+      "ProductType": "pizza",
+      "Available Amount": 714,
+      "Price": 11.51
+    },
+    {
+      "ProductName": "BBQ Chicken Pizza",
+      "ProductType": "pizza",
+      "Available Amount": 931,
+      "Price": 11.33
+    }
+  ]
+}

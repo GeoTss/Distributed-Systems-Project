@@ -1,0 +1,29 @@
+{
+  "StoreName": "Tasty Grill",
+  "Latitude": 66.224166,
+  "Longitude": 76.073022,
+  "FoodCategory": "pizza",
+  "Stars": 2.6,
+  "NoOfVotes": 272,
+  "StoreLogo": "/images/tasty_grill_logo.png",
+  "Products": [
+    {
+      "ProductName": "Pepperoni Pizza",
+      "ProductType": "pizza",
+      "Available Amount": 168,
+      "Price": 11.05
+    },
+    {
+      "ProductName": "Margherita Pizza",
+      "ProductType": "pizza",
+      "Available Amount": 576,
+      "Price": 11.91
+    },
+    {
+      "ProductName": "BBQ Chicken Pizza",
+      "ProductType": "pizza",
+      "Available Amount": 484,
+      "Price": 7.23
+    }
+  ]
+}

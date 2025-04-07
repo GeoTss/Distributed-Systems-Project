@@ -1,0 +1,29 @@
+{
+  "StoreName": "Epic Platter",
+  "Latitude": -79.692337,
+  "Longitude": 40.750124,
+  "FoodCategory": "kebab",
+  "Stars": 3.2,
+  "NoOfVotes": 126,
+  "StoreLogo": "/images/epic_platter_logo.png",
+  "Products": [
+    {
+      "ProductName": "Lamb Shawarma",
+      "ProductType": "kebab",
+      "Available Amount": 203,
+      "Price": 5.22
+    },
+    {
+      "ProductName": "Chicken Kebab",
+      "ProductType": "kebab",
+      "Available Amount": 174,
+      "Price": 4.49
+    },
+    {
+      "ProductName": "Falafel Wrap",
+      "ProductType": "kebab",
+      "Available Amount": 428,
+      "Price": 13.94
+    }
+  ]
+}

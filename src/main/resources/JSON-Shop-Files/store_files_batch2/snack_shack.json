@@ -1,0 +1,29 @@
+{
+  "StoreName": "Snack Shack",
+  "Latitude": 68.245442,
+  "Longitude": 136.463042,
+  "FoodCategory": "vegan",
+  "Stars": 3.0,
+  "NoOfVotes": 70,
+  "StoreLogo": "/images/snack_shack_logo.png",
+  "Products": [
+    {
+      "ProductName": "Tofu Salad",
+      "ProductType": "vegan",
+      "Available Amount": 590,
+      "Price": 4.63
+    },
+    {
+      "ProductName": "Vegan Bowl",
+      "ProductType": "vegan",
+      "Available Amount": 738,
+      "Price": 8.57
+    },
+    {
+      "ProductName": "Vegan Burger",
+      "ProductType": "vegan",
+      "Available Amount": 779,
+      "Price": 8.04
+    }
+  ]
+}

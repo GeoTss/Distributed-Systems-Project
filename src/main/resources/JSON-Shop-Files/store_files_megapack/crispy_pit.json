@@ -1,0 +1,29 @@
+{
+  "StoreName": "Crispy Pit",
+  "Latitude": 68.319727,
+  "Longitude": -149.426878,
+  "FoodCategory": "salad",
+  "Stars": 3.3,
+  "NoOfVotes": 459,
+  "StoreLogo": "/images/crispy_pit_logo.png",
+  "Products": [
+    {
+      "ProductName": "Quinoa Salad",
+      "ProductType": "salad",
+      "Available Amount": 399,
+      "Price": 3.79
+    },
+    {
+      "ProductName": "Greek Salad",
+      "ProductType": "salad",
+      "Available Amount": 125,
+      "Price": 7.15
+    },
+    {
+      "ProductName": "Caesar Salad",
+      "ProductType": "salad",
+      "Available Amount": 287,
+      "Price": 7.02
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "StoreName": "Spicy House",
+  "Latitude": -47.467838,
+  "Longitude": 169.970418,
+  "FoodCategory": "burger",
+  "Stars": 4.8,
+  "NoOfVotes": 46,
+  "StoreLogo": "/images/spicy_house_logo.png",
+  "Products": [
+    {
+      "ProductName": "Classic Burger",
+      "ProductType": "burger",
+      "Available Amount": 830,
+      "Price": 6.77
+    },
+    {
+      "ProductName": "Veggie Burger",
+      "ProductType": "burger",
+      "Available Amount": 272,
+      "Price": 9.79
+    },
+    {
+      "ProductName": "Bacon Double Cheeseburger",
+      "ProductType": "burger",
+      "Available Amount": 507,
+      "Price": 13.01
+    }
+  ]
+}

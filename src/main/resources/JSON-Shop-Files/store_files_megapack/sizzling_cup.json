@@ -1,0 +1,29 @@
+{
+  "StoreName": "Sizzling Cup",
+  "Latitude": 10.071776,
+  "Longitude": -7.196137,
+  "FoodCategory": "vegan",
+  "Stars": 4.9,
+  "NoOfVotes": 345,
+  "StoreLogo": "/images/sizzling_cup_logo.png",
+  "Products": [
+    {
+      "ProductName": "Vegan Bowl",
+      "ProductType": "vegan",
+      "Available Amount": 290,
+      "Price": 9.81
+    },
+    {
+      "ProductName": "Tofu Salad",
+      "ProductType": "vegan",
+      "Available Amount": 753,
+      "Price": 11.5
+    },
+    {
+      "ProductName": "Vegan Burger",
+      "ProductType": "vegan",
+      "Available Amount": 336,
+      "Price": 12.36
+    }
+  ]
+}

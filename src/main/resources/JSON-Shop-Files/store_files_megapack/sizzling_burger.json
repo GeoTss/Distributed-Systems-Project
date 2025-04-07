@@ -1,0 +1,29 @@
+{
+  "StoreName": "Sizzling Burger",
+  "Latitude": 13.4833,
+  "Longitude": -110.843979,
+  "FoodCategory": "pasta",
+  "Stars": 3.8,
+  "NoOfVotes": 86,
+  "StoreLogo": "/images/sizzling_burger_logo.png",
+  "Products": [
+    {
+      "ProductName": "Spaghetti Bolognese",
+      "ProductType": "pasta",
+      "Available Amount": 826,
+      "Price": 11.42
+    },
+    {
+      "ProductName": "Penne Alfredo",
+      "ProductType": "pasta",
+      "Available Amount": 104,
+      "Price": 3.89
+    },
+    {
+      "ProductName": "Lasagna",
+      "ProductType": "pasta",
+      "Available Amount": 905,
+      "Price": 9.55
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "StoreName": "Lush Slice",
+  "Latitude": -6.092472,
+  "Longitude": -134.302809,
+  "FoodCategory": "coffee",
+  "Stars": 2.6,
+  "NoOfVotes": 334,
+  "StoreLogo": "/images/lush_slice_logo.png",
+  "Products": [
+    {
+      "ProductName": "Espresso",
+      "ProductType": "coffee",
+      "Available Amount": 518,
+      "Price": 6.52
+    },
+    {
+      "ProductName": "Iced Latte",
+      "ProductType": "coffee",
+      "Available Amount": 666,
+      "Price": 7.12
+    },
+    {
+      "ProductName": "Cappuccino",
+      "ProductType": "coffee",
+      "Available Amount": 842,
+      "Price": 6.51
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "StoreName": "Fresh Feast",
+  "Latitude": 48.155439,
+  "Longitude": 146.20781,
+  "FoodCategory": "coffee",
+  "Stars": 3.0,
+  "NoOfVotes": 107,
+  "StoreLogo": "/images/fresh_feast_logo.png",
+  "Products": [
+    {
+      "ProductName": "Cappuccino",
+      "ProductType": "coffee",
+      "Available Amount": 877,
+      "Price": 13.72
+    },
+    {
+      "ProductName": "Espresso",
+      "ProductType": "coffee",
+      "Available Amount": 269,
+      "Price": 13.17
+    },
+    {
+      "ProductName": "Iced Latte",
+      "ProductType": "coffee",
+      "Available Amount": 935,
+      "Price": 6.12
+    }
+  ]
+}

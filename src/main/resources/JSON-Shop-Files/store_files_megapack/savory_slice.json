@@ -1,0 +1,29 @@
+{
+  "StoreName": "Savory Slice",
+  "Latitude": 33.155865,
+  "Longitude": -116.541494,
+  "FoodCategory": "sushi",
+  "Stars": 2.6,
+  "NoOfVotes": 258,
+  "StoreLogo": "/images/savory_slice_logo.png",
+  "Products": [
+    {
+      "ProductName": "California Roll",
+      "ProductType": "sushi",
+      "Available Amount": 518,
+      "Price": 9.15
+    },
+    {
+      "ProductName": "Spicy Tuna Roll",
+      "ProductType": "sushi",
+      "Available Amount": 978,
+      "Price": 8.35
+    },
+    {
+      "ProductName": "Salmon Nigiri",
+      "ProductType": "sushi",
+      "Available Amount": 159,
+      "Price": 6.0
+    }
+  ]
+}

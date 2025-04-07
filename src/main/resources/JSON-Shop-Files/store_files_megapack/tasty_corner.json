@@ -1,0 +1,29 @@
+{
+  "StoreName": "Tasty Corner",
+  "Latitude": 30.751534,
+  "Longitude": -101.806802,
+  "FoodCategory": "salad",
+  "Stars": 5.0,
+  "NoOfVotes": 208,
+  "StoreLogo": "/images/tasty_corner_logo.png",
+  "Products": [
+    {
+      "ProductName": "Quinoa Salad",
+      "ProductType": "salad",
+      "Available Amount": 557,
+      "Price": 4.34
+    },
+    {
+      "ProductName": "Caesar Salad",
+      "ProductType": "salad",
+      "Available Amount": 621,
+      "Price": 9.11
+    },
+    {
+      "ProductName": "Greek Salad",
+      "ProductType": "salad",
+      "Available Amount": 940,
+      "Price": 3.2
+    }
+  ]
+}

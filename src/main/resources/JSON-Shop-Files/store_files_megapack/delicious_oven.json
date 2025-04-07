@@ -1,0 +1,29 @@
+{
+  "StoreName": "Delicious Oven",
+  "Latitude": 9.032385,
+  "Longitude": 165.326666,
+  "FoodCategory": "bbq",
+  "Stars": 2.8,
+  "NoOfVotes": 350,
+  "StoreLogo": "/images/delicious_oven_logo.png",
+  "Products": [
+    {
+      "ProductName": "Pulled Pork Sandwich",
+      "ProductType": "bbq",
+      "Available Amount": 430,
+      "Price": 8.83
+    },
+    {
+      "ProductName": "Brisket Plate",
+      "ProductType": "bbq",
+      "Available Amount": 191,
+      "Price": 7.47
+    },
+    {
+      "ProductName": "BBQ Ribs",
+      "ProductType": "bbq",
+      "Available Amount": 549,
+      "Price": 11.06
+    }
+  ]
+}

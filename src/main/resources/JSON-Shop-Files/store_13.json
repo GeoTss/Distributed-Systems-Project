@@ -1,0 +1,29 @@
+{
+  "StoreName": "Wrap It Up",
+  "Latitude": -19.472851,
+  "Longitude": -94.982875,
+  "FoodCategory": "dessert",
+  "Stars": 3.4,
+  "NoOfVotes": 102,
+  "StoreLogo": "/images/wrap_it_up_logo.png",
+  "Products": [
+    {
+      "ProductName": "Ice Cream Sundae",
+      "ProductType": "dessert",
+      "Available Amount": 763,
+      "Price": 10.64
+    },
+    {
+      "ProductName": "Chocolate Cake",
+      "ProductType": "dessert",
+      "Available Amount": 678,
+      "Price": 12.6
+    },
+    {
+      "ProductName": "Fruit Tart",
+      "ProductType": "dessert",
+      "Available Amount": 312,
+      "Price": 4.94
+    }
+  ]
+}

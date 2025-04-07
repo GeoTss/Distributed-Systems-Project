@@ -1,0 +1,29 @@
+{
+  "StoreName": "Zesty Bowl",
+  "Latitude": -80.956845,
+  "Longitude": -165.665511,
+  "FoodCategory": "coffee",
+  "Stars": 2.7,
+  "NoOfVotes": 329,
+  "StoreLogo": "/images/zesty_bowl_logo.png",
+  "Products": [
+    {
+      "ProductName": "Cappuccino",
+      "ProductType": "coffee",
+      "Available Amount": 317,
+      "Price": 6.79
+    },
+    {
+      "ProductName": "Iced Latte",
+      "ProductType": "coffee",
+      "Available Amount": 853,
+      "Price": 8.86
+    },
+    {
+      "ProductName": "Espresso",
+      "ProductType": "coffee",
+      "Available Amount": 936,
+      "Price": 8.2
+    }
+  ]
+}

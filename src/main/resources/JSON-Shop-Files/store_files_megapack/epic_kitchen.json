@@ -1,0 +1,29 @@
+{
+  "StoreName": "Epic Kitchen",
+  "Latitude": -69.246288,
+  "Longitude": 143.402318,
+  "FoodCategory": "dessert",
+  "Stars": 4.0,
+  "NoOfVotes": 64,
+  "StoreLogo": "/images/epic_kitchen_logo.png",
+  "Products": [
+    {
+      "ProductName": "Chocolate Cake",
+      "ProductType": "dessert",
+      "Available Amount": 262,
+      "Price": 14.96
+    },
+    {
+      "ProductName": "Ice Cream Sundae",
+      "ProductType": "dessert",
+      "Available Amount": 233,
+      "Price": 13.92
+    },
+    {
+      "ProductName": "Fruit Tart",
+      "ProductType": "dessert",
+      "Available Amount": 697,
+      "Price": 14.65
+    }
+  ]
+}

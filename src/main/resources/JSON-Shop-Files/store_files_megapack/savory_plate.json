@@ -1,0 +1,29 @@
+{
+  "StoreName": "Savory Plate",
+  "Latitude": 41.999489,
+  "Longitude": -173.961889,
+  "FoodCategory": "coffee",
+  "Stars": 3.9,
+  "NoOfVotes": 180,
+  "StoreLogo": "/images/savory_plate_logo.png",
+  "Products": [
+    {
+      "ProductName": "Espresso",
+      "ProductType": "coffee",
+      "Available Amount": 871,
+      "Price": 14.82
+    },
+    {
+      "ProductName": "Cappuccino",
+      "ProductType": "coffee",
+      "Available Amount": 179,
+      "Price": 4.87
+    },
+    {
+      "ProductName": "Iced Latte",
+      "ProductType": "coffee",
+      "Available Amount": 259,
+      "Price": 11.02
+    }
+  ]
+}

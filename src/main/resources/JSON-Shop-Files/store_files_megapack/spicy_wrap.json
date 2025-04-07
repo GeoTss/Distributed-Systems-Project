@@ -1,0 +1,29 @@
+{
+  "StoreName": "Spicy Wrap",
+  "Latitude": -49.456709,
+  "Longitude": 171.30307,
+  "FoodCategory": "pasta",
+  "Stars": 4.3,
+  "NoOfVotes": 324,
+  "StoreLogo": "/images/spicy_wrap_logo.png",
+  "Products": [
+    {
+      "ProductName": "Lasagna",
+      "ProductType": "pasta",
+      "Available Amount": 744,
+      "Price": 4.11
+    },
+    {
+      "ProductName": "Penne Alfredo",
+      "ProductType": "pasta",
+      "Available Amount": 635,
+      "Price": 10.83
+    },
+    {
+      "ProductName": "Spaghetti Bolognese",
+      "ProductType": "pasta",
+      "Available Amount": 813,
+      "Price": 14.69
+    }
+  ]
+}

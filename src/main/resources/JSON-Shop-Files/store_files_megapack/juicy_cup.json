@@ -1,0 +1,29 @@
+{
+  "StoreName": "Juicy Cup",
+  "Latitude": -81.736832,
+  "Longitude": -134.858698,
+  "FoodCategory": "bbq",
+  "Stars": 4.1,
+  "NoOfVotes": 295,
+  "StoreLogo": "/images/juicy_cup_logo.png",
+  "Products": [
+    {
+      "ProductName": "BBQ Ribs",
+      "ProductType": "bbq",
+      "Available Amount": 560,
+      "Price": 14.73
+    },
+    {
+      "ProductName": "Pulled Pork Sandwich",
+      "ProductType": "bbq",
+      "Available Amount": 526,
+      "Price": 8.3
+    },
+    {
+      "ProductName": "Brisket Plate",
+      "ProductType": "bbq",
+      "Available Amount": 153,
+      "Price": 3.84
+    }
+  ]
+}

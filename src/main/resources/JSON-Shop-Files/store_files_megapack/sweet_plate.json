@@ -1,0 +1,29 @@
+{
+  "StoreName": "Sweet Plate",
+  "Latitude": 21.437608,
+  "Longitude": -103.57162,
+  "FoodCategory": "vegan",
+  "Stars": 4.8,
+  "NoOfVotes": 58,
+  "StoreLogo": "/images/sweet_plate_logo.png",
+  "Products": [
+    {
+      "ProductName": "Tofu Salad",
+      "ProductType": "vegan",
+      "Available Amount": 314,
+      "Price": 8.74
+    },
+    {
+      "ProductName": "Vegan Burger",
+      "ProductType": "vegan",
+      "Available Amount": 695,
+      "Price": 13.69
+    },
+    {
+      "ProductName": "Vegan Bowl",
+      "ProductType": "vegan",
+      "Available Amount": 598,
+      "Price": 9.17
+    }
+  ]
+}

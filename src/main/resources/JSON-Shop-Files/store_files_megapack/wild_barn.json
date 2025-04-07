@@ -1,0 +1,29 @@
+{
+  "StoreName": "Wild Barn",
+  "Latitude": -63.305987,
+  "Longitude": -77.419155,
+  "FoodCategory": "dessert",
+  "Stars": 3.1,
+  "NoOfVotes": 483,
+  "StoreLogo": "/images/wild_barn_logo.png",
+  "Products": [
+    {
+      "ProductName": "Ice Cream Sundae",
+      "ProductType": "dessert",
+      "Available Amount": 853,
+      "Price": 3.65
+    },
+    {
+      "ProductName": "Fruit Tart",
+      "ProductType": "dessert",
+      "Available Amount": 527,
+      "Price": 6.05
+    },
+    {
+      "ProductName": "Chocolate Cake",
+      "ProductType": "dessert",
+      "Available Amount": 170,
+      "Price": 5.83
+    }
+  ]
+}

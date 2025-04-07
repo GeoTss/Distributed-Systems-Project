@@ -1,0 +1,29 @@
+{
+  "StoreName": "Zesty Wrap",
+  "Latitude": 31.747009,
+  "Longitude": 124.152346,
+  "FoodCategory": "pasta",
+  "Stars": 3.6,
+  "NoOfVotes": 333,
+  "StoreLogo": "/images/zesty_wrap_logo.png",
+  "Products": [
+    {
+      "ProductName": "Penne Alfredo",
+      "ProductType": "pasta",
+      "Available Amount": 289,
+      "Price": 4.17
+    },
+    {
+      "ProductName": "Spaghetti Bolognese",
+      "ProductType": "pasta",
+      "Available Amount": 312,
+      "Price": 10.82
+    },
+    {
+      "ProductName": "Lasagna",
+      "ProductType": "pasta",
+      "Available Amount": 814,
+      "Price": 2.7
+    }
+  ]
+}

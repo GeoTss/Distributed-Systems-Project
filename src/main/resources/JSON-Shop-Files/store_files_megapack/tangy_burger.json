@@ -1,0 +1,29 @@
+{
+  "StoreName": "Tangy Burger",
+  "Latitude": 22.436141,
+  "Longitude": -2.009596,
+  "FoodCategory": "kebab",
+  "Stars": 3.9,
+  "NoOfVotes": 214,
+  "StoreLogo": "/images/tangy_burger_logo.png",
+  "Products": [
+    {
+      "ProductName": "Chicken Kebab",
+      "ProductType": "kebab",
+      "Available Amount": 296,
+      "Price": 11.65
+    },
+    {
+      "ProductName": "Falafel Wrap",
+      "ProductType": "kebab",
+      "Available Amount": 797,
+      "Price": 2.11
+    },
+    {
+      "ProductName": "Lamb Shawarma",
+      "ProductType": "kebab",
+      "Available Amount": 886,
+      "Price": 8.51
+    }
+  ]
+}

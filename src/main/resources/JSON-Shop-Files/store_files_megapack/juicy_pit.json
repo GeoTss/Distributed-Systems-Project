@@ -1,0 +1,29 @@
+{
+  "StoreName": "Juicy Pit",
+  "Latitude": -76.874167,
+  "Longitude": 171.180949,
+  "FoodCategory": "pasta",
+  "Stars": 3.9,
+  "NoOfVotes": 285,
+  "StoreLogo": "/images/juicy_pit_logo.png",
+  "Products": [
+    {
+      "ProductName": "Lasagna",
+      "ProductType": "pasta",
+      "Available Amount": 627,
+      "Price": 3.67
+    },
+    {
+      "ProductName": "Spaghetti Bolognese",
+      "ProductType": "pasta",
+      "Available Amount": 319,
+      "Price": 12.87
+    },
+    {
+      "ProductName": "Penne Alfredo",
+      "ProductType": "pasta",
+      "Available Amount": 655,
+      "Price": 9.57
+    }
+  ]
+}

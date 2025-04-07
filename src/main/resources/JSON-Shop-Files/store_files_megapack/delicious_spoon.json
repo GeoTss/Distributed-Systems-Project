@@ -1,0 +1,29 @@
+{
+  "StoreName": "Delicious Spoon",
+  "Latitude": 32.014633,
+  "Longitude": -76.699515,
+  "FoodCategory": "pasta",
+  "Stars": 2.9,
+  "NoOfVotes": 425,
+  "StoreLogo": "/images/delicious_spoon_logo.png",
+  "Products": [
+    {
+      "ProductName": "Lasagna",
+      "ProductType": "pasta",
+      "Available Amount": 171,
+      "Price": 7.65
+    },
+    {
+      "ProductName": "Spaghetti Bolognese",
+      "ProductType": "pasta",
+      "Available Amount": 862,
+      "Price": 10.54
+    },
+    {
+      "ProductName": "Penne Alfredo",
+      "ProductType": "pasta",
+      "Available Amount": 657,
+      "Price": 12.72
+    }
+  ]
+}

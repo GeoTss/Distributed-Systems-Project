@@ -1,0 +1,29 @@
+{
+  "StoreName": "Zesty Garden",
+  "Latitude": 35.689108,
+  "Longitude": -84.017311,
+  "FoodCategory": "vegan",
+  "Stars": 4.9,
+  "NoOfVotes": 390,
+  "StoreLogo": "/images/zesty_garden_logo.png",
+  "Products": [
+    {
+      "ProductName": "Tofu Salad",
+      "ProductType": "vegan",
+      "Available Amount": 314,
+      "Price": 2.29
+    },
+    {
+      "ProductName": "Vegan Burger",
+      "ProductType": "vegan",
+      "Available Amount": 504,
+      "Price": 13.86
+    },
+    {
+      "ProductName": "Vegan Bowl",
+      "ProductType": "vegan",
+      "Available Amount": 439,
+      "Price": 7.8
+    }
+  ]
+}

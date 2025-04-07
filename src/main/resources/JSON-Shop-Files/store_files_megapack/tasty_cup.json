@@ -1,0 +1,29 @@
+{
+  "StoreName": "Tasty Cup",
+  "Latitude": 69.322875,
+  "Longitude": 42.859537,
+  "FoodCategory": "salad",
+  "Stars": 2.6,
+  "NoOfVotes": 443,
+  "StoreLogo": "/images/tasty_cup_logo.png",
+  "Products": [
+    {
+      "ProductName": "Caesar Salad",
+      "ProductType": "salad",
+      "Available Amount": 493,
+      "Price": 3.2
+    },
+    {
+      "ProductName": "Greek Salad",
+      "ProductType": "salad",
+      "Available Amount": 540,
+      "Price": 4.19
+    },
+    {
+      "ProductName": "Quinoa Salad",
+      "ProductType": "salad",
+      "Available Amount": 210,
+      "Price": 2.91
+    }
+  ]
+}

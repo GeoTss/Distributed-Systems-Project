@@ -1,0 +1,29 @@
+{
+  "StoreName": "Tangy Wrap",
+  "Latitude": -78.571395,
+  "Longitude": -165.568362,
+  "FoodCategory": "dessert",
+  "Stars": 4.8,
+  "NoOfVotes": 217,
+  "StoreLogo": "/images/tangy_wrap_logo.png",
+  "Products": [
+    {
+      "ProductName": "Ice Cream Sundae",
+      "ProductType": "dessert",
+      "Available Amount": 871,
+      "Price": 12.15
+    },
+    {
+      "ProductName": "Fruit Tart",
+      "ProductType": "dessert",
+      "Available Amount": 844,
+      "Price": 10.15
+    },
+    {
+      "ProductName": "Chocolate Cake",
+      "ProductType": "dessert",
+      "Available Amount": 343,
+      "Price": 11.86
+    }
+  ]
+}

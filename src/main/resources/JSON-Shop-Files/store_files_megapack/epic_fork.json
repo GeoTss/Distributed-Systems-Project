@@ -1,0 +1,29 @@
+{
+  "StoreName": "Epic Fork",
+  "Latitude": 27.933436,
+  "Longitude": 151.703931,
+  "FoodCategory": "dessert",
+  "Stars": 4.7,
+  "NoOfVotes": 62,
+  "StoreLogo": "/images/epic_fork_logo.png",
+  "Products": [
+    {
+      "ProductName": "Fruit Tart",
+      "ProductType": "dessert",
+      "Available Amount": 272,
+      "Price": 14.04
+    },
+    {
+      "ProductName": "Ice Cream Sundae",
+      "ProductType": "dessert",
+      "Available Amount": 661,
+      "Price": 11.06
+    },
+    {
+      "ProductName": "Chocolate Cake",
+      "ProductType": "dessert",
+      "Available Amount": 889,
+      "Price": 2.16
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "StoreName": "Sweet Pit",
+  "Latitude": 50.848229,
+  "Longitude": -9.683286,
+  "FoodCategory": "bbq",
+  "Stars": 3.1,
+  "NoOfVotes": 156,
+  "StoreLogo": "/images/sweet_pit_logo.png",
+  "Products": [
+    {
+      "ProductName": "Pulled Pork Sandwich",
+      "ProductType": "bbq",
+      "Available Amount": 600,
+      "Price": 14.75
+    },
+    {
+      "ProductName": "BBQ Ribs",
+      "ProductType": "bbq",
+      "Available Amount": 165,
+      "Price": 2.87
+    },
+    {
+      "ProductName": "Brisket Plate",
+      "ProductType": "bbq",
+      "Available Amount": 275,
+      "Price": 5.56
+    }
+  ]
+}

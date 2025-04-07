@@ -1,0 +1,29 @@
+{
+  "StoreName": "Epic Bite",
+  "Latitude": 15.166882,
+  "Longitude": -167.254316,
+  "FoodCategory": "pizza",
+  "Stars": 4.0,
+  "NoOfVotes": 114,
+  "StoreLogo": "/images/epic_bite_logo.png",
+  "Products": [
+    {
+      "ProductName": "BBQ Chicken Pizza",
+      "ProductType": "pizza",
+      "Available Amount": 930,
+      "Price": 5.74
+    },
+    {
+      "ProductName": "Margherita Pizza",
+      "ProductType": "pizza",
+      "Available Amount": 569,
+      "Price": 7.66
+    },
+    {
+      "ProductName": "Pepperoni Pizza",
+      "ProductType": "pizza",
+      "Available Amount": 352,
+      "Price": 13.01
+    }
+  ]
+}

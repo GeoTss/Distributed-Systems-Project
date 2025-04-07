@@ -1,0 +1,29 @@
+{
+  "StoreName": "Heavenly Slice",
+  "Latitude": -43.592122,
+  "Longitude": -85.701318,
+  "FoodCategory": "coffee",
+  "Stars": 4.9,
+  "NoOfVotes": 125,
+  "StoreLogo": "/images/heavenly_slice_logo.png",
+  "Products": [
+    {
+      "ProductName": "Espresso",
+      "ProductType": "coffee",
+      "Available Amount": 342,
+      "Price": 8.06
+    },
+    {
+      "ProductName": "Iced Latte",
+      "ProductType": "coffee",
+      "Available Amount": 153,
+      "Price": 14.21
+    },
+    {
+      "ProductName": "Cappuccino",
+      "ProductType": "coffee",
+      "Available Amount": 722,
+      "Price": 13.41
+    }
+  ]
+}

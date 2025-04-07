@@ -1,0 +1,29 @@
+{
+  "StoreName": "Juicy Plate",
+  "Latitude": -69.14427,
+  "Longitude": 102.147431,
+  "FoodCategory": "sushi",
+  "Stars": 3.1,
+  "NoOfVotes": 410,
+  "StoreLogo": "/images/juicy_plate_logo.png",
+  "Products": [
+    {
+      "ProductName": "Salmon Nigiri",
+      "ProductType": "sushi",
+      "Available Amount": 479,
+      "Price": 3.99
+    },
+    {
+      "ProductName": "California Roll",
+      "ProductType": "sushi",
+      "Available Amount": 911,
+      "Price": 8.02
+    },
+    {
+      "ProductName": "Spicy Tuna Roll",
+      "ProductType": "sushi",
+      "Available Amount": 676,
+      "Price": 12.82
+    }
+  ]
+}

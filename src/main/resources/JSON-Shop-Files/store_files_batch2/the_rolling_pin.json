@@ -1,0 +1,29 @@
+{
+  "StoreName": "The Rolling Pin",
+  "Latitude": -14.578343,
+  "Longitude": 39.083144,
+  "FoodCategory": "vegan",
+  "Stars": 4.8,
+  "NoOfVotes": 399,
+  "StoreLogo": "/images/the_rolling_pin_logo.png",
+  "Products": [
+    {
+      "ProductName": "Vegan Burger",
+      "ProductType": "vegan",
+      "Available Amount": 815,
+      "Price": 12.97
+    },
+    {
+      "ProductName": "Vegan Bowl",
+      "ProductType": "vegan",
+      "Available Amount": 189,
+      "Price": 9.76
+    },
+    {
+      "ProductName": "Tofu Salad",
+      "ProductType": "vegan",
+      "Available Amount": 794,
+      "Price": 4.86
+    }
+  ]
+}

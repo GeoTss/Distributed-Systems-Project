@@ -1,0 +1,29 @@
+{
+  "StoreName": "Spicy Platter",
+  "Latitude": 78.104925,
+  "Longitude": 143.740294,
+  "FoodCategory": "salad",
+  "Stars": 3.7,
+  "NoOfVotes": 216,
+  "StoreLogo": "/images/spicy_platter_logo.png",
+  "Products": [
+    {
+      "ProductName": "Quinoa Salad",
+      "ProductType": "salad",
+      "Available Amount": 375,
+      "Price": 9.63
+    },
+    {
+      "ProductName": "Greek Salad",
+      "ProductType": "salad",
+      "Available Amount": 390,
+      "Price": 14.95
+    },
+    {
+      "ProductName": "Caesar Salad",
+      "ProductType": "salad",
+      "Available Amount": 894,
+      "Price": 13.42
+    }
+  ]
+}

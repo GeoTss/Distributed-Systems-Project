@@ -1,0 +1,29 @@
+{
+  "StoreName": "Peppery Oven",
+  "Latitude": 78.102143,
+  "Longitude": 136.527667,
+  "FoodCategory": "kebab",
+  "Stars": 4.4,
+  "NoOfVotes": 211,
+  "StoreLogo": "/images/peppery_oven_logo.png",
+  "Products": [
+    {
+      "ProductName": "Falafel Wrap",
+      "ProductType": "kebab",
+      "Available Amount": 846,
+      "Price": 4.23
+    },
+    {
+      "ProductName": "Chicken Kebab",
+      "ProductType": "kebab",
+      "Available Amount": 294,
+      "Price": 7.93
+    },
+    {
+      "ProductName": "Lamb Shawarma",
+      "ProductType": "kebab",
+      "Available Amount": 256,
+      "Price": 12.44
+    }
+  ]
+}

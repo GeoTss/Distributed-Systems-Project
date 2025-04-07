@@ -1,0 +1,29 @@
+{
+  "StoreName": "Buttery Burger",
+  "Latitude": -86.365294,
+  "Longitude": -104.212556,
+  "FoodCategory": "burger",
+  "Stars": 5.0,
+  "NoOfVotes": 79,
+  "StoreLogo": "/images/buttery_burger_logo.png",
+  "Products": [
+    {
+      "ProductName": "Veggie Burger",
+      "ProductType": "burger",
+      "Available Amount": 746,
+      "Price": 3.48
+    },
+    {
+      "ProductName": "Bacon Double Cheeseburger",
+      "ProductType": "burger",
+      "Available Amount": 482,
+      "Price": 8.5
+    },
+    {
+      "ProductName": "Classic Burger",
+      "ProductType": "burger",
+      "Available Amount": 974,
+      "Price": 5.22
+    }
+  ]
+}

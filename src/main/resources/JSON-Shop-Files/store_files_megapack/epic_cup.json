@@ -1,0 +1,29 @@
+{
+  "StoreName": "Epic Cup",
+  "Latitude": 49.525883,
+  "Longitude": 146.177403,
+  "FoodCategory": "pasta",
+  "Stars": 4.3,
+  "NoOfVotes": 301,
+  "StoreLogo": "/images/epic_cup_logo.png",
+  "Products": [
+    {
+      "ProductName": "Spaghetti Bolognese",
+      "ProductType": "pasta",
+      "Available Amount": 398,
+      "Price": 6.82
+    },
+    {
+      "ProductName": "Lasagna",
+      "ProductType": "pasta",
+      "Available Amount": 869,
+      "Price": 8.82
+    },
+    {
+      "ProductName": "Penne Alfredo",
+      "ProductType": "pasta",
+      "Available Amount": 886,
+      "Price": 4.82
+    }
+  ]
+}

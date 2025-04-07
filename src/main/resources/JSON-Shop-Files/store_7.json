@@ -1,0 +1,29 @@
+{
+  "StoreName": "Caffeine Hub",
+  "Latitude": -65.299134,
+  "Longitude": -147.13419,
+  "FoodCategory": "pizza",
+  "Stars": 5.0,
+  "NoOfVotes": 465,
+  "StoreLogo": "/images/caffeine_hub_logo.png",
+  "Products": [
+    {
+      "ProductName": "Margherita Pizza",
+      "ProductType": "pizza",
+      "Available Amount": 600,
+      "Price": 12.71
+    },
+    {
+      "ProductName": "BBQ Chicken Pizza",
+      "ProductType": "pizza",
+      "Available Amount": 296,
+      "Price": 2.14
+    },
+    {
+      "ProductName": "Pepperoni Pizza",
+      "ProductType": "pizza",
+      "Available Amount": 391,
+      "Price": 6.62
+    }
+  ]
+}

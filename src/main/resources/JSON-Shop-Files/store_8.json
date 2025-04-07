@@ -1,0 +1,29 @@
+{
+  "StoreName": "Salad Stop",
+  "Latitude": -0.893368,
+  "Longitude": -97.771287,
+  "FoodCategory": "pasta",
+  "Stars": 2.6,
+  "NoOfVotes": 311,
+  "StoreLogo": "/images/salad_stop_logo.png",
+  "Products": [
+    {
+      "ProductName": "Spaghetti Bolognese",
+      "ProductType": "pasta",
+      "Available Amount": 137,
+      "Price": 11.82
+    },
+    {
+      "ProductName": "Penne Alfredo",
+      "ProductType": "pasta",
+      "Available Amount": 263,
+      "Price": 13.87
+    },
+    {
+      "ProductName": "Lasagna",
+      "ProductType": "pasta",
+      "Available Amount": 639,
+      "Price": 10.25
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "StoreName": "Savory Table",
+  "Latitude": 64.673689,
+  "Longitude": 72.957129,
+  "FoodCategory": "kebab",
+  "Stars": 4.1,
+  "NoOfVotes": 97,
+  "StoreLogo": "/images/savory_table_logo.png",
+  "Products": [
+    {
+      "ProductName": "Chicken Kebab",
+      "ProductType": "kebab",
+      "Available Amount": 357,
+      "Price": 2.15
+    },
+    {
+      "ProductName": "Falafel Wrap",
+      "ProductType": "kebab",
+      "Available Amount": 243,
+      "Price": 6.98
+    },
+    {
+      "ProductName": "Lamb Shawarma",
+      "ProductType": "kebab",
+      "Available Amount": 664,
+      "Price": 7.42
+    }
+  ]
+}

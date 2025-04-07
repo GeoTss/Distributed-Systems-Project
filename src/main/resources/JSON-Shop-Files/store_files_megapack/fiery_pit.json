@@ -1,0 +1,29 @@
+{
+  "StoreName": "Fiery Pit",
+  "Latitude": -34.182164,
+  "Longitude": 84.082476,
+  "FoodCategory": "pasta",
+  "Stars": 3.3,
+  "NoOfVotes": 128,
+  "StoreLogo": "/images/fiery_pit_logo.png",
+  "Products": [
+    {
+      "ProductName": "Spaghetti Bolognese",
+      "ProductType": "pasta",
+      "Available Amount": 626,
+      "Price": 8.86
+    },
+    {
+      "ProductName": "Lasagna",
+      "ProductType": "pasta",
+      "Available Amount": 237,
+      "Price": 5.96
+    },
+    {
+      "ProductName": "Penne Alfredo",
+      "ProductType": "pasta",
+      "Available Amount": 795,
+      "Price": 6.64
+    }
+  ]
+}

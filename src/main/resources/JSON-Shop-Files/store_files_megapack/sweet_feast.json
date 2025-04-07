@@ -1,0 +1,29 @@
+{
+  "StoreName": "Sweet Feast",
+  "Latitude": 13.143803,
+  "Longitude": 115.891327,
+  "FoodCategory": "dessert",
+  "Stars": 4.0,
+  "NoOfVotes": 366,
+  "StoreLogo": "/images/sweet_feast_logo.png",
+  "Products": [
+    {
+      "ProductName": "Ice Cream Sundae",
+      "ProductType": "dessert",
+      "Available Amount": 747,
+      "Price": 6.25
+    },
+    {
+      "ProductName": "Chocolate Cake",
+      "ProductType": "dessert",
+      "Available Amount": 496,
+      "Price": 11.71
+    },
+    {
+      "ProductName": "Fruit Tart",
+      "ProductType": "dessert",
+      "Available Amount": 791,
+      "Price": 6.34
+    }
+  ]
+}

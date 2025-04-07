@@ -1,0 +1,29 @@
+{
+  "StoreName": "Savory Cup",
+  "Latitude": -0.192778,
+  "Longitude": 39.347542,
+  "FoodCategory": "vegan",
+  "Stars": 2.7,
+  "NoOfVotes": 77,
+  "StoreLogo": "/images/savory_cup_logo.png",
+  "Products": [
+    {
+      "ProductName": "Tofu Salad",
+      "ProductType": "vegan",
+      "Available Amount": 782,
+      "Price": 11.07
+    },
+    {
+      "ProductName": "Vegan Bowl",
+      "ProductType": "vegan",
+      "Available Amount": 337,
+      "Price": 14.98
+    },
+    {
+      "ProductName": "Vegan Burger",
+      "ProductType": "vegan",
+      "Available Amount": 962,
+      "Price": 11.66
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "StoreName": "Savor Station",
+  "Latitude": 85.862809,
+  "Longitude": 174.2336,
+  "FoodCategory": "burger",
+  "Stars": 4.2,
+  "NoOfVotes": 87,
+  "StoreLogo": "/images/savor_station_logo.png",
+  "Products": [
+    {
+      "ProductName": "Veggie Burger",
+      "ProductType": "burger",
+      "Available Amount": 183,
+      "Price": 6.18
+    },
+    {
+      "ProductName": "Classic Burger",
+      "ProductType": "burger",
+      "Available Amount": 709,
+      "Price": 5.19
+    },
+    {
+      "ProductName": "Bacon Double Cheeseburger",
+      "ProductType": "burger",
+      "Available Amount": 281,
+      "Price": 6.66
+    }
+  ]
+}

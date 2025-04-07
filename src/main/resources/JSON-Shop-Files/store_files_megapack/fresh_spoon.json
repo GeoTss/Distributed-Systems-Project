@@ -1,0 +1,29 @@
+{
+  "StoreName": "Fresh Spoon",
+  "Latitude": -27.382572,
+  "Longitude": -145.535772,
+  "FoodCategory": "vegan",
+  "Stars": 4.5,
+  "NoOfVotes": 450,
+  "StoreLogo": "/images/fresh_spoon_logo.png",
+  "Products": [
+    {
+      "ProductName": "Vegan Bowl",
+      "ProductType": "vegan",
+      "Available Amount": 294,
+      "Price": 11.22
+    },
+    {
+      "ProductName": "Tofu Salad",
+      "ProductType": "vegan",
+      "Available Amount": 634,
+      "Price": 11.97
+    },
+    {
+      "ProductName": "Vegan Burger",
+      "ProductType": "vegan",
+      "Available Amount": 944,
+      "Price": 13.7
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "StoreName": "Epic Bowl",
+  "Latitude": 22.324419,
+  "Longitude": 106.255659,
+  "FoodCategory": "pasta",
+  "Stars": 4.2,
+  "NoOfVotes": 15,
+  "StoreLogo": "/images/epic_bowl_logo.png",
+  "Products": [
+    {
+      "ProductName": "Penne Alfredo",
+      "ProductType": "pasta",
+      "Available Amount": 395,
+      "Price": 10.81
+    },
+    {
+      "ProductName": "Lasagna",
+      "ProductType": "pasta",
+      "Available Amount": 1000,
+      "Price": 12.88
+    },
+    {
+      "ProductName": "Spaghetti Bolognese",
+      "ProductType": "pasta",
+      "Available Amount": 428,
+      "Price": 9.66
+    }
+  ]
+}

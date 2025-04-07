@@ -1,0 +1,29 @@
+{
+  "StoreName": "Peppery Plate",
+  "Latitude": -9.399308,
+  "Longitude": 29.806837,
+  "FoodCategory": "coffee",
+  "Stars": 4.0,
+  "NoOfVotes": 375,
+  "StoreLogo": "/images/peppery_plate_logo.png",
+  "Products": [
+    {
+      "ProductName": "Iced Latte",
+      "ProductType": "coffee",
+      "Available Amount": 236,
+      "Price": 9.0
+    },
+    {
+      "ProductName": "Cappuccino",
+      "ProductType": "coffee",
+      "Available Amount": 990,
+      "Price": 13.38
+    },
+    {
+      "ProductName": "Espresso",
+      "ProductType": "coffee",
+      "Available Amount": 378,
+      "Price": 10.23
+    }
+  ]
+}

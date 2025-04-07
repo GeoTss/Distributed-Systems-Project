@@ -1,0 +1,29 @@
+{
+  "StoreName": "Fry Guys",
+  "Latitude": -50.241306,
+  "Longitude": 1.748984,
+  "FoodCategory": "salad",
+  "Stars": 4.2,
+  "NoOfVotes": 348,
+  "StoreLogo": "/images/fry_guys_logo.png",
+  "Products": [
+    {
+      "ProductName": "Caesar Salad",
+      "ProductType": "salad",
+      "Available Amount": 798,
+      "Price": 6.07
+    },
+    {
+      "ProductName": "Greek Salad",
+      "ProductType": "salad",
+      "Available Amount": 698,
+      "Price": 5.93
+    },
+    {
+      "ProductName": "Quinoa Salad",
+      "ProductType": "salad",
+      "Available Amount": 894,
+      "Price": 5.24
+    }
+  ]
+}

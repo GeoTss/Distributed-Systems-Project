@@ -1,0 +1,29 @@
+{
+  "StoreName": "Sizzling Feast",
+  "Latitude": 0.254653,
+  "Longitude": -59.185927,
+  "FoodCategory": "sushi",
+  "Stars": 3.9,
+  "NoOfVotes": 23,
+  "StoreLogo": "/images/sizzling_feast_logo.png",
+  "Products": [
+    {
+      "ProductName": "Salmon Nigiri",
+      "ProductType": "sushi",
+      "Available Amount": 378,
+      "Price": 2.92
+    },
+    {
+      "ProductName": "California Roll",
+      "ProductType": "sushi",
+      "Available Amount": 617,
+      "Price": 2.44
+    },
+    {
+      "ProductName": "Spicy Tuna Roll",
+      "ProductType": "sushi",
+      "Available Amount": 403,
+      "Price": 2.43
+    }
+  ]
+}

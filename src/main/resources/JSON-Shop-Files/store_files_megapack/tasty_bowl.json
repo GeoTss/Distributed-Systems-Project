@@ -1,0 +1,29 @@
+{
+  "StoreName": "Tasty Bowl",
+  "Latitude": -3.090531,
+  "Longitude": -123.676626,
+  "FoodCategory": "pasta",
+  "Stars": 3.9,
+  "NoOfVotes": 17,
+  "StoreLogo": "/images/tasty_bowl_logo.png",
+  "Products": [
+    {
+      "ProductName": "Lasagna",
+      "ProductType": "pasta",
+      "Available Amount": 555,
+      "Price": 2.78
+    },
+    {
+      "ProductName": "Penne Alfredo",
+      "ProductType": "pasta",
+      "Available Amount": 272,
+      "Price": 12.25
+    },
+    {
+      "ProductName": "Spaghetti Bolognese",
+      "ProductType": "pasta",
+      "Available Amount": 357,
+      "Price": 4.93
+    }
+  ]
+}

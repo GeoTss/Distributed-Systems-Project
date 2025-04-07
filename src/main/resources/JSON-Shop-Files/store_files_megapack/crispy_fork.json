@@ -1,0 +1,29 @@
+{
+  "StoreName": "Crispy Fork",
+  "Latitude": 56.35451,
+  "Longitude": 111.283328,
+  "FoodCategory": "pizza",
+  "Stars": 4.2,
+  "NoOfVotes": 181,
+  "StoreLogo": "/images/crispy_fork_logo.png",
+  "Products": [
+    {
+      "ProductName": "Pepperoni Pizza",
+      "ProductType": "pizza",
+      "Available Amount": 547,
+      "Price": 11.97
+    },
+    {
+      "ProductName": "BBQ Chicken Pizza",
+      "ProductType": "pizza",
+      "Available Amount": 999,
+      "Price": 3.31
+    },
+    {
+      "ProductName": "Margherita Pizza",
+      "ProductType": "pizza",
+      "Available Amount": 767,
+      "Price": 14.75
+    }
+  ]
+}

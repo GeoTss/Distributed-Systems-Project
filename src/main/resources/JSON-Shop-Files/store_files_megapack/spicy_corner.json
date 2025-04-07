@@ -1,0 +1,29 @@
+{
+  "StoreName": "Spicy Corner",
+  "Latitude": 36.682624,
+  "Longitude": -113.909548,
+  "FoodCategory": "sushi",
+  "Stars": 4.7,
+  "NoOfVotes": 251,
+  "StoreLogo": "/images/spicy_corner_logo.png",
+  "Products": [
+    {
+      "ProductName": "Salmon Nigiri",
+      "ProductType": "sushi",
+      "Available Amount": 657,
+      "Price": 10.03
+    },
+    {
+      "ProductName": "Spicy Tuna Roll",
+      "ProductType": "sushi",
+      "Available Amount": 829,
+      "Price": 4.85
+    },
+    {
+      "ProductName": "California Roll",
+      "ProductType": "sushi",
+      "Available Amount": 605,
+      "Price": 4.54
+    }
+  ]
+}

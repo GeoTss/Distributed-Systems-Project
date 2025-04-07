@@ -1,0 +1,29 @@
+{
+  "StoreName": "Golden Wrap",
+  "Latitude": -47.317066,
+  "Longitude": -145.325045,
+  "FoodCategory": "pasta",
+  "Stars": 4.8,
+  "NoOfVotes": 233,
+  "StoreLogo": "/images/golden_wrap_logo.png",
+  "Products": [
+    {
+      "ProductName": "Lasagna",
+      "ProductType": "pasta",
+      "Available Amount": 677,
+      "Price": 12.66
+    },
+    {
+      "ProductName": "Spaghetti Bolognese",
+      "ProductType": "pasta",
+      "Available Amount": 224,
+      "Price": 2.46
+    },
+    {
+      "ProductName": "Penne Alfredo",
+      "ProductType": "pasta",
+      "Available Amount": 487,
+      "Price": 3.55
+    }
+  ]
+}

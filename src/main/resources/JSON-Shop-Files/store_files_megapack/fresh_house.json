@@ -1,0 +1,29 @@
+{
+  "StoreName": "Fresh House",
+  "Latitude": -43.020863,
+  "Longitude": 36.794897,
+  "FoodCategory": "bbq",
+  "Stars": 2.8,
+  "NoOfVotes": 454,
+  "StoreLogo": "/images/fresh_house_logo.png",
+  "Products": [
+    {
+      "ProductName": "BBQ Ribs",
+      "ProductType": "bbq",
+      "Available Amount": 691,
+      "Price": 5.79
+    },
+    {
+      "ProductName": "Brisket Plate",
+      "ProductType": "bbq",
+      "Available Amount": 475,
+      "Price": 11.33
+    },
+    {
+      "ProductName": "Pulled Pork Sandwich",
+      "ProductType": "bbq",
+      "Available Amount": 636,
+      "Price": 7.91
+    }
+  ]
+}

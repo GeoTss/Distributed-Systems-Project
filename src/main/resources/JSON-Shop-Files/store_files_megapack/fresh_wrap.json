@@ -1,0 +1,29 @@
+{
+  "StoreName": "Fresh Wrap",
+  "Latitude": 50.475635,
+  "Longitude": 78.088438,
+  "FoodCategory": "bbq",
+  "Stars": 4.9,
+  "NoOfVotes": 425,
+  "StoreLogo": "/images/fresh_wrap_logo.png",
+  "Products": [
+    {
+      "ProductName": "Pulled Pork Sandwich",
+      "ProductType": "bbq",
+      "Available Amount": 734,
+      "Price": 10.72
+    },
+    {
+      "ProductName": "BBQ Ribs",
+      "ProductType": "bbq",
+      "Available Amount": 158,
+      "Price": 12.44
+    },
+    {
+      "ProductName": "Brisket Plate",
+      "ProductType": "bbq",
+      "Available Amount": 383,
+      "Price": 9.23
+    }
+  ]
+}

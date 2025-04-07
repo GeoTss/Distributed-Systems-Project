@@ -1,0 +1,29 @@
+{
+  "StoreName": "Buttery Cup",
+  "Latitude": 12.637092,
+  "Longitude": 165.840632,
+  "FoodCategory": "dessert",
+  "Stars": 4.2,
+  "NoOfVotes": 339,
+  "StoreLogo": "/images/buttery_cup_logo.png",
+  "Products": [
+    {
+      "ProductName": "Ice Cream Sundae",
+      "ProductType": "dessert",
+      "Available Amount": 932,
+      "Price": 10.78
+    },
+    {
+      "ProductName": "Fruit Tart",
+      "ProductType": "dessert",
+      "Available Amount": 837,
+      "Price": 12.08
+    },
+    {
+      "ProductName": "Chocolate Cake",
+      "ProductType": "dessert",
+      "Available Amount": 461,
+      "Price": 12.91
+    }
+  ]
+}

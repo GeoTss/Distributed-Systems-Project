@@ -1,0 +1,29 @@
+{
+  "StoreName": "Pasta Parade",
+  "Latitude": 88.127181,
+  "Longitude": 30.690719,
+  "FoodCategory": "burger",
+  "Stars": 4.8,
+  "NoOfVotes": 384,
+  "StoreLogo": "/images/pasta_parade_logo.png",
+  "Products": [
+    {
+      "ProductName": "Classic Burger",
+      "ProductType": "burger",
+      "Available Amount": 484,
+      "Price": 8.54
+    },
+    {
+      "ProductName": "Veggie Burger",
+      "ProductType": "burger",
+      "Available Amount": 312,
+      "Price": 8.97
+    },
+    {
+      "ProductName": "Bacon Double Cheeseburger",
+      "ProductType": "burger",
+      "Available Amount": 266,
+      "Price": 10.65
+    }
+  ]
+}

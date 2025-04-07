@@ -1,0 +1,29 @@
+{
+  "StoreName": "Savory House",
+  "Latitude": -30.524786,
+  "Longitude": 77.436452,
+  "FoodCategory": "salad",
+  "Stars": 3.8,
+  "NoOfVotes": 180,
+  "StoreLogo": "/images/savory_house_logo.png",
+  "Products": [
+    {
+      "ProductName": "Greek Salad",
+      "ProductType": "salad",
+      "Available Amount": 478,
+      "Price": 14.36
+    },
+    {
+      "ProductName": "Quinoa Salad",
+      "ProductType": "salad",
+      "Available Amount": 207,
+      "Price": 2.41
+    },
+    {
+      "ProductName": "Caesar Salad",
+      "ProductType": "salad",
+      "Available Amount": 178,
+      "Price": 4.11
+    }
+  ]
+}

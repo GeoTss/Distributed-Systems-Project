@@ -1,0 +1,29 @@
+{
+  "StoreName": "Sandwich Shack",
+  "Latitude": 77.653547,
+  "Longitude": -80.733851,
+  "FoodCategory": "coffee",
+  "Stars": 2.6,
+  "NoOfVotes": 374,
+  "StoreLogo": "/images/sandwich_shack_logo.png",
+  "Products": [
+    {
+      "ProductName": "Espresso",
+      "ProductType": "coffee",
+      "Available Amount": 337,
+      "Price": 6.46
+    },
+    {
+      "ProductName": "Iced Latte",
+      "ProductType": "coffee",
+      "Available Amount": 430,
+      "Price": 8.74
+    },
+    {
+      "ProductName": "Cappuccino",
+      "ProductType": "coffee",
+      "Available Amount": 384,
+      "Price": 9.85
+    }
+  ]
+}

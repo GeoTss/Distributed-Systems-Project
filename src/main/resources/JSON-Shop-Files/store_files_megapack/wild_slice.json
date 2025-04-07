@@ -1,0 +1,29 @@
+{
+  "StoreName": "Wild Slice",
+  "Latitude": -5.190388,
+  "Longitude": 107.164938,
+  "FoodCategory": "coffee",
+  "Stars": 3.4,
+  "NoOfVotes": 226,
+  "StoreLogo": "/images/wild_slice_logo.png",
+  "Products": [
+    {
+      "ProductName": "Iced Latte",
+      "ProductType": "coffee",
+      "Available Amount": 334,
+      "Price": 14.53
+    },
+    {
+      "ProductName": "Cappuccino",
+      "ProductType": "coffee",
+      "Available Amount": 804,
+      "Price": 10.91
+    },
+    {
+      "ProductName": "Espresso",
+      "ProductType": "coffee",
+      "Available Amount": 708,
+      "Price": 11.3
+    }
+  ]
+}

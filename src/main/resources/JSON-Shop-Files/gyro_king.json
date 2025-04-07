@@ -1,0 +1,29 @@
+{
+  "StoreName": "Gyro King",
+  "Latitude": 37.975793,
+  "Longitude": 23.734224,
+  "FoodCategory": "greek",
+  "Stars": 4.2,
+  "NoOfVotes": 89,
+  "StoreLogo": "/images/gyro_king_logo.png",
+  "Products": [
+    {
+      "ProductName": "Pork Gyro",
+      "ProductType": "gyro",
+      "Available Amount": 1500,
+      "Price": 4.5
+    },
+    {
+      "ProductName": "Chicken Gyro",
+      "ProductType": "gyro",
+      "Available Amount": 1600,
+      "Price": 4.8
+    },
+    {
+      "ProductName": "Greek Salad",
+      "ProductType": "salad",
+      "Available Amount": 300,
+      "Price": 3.5
+    }
+  ]
+}

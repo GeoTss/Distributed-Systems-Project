@@ -1,0 +1,29 @@
+{
+  "StoreName": "Tangy Cup",
+  "Latitude": -72.882005,
+  "Longitude": -11.803783,
+  "FoodCategory": "kebab",
+  "Stars": 3.6,
+  "NoOfVotes": 451,
+  "StoreLogo": "/images/tangy_cup_logo.png",
+  "Products": [
+    {
+      "ProductName": "Lamb Shawarma",
+      "ProductType": "kebab",
+      "Available Amount": 378,
+      "Price": 5.89
+    },
+    {
+      "ProductName": "Falafel Wrap",
+      "ProductType": "kebab",
+      "Available Amount": 977,
+      "Price": 9.09
+    },
+    {
+      "ProductName": "Chicken Kebab",
+      "ProductType": "kebab",
+      "Available Amount": 621,
+      "Price": 2.84
+    }
+  ]
+}

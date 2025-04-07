@@ -1,0 +1,29 @@
+{
+  "StoreName": "Sizzling Kitchen",
+  "Latitude": -72.240042,
+  "Longitude": 26.419978,
+  "FoodCategory": "pasta",
+  "Stars": 2.8,
+  "NoOfVotes": 332,
+  "StoreLogo": "/images/sizzling_kitchen_logo.png",
+  "Products": [
+    {
+      "ProductName": "Lasagna",
+      "ProductType": "pasta",
+      "Available Amount": 666,
+      "Price": 6.58
+    },
+    {
+      "ProductName": "Spaghetti Bolognese",
+      "ProductType": "pasta",
+      "Available Amount": 702,
+      "Price": 4.66
+    },
+    {
+      "ProductName": "Penne Alfredo",
+      "ProductType": "pasta",
+      "Available Amount": 446,
+      "Price": 8.1
+    }
+  ]
+}

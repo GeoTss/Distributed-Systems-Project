@@ -1,0 +1,29 @@
+{
+  "StoreName": "Fresh Bowl",
+  "Latitude": -75.283592,
+  "Longitude": 35.904119,
+  "FoodCategory": "vegan",
+  "Stars": 3.2,
+  "NoOfVotes": 451,
+  "StoreLogo": "/images/fresh_bowl_logo.png",
+  "Products": [
+    {
+      "ProductName": "Vegan Burger",
+      "ProductType": "vegan",
+      "Available Amount": 184,
+      "Price": 8.77
+    },
+    {
+      "ProductName": "Tofu Salad",
+      "ProductType": "vegan",
+      "Available Amount": 705,
+      "Price": 9.34
+    },
+    {
+      "ProductName": "Vegan Bowl",
+      "ProductType": "vegan",
+      "Available Amount": 443,
+      "Price": 7.15
+    }
+  ]
+}

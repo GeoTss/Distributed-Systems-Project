@@ -1,0 +1,29 @@
+{
+  "StoreName": "Juicy Bowl",
+  "Latitude": -60.131802,
+  "Longitude": -37.325035,
+  "FoodCategory": "sushi",
+  "Stars": 3.4,
+  "NoOfVotes": 124,
+  "StoreLogo": "/images/juicy_bowl_logo.png",
+  "Products": [
+    {
+      "ProductName": "Spicy Tuna Roll",
+      "ProductType": "sushi",
+      "Available Amount": 855,
+      "Price": 14.51
+    },
+    {
+      "ProductName": "Salmon Nigiri",
+      "ProductType": "sushi",
+      "Available Amount": 984,
+      "Price": 14.43
+    },
+    {
+      "ProductName": "California Roll",
+      "ProductType": "sushi",
+      "Available Amount": 572,
+      "Price": 3.39
+    }
+  ]
+}

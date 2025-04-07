@@ -1,0 +1,29 @@
+{
+  "StoreName": "Grill Master",
+  "Latitude": 66.180784,
+  "Longitude": 15.054993,
+  "FoodCategory": "coffee",
+  "Stars": 4.8,
+  "NoOfVotes": 489,
+  "StoreLogo": "/images/grill_master_logo.png",
+  "Products": [
+    {
+      "ProductName": "Iced Latte",
+      "ProductType": "coffee",
+      "Available Amount": 846,
+      "Price": 5.81
+    },
+    {
+      "ProductName": "Espresso",
+      "ProductType": "coffee",
+      "Available Amount": 629,
+      "Price": 12.01
+    },
+    {
+      "ProductName": "Cappuccino",
+      "ProductType": "coffee",
+      "Available Amount": 589,
+      "Price": 5.2
+    }
+  ]
+}

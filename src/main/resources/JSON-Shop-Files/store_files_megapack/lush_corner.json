@@ -1,0 +1,29 @@
+{
+  "StoreName": "Lush Corner",
+  "Latitude": 56.614471,
+  "Longitude": 8.679213,
+  "FoodCategory": "salad",
+  "Stars": 3.1,
+  "NoOfVotes": 213,
+  "StoreLogo": "/images/lush_corner_logo.png",
+  "Products": [
+    {
+      "ProductName": "Quinoa Salad",
+      "ProductType": "salad",
+      "Available Amount": 946,
+      "Price": 3.28
+    },
+    {
+      "ProductName": "Caesar Salad",
+      "ProductType": "salad",
+      "Available Amount": 174,
+      "Price": 2.53
+    },
+    {
+      "ProductName": "Greek Salad",
+      "ProductType": "salad",
+      "Available Amount": 635,
+      "Price": 13.46
+    }
+  ]
+}

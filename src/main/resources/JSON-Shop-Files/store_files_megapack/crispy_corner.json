@@ -1,0 +1,29 @@
+{
+  "StoreName": "Crispy Corner",
+  "Latitude": 67.971205,
+  "Longitude": 92.271946,
+  "FoodCategory": "salad",
+  "Stars": 4.9,
+  "NoOfVotes": 14,
+  "StoreLogo": "/images/crispy_corner_logo.png",
+  "Products": [
+    {
+      "ProductName": "Greek Salad",
+      "ProductType": "salad",
+      "Available Amount": 280,
+      "Price": 8.35
+    },
+    {
+      "ProductName": "Caesar Salad",
+      "ProductType": "salad",
+      "Available Amount": 339,
+      "Price": 12.63
+    },
+    {
+      "ProductName": "Quinoa Salad",
+      "ProductType": "salad",
+      "Available Amount": 689,
+      "Price": 11.53
+    }
+  ]
+}

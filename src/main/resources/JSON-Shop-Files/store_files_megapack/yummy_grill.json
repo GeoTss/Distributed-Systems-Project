@@ -1,0 +1,29 @@
+{
+  "StoreName": "Yummy Grill",
+  "Latitude": -51.280539,
+  "Longitude": -15.083413,
+  "FoodCategory": "bbq",
+  "Stars": 4.4,
+  "NoOfVotes": 406,
+  "StoreLogo": "/images/yummy_grill_logo.png",
+  "Products": [
+    {
+      "ProductName": "Pulled Pork Sandwich",
+      "ProductType": "bbq",
+      "Available Amount": 698,
+      "Price": 12.85
+    },
+    {
+      "ProductName": "Brisket Plate",
+      "ProductType": "bbq",
+      "Available Amount": 126,
+      "Price": 14.43
+    },
+    {
+      "ProductName": "BBQ Ribs",
+      "ProductType": "bbq",
+      "Available Amount": 105,
+      "Price": 4.26
+    }
+  ]
+}

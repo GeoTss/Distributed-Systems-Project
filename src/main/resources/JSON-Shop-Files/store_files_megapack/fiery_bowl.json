@@ -1,0 +1,29 @@
+{
+  "StoreName": "Fiery Bowl",
+  "Latitude": -52.798392,
+  "Longitude": -128.917868,
+  "FoodCategory": "dessert",
+  "Stars": 3.5,
+  "NoOfVotes": 427,
+  "StoreLogo": "/images/fiery_bowl_logo.png",
+  "Products": [
+    {
+      "ProductName": "Ice Cream Sundae",
+      "ProductType": "dessert",
+      "Available Amount": 987,
+      "Price": 6.69
+    },
+    {
+      "ProductName": "Fruit Tart",
+      "ProductType": "dessert",
+      "Available Amount": 331,
+      "Price": 11.92
+    },
+    {
+      "ProductName": "Chocolate Cake",
+      "ProductType": "dessert",
+      "Available Amount": 962,
+      "Price": 4.64
+    }
+  ]
+}

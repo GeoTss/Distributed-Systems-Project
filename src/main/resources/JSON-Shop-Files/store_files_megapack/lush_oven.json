@@ -1,0 +1,29 @@
+{
+  "StoreName": "Lush Oven",
+  "Latitude": 59.015444,
+  "Longitude": -36.431411,
+  "FoodCategory": "sushi",
+  "Stars": 4.2,
+  "NoOfVotes": 17,
+  "StoreLogo": "/images/lush_oven_logo.png",
+  "Products": [
+    {
+      "ProductName": "California Roll",
+      "ProductType": "sushi",
+      "Available Amount": 689,
+      "Price": 8.57
+    },
+    {
+      "ProductName": "Salmon Nigiri",
+      "ProductType": "sushi",
+      "Available Amount": 249,
+      "Price": 11.23
+    },
+    {
+      "ProductName": "Spicy Tuna Roll",
+      "ProductType": "sushi",
+      "Available Amount": 819,
+      "Price": 10.84
+    }
+  ]
+}

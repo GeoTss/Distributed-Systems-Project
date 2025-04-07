@@ -1,0 +1,29 @@
+{
+  "StoreName": "Fiery Cup",
+  "Latitude": 23.44079,
+  "Longitude": -161.709967,
+  "FoodCategory": "salad",
+  "Stars": 2.7,
+  "NoOfVotes": 378,
+  "StoreLogo": "/images/fiery_cup_logo.png",
+  "Products": [
+    {
+      "ProductName": "Caesar Salad",
+      "ProductType": "salad",
+      "Available Amount": 592,
+      "Price": 12.73
+    },
+    {
+      "ProductName": "Greek Salad",
+      "ProductType": "salad",
+      "Available Amount": 502,
+      "Price": 8.32
+    },
+    {
+      "ProductName": "Quinoa Salad",
+      "ProductType": "salad",
+      "Available Amount": 563,
+      "Price": 14.9
+    }
+  ]
+}

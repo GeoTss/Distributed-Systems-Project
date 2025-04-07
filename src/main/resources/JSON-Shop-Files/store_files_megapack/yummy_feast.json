@@ -1,0 +1,29 @@
+{
+  "StoreName": "Yummy Feast",
+  "Latitude": -47.220131,
+  "Longitude": 177.834472,
+  "FoodCategory": "burger",
+  "Stars": 2.8,
+  "NoOfVotes": 430,
+  "StoreLogo": "/images/yummy_feast_logo.png",
+  "Products": [
+    {
+      "ProductName": "Veggie Burger",
+      "ProductType": "burger",
+      "Available Amount": 254,
+      "Price": 3.37
+    },
+    {
+      "ProductName": "Bacon Double Cheeseburger",
+      "ProductType": "burger",
+      "Available Amount": 274,
+      "Price": 11.71
+    },
+    {
+      "ProductName": "Classic Burger",
+      "ProductType": "burger",
+      "Available Amount": 617,
+      "Price": 3.97
+    }
+  ]
+}

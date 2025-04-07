@@ -1,0 +1,29 @@
+{
+  "StoreName": "Heavenly Pit",
+  "Latitude": -81.25618,
+  "Longitude": 69.760496,
+  "FoodCategory": "kebab",
+  "Stars": 3.7,
+  "NoOfVotes": 461,
+  "StoreLogo": "/images/heavenly_pit_logo.png",
+  "Products": [
+    {
+      "ProductName": "Chicken Kebab",
+      "ProductType": "kebab",
+      "Available Amount": 455,
+      "Price": 14.7
+    },
+    {
+      "ProductName": "Lamb Shawarma",
+      "ProductType": "kebab",
+      "Available Amount": 641,
+      "Price": 2.17
+    },
+    {
+      "ProductName": "Falafel Wrap",
+      "ProductType": "kebab",
+      "Available Amount": 762,
+      "Price": 4.49
+    }
+  ]
+}

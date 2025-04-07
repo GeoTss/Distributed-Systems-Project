@@ -1,0 +1,29 @@
+{
+  "StoreName": "Zesty Kitchen",
+  "Latitude": -45.137643,
+  "Longitude": 149.801407,
+  "FoodCategory": "kebab",
+  "Stars": 3.6,
+  "NoOfVotes": 40,
+  "StoreLogo": "/images/zesty_kitchen_logo.png",
+  "Products": [
+    {
+      "ProductName": "Lamb Shawarma",
+      "ProductType": "kebab",
+      "Available Amount": 994,
+      "Price": 10.17
+    },
+    {
+      "ProductName": "Chicken Kebab",
+      "ProductType": "kebab",
+      "Available Amount": 147,
+      "Price": 3.55
+    },
+    {
+      "ProductName": "Falafel Wrap",
+      "ProductType": "kebab",
+      "Available Amount": 541,
+      "Price": 9.6
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "StoreName": "Heavenly Wrap",
+  "Latitude": 34.129003,
+  "Longitude": -135.898079,
+  "FoodCategory": "sushi",
+  "Stars": 3.1,
+  "NoOfVotes": 161,
+  "StoreLogo": "/images/heavenly_wrap_logo.png",
+  "Products": [
+    {
+      "ProductName": "Salmon Nigiri",
+      "ProductType": "sushi",
+      "Available Amount": 205,
+      "Price": 2.46
+    },
+    {
+      "ProductName": "Spicy Tuna Roll",
+      "ProductType": "sushi",
+      "Available Amount": 857,
+      "Price": 7.83
+    },
+    {
+      "ProductName": "California Roll",
+      "ProductType": "sushi",
+      "Available Amount": 607,
+      "Price": 14.19
+    }
+  ]
+}

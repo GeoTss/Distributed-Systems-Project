@@ -1,0 +1,29 @@
+{
+  "StoreName": "Fresh Platter",
+  "Latitude": 73.839168,
+  "Longitude": -100.069051,
+  "FoodCategory": "salad",
+  "Stars": 3.4,
+  "NoOfVotes": 302,
+  "StoreLogo": "/images/fresh_platter_logo.png",
+  "Products": [
+    {
+      "ProductName": "Caesar Salad",
+      "ProductType": "salad",
+      "Available Amount": 626,
+      "Price": 4.4
+    },
+    {
+      "ProductName": "Quinoa Salad",
+      "ProductType": "salad",
+      "Available Amount": 174,
+      "Price": 12.16
+    },
+    {
+      "ProductName": "Greek Salad",
+      "ProductType": "salad",
+      "Available Amount": 246,
+      "Price": 6.95
+    }
+  ]
+}

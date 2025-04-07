@@ -1,0 +1,29 @@
+{
+  "StoreName": "Tasty Burger",
+  "Latitude": 36.511902,
+  "Longitude": -90.051178,
+  "FoodCategory": "coffee",
+  "Stars": 3.5,
+  "NoOfVotes": 224,
+  "StoreLogo": "/images/tasty_burger_logo.png",
+  "Products": [
+    {
+      "ProductName": "Iced Latte",
+      "ProductType": "coffee",
+      "Available Amount": 958,
+      "Price": 7.64
+    },
+    {
+      "ProductName": "Espresso",
+      "ProductType": "coffee",
+      "Available Amount": 229,
+      "Price": 10.29
+    },
+    {
+      "ProductName": "Cappuccino",
+      "ProductType": "coffee",
+      "Available Amount": 412,
+      "Price": 13.03
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "StoreName": "Sizzling Table",
+  "Latitude": -21.910583,
+  "Longitude": 34.478159,
+  "FoodCategory": "pizza",
+  "Stars": 4.5,
+  "NoOfVotes": 412,
+  "StoreLogo": "/images/sizzling_table_logo.png",
+  "Products": [
+    {
+      "ProductName": "BBQ Chicken Pizza",
+      "ProductType": "pizza",
+      "Available Amount": 578,
+      "Price": 8.25
+    },
+    {
+      "ProductName": "Margherita Pizza",
+      "ProductType": "pizza",
+      "Available Amount": 422,
+      "Price": 8.05
+    },
+    {
+      "ProductName": "Pepperoni Pizza",
+      "ProductType": "pizza",
+      "Available Amount": 364,
+      "Price": 5.3
+    }
+  ]
+}

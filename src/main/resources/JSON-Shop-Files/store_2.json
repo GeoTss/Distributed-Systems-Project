@@ -1,0 +1,29 @@
+{
+  "StoreName": "Pizza Planet",
+  "Latitude": 83.84626,
+  "Longitude": 12.134788,
+  "FoodCategory": "sushi",
+  "Stars": 4.3,
+  "NoOfVotes": 412,
+  "StoreLogo": "/images/pizza_planet_logo.png",
+  "Products": [
+    {
+      "ProductName": "California Roll",
+      "ProductType": "sushi",
+      "Available Amount": 307,
+      "Price": 4.33
+    },
+    {
+      "ProductName": "Spicy Tuna Roll",
+      "ProductType": "sushi",
+      "Available Amount": 634,
+      "Price": 6.17
+    },
+    {
+      "ProductName": "Salmon Nigiri",
+      "ProductType": "sushi",
+      "Available Amount": 192,
+      "Price": 10.27
+    }
+  ]
+}

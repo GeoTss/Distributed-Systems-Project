@@ -1,0 +1,29 @@
+{
+  "StoreName": "Taco Fiesta",
+  "Latitude": 6.592045,
+  "Longitude": -136.343895,
+  "FoodCategory": "sushi",
+  "Stars": 3.1,
+  "NoOfVotes": 176,
+  "StoreLogo": "/images/taco_fiesta_logo.png",
+  "Products": [
+    {
+      "ProductName": "Spicy Tuna Roll",
+      "ProductType": "sushi",
+      "Available Amount": 603,
+      "Price": 8.5
+    },
+    {
+      "ProductName": "Salmon Nigiri",
+      "ProductType": "sushi",
+      "Available Amount": 590,
+      "Price": 3.69
+    },
+    {
+      "ProductName": "California Roll",
+      "ProductType": "sushi",
+      "Available Amount": 530,
+      "Price": 6.2
+    }
+  ]
+}

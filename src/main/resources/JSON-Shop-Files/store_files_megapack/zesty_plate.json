@@ -1,0 +1,29 @@
+{
+  "StoreName": "Zesty Plate",
+  "Latitude": -28.63692,
+  "Longitude": 4.704984,
+  "FoodCategory": "salad",
+  "Stars": 2.5,
+  "NoOfVotes": 204,
+  "StoreLogo": "/images/zesty_plate_logo.png",
+  "Products": [
+    {
+      "ProductName": "Greek Salad",
+      "ProductType": "salad",
+      "Available Amount": 840,
+      "Price": 4.05
+    },
+    {
+      "ProductName": "Caesar Salad",
+      "ProductType": "salad",
+      "Available Amount": 150,
+      "Price": 7.05
+    },
+    {
+      "ProductName": "Quinoa Salad",
+      "ProductType": "salad",
+      "Available Amount": 703,
+      "Price": 2.68
+    }
+  ]
+}

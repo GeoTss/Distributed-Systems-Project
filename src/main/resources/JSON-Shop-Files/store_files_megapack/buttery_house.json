@@ -1,0 +1,29 @@
+{
+  "StoreName": "Buttery House",
+  "Latitude": 8.195423,
+  "Longitude": -120.280883,
+  "FoodCategory": "vegan",
+  "Stars": 4.7,
+  "NoOfVotes": 159,
+  "StoreLogo": "/images/buttery_house_logo.png",
+  "Products": [
+    {
+      "ProductName": "Vegan Bowl",
+      "ProductType": "vegan",
+      "Available Amount": 372,
+      "Price": 12.7
+    },
+    {
+      "ProductName": "Vegan Burger",
+      "ProductType": "vegan",
+      "Available Amount": 357,
+      "Price": 4.61
+    },
+    {
+      "ProductName": "Tofu Salad",
+      "ProductType": "vegan",
+      "Available Amount": 268,
+      "Price": 7.94
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "StoreName": "Bean Barn",
+  "Latitude": -77.199875,
+  "Longitude": -44.185429,
+  "FoodCategory": "salad",
+  "Stars": 3.4,
+  "NoOfVotes": 93,
+  "StoreLogo": "/images/bean_barn_logo.png",
+  "Products": [
+    {
+      "ProductName": "Greek Salad",
+      "ProductType": "salad",
+      "Available Amount": 665,
+      "Price": 13.0
+    },
+    {
+      "ProductName": "Quinoa Salad",
+      "ProductType": "salad",
+      "Available Amount": 990,
+      "Price": 9.61
+    },
+    {
+      "ProductName": "Caesar Salad",
+      "ProductType": "salad",
+      "Available Amount": 690,
+      "Price": 9.16
+    }
+  ]
+}

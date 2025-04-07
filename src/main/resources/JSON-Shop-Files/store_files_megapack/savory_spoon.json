@@ -1,0 +1,29 @@
+{
+  "StoreName": "Savory Spoon",
+  "Latitude": -27.008948,
+  "Longitude": 144.234854,
+  "FoodCategory": "pasta",
+  "Stars": 4.8,
+  "NoOfVotes": 59,
+  "StoreLogo": "/images/savory_spoon_logo.png",
+  "Products": [
+    {
+      "ProductName": "Penne Alfredo",
+      "ProductType": "pasta",
+      "Available Amount": 207,
+      "Price": 8.67
+    },
+    {
+      "ProductName": "Lasagna",
+      "ProductType": "pasta",
+      "Available Amount": 153,
+      "Price": 9.92
+    },
+    {
+      "ProductName": "Spaghetti Bolognese",
+      "ProductType": "pasta",
+      "Available Amount": 349,
+      "Price": 4.06
+    }
+  ]
+}

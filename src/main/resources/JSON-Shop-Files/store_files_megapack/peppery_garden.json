@@ -1,0 +1,29 @@
+{
+  "StoreName": "Peppery Garden",
+  "Latitude": 85.50979,
+  "Longitude": 162.938158,
+  "FoodCategory": "burger",
+  "Stars": 3.9,
+  "NoOfVotes": 346,
+  "StoreLogo": "/images/peppery_garden_logo.png",
+  "Products": [
+    {
+      "ProductName": "Classic Burger",
+      "ProductType": "burger",
+      "Available Amount": 484,
+      "Price": 13.61
+    },
+    {
+      "ProductName": "Bacon Double Cheeseburger",
+      "ProductType": "burger",
+      "Available Amount": 664,
+      "Price": 3.5
+    },
+    {
+      "ProductName": "Veggie Burger",
+      "ProductType": "burger",
+      "Available Amount": 757,
+      "Price": 5.91
+    }
+  ]
+}

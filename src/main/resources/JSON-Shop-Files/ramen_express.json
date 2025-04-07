@@ -1,0 +1,29 @@
+{
+  "StoreName": "Ramen Express",
+  "Latitude": 37.987654,
+  "Longitude": 23.740123,
+  "FoodCategory": "ramen",
+  "Stars": 4.6,
+  "NoOfVotes": 98,
+  "StoreLogo": "/images/ramen_express_logo.png",
+  "Products": [
+    {
+      "ProductName": "Spicy Miso Ramen",
+      "ProductType": "ramen",
+      "Available Amount": 500,
+      "Price": 9.0
+    },
+    {
+      "ProductName": "Shoyu Ramen",
+      "ProductType": "ramen",
+      "Available Amount": 450,
+      "Price": 8.5
+    },
+    {
+      "ProductName": "Gyoza",
+      "ProductType": "sides",
+      "Available Amount": 600,
+      "Price": 4.0
+    }
+  ]
+}

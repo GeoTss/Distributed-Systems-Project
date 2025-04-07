@@ -1,0 +1,29 @@
+{
+  "StoreName": "Tangy Feast",
+  "Latitude": 55.7873,
+  "Longitude": -4.430404,
+  "FoodCategory": "bbq",
+  "Stars": 3.3,
+  "NoOfVotes": 348,
+  "StoreLogo": "/images/tangy_feast_logo.png",
+  "Products": [
+    {
+      "ProductName": "Brisket Plate",
+      "ProductType": "bbq",
+      "Available Amount": 796,
+      "Price": 13.58
+    },
+    {
+      "ProductName": "BBQ Ribs",
+      "ProductType": "bbq",
+      "Available Amount": 752,
+      "Price": 3.37
+    },
+    {
+      "ProductName": "Pulled Pork Sandwich",
+      "ProductType": "bbq",
+      "Available Amount": 278,
+      "Price": 14.12
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "StoreName": "Golden Feast",
+  "Latitude": 41.732607,
+  "Longitude": -34.865934,
+  "FoodCategory": "coffee",
+  "Stars": 3.9,
+  "NoOfVotes": 400,
+  "StoreLogo": "/images/golden_feast_logo.png",
+  "Products": [
+    {
+      "ProductName": "Iced Latte",
+      "ProductType": "coffee",
+      "Available Amount": 803,
+      "Price": 4.09
+    },
+    {
+      "ProductName": "Cappuccino",
+      "ProductType": "coffee",
+      "Available Amount": 812,
+      "Price": 13.23
+    },
+    {
+      "ProductName": "Espresso",
+      "ProductType": "coffee",
+      "Available Amount": 682,
+      "Price": 2.15
+    }
+  ]
+}

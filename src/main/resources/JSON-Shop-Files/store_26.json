@@ -1,0 +1,29 @@
+{
+  "StoreName": "Pita Pocket",
+  "Latitude": 23.484701,
+  "Longitude": -115.898467,
+  "FoodCategory": "pizza",
+  "Stars": 4.8,
+  "NoOfVotes": 258,
+  "StoreLogo": "/images/pita_pocket_logo.png",
+  "Products": [
+    {
+      "ProductName": "BBQ Chicken Pizza",
+      "ProductType": "pizza",
+      "Available Amount": 903,
+      "Price": 14.11
+    },
+    {
+      "ProductName": "Pepperoni Pizza",
+      "ProductType": "pizza",
+      "Available Amount": 889,
+      "Price": 13.9
+    },
+    {
+      "ProductName": "Margherita Pizza",
+      "ProductType": "pizza",
+      "Available Amount": 638,
+      "Price": 8.29
+    }
+  ]
+}

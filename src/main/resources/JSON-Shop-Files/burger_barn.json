@@ -1,0 +1,29 @@
+{
+  "StoreName": "Burger Barn",
+  "Latitude": 37.992300,
+  "Longitude": 23.735200,
+  "FoodCategory": "burger",
+  "Stars": 3.8,
+  "NoOfVotes": 65,
+  "StoreLogo": "/images/burger_barn_logo.png",
+  "Products": [
+    {
+      "ProductName": "Classic Burger",
+      "ProductType": "burger",
+      "Available Amount": 900,
+      "Price": 6.0
+    },
+    {
+      "ProductName": "Bacon Cheeseburger",
+      "ProductType": "burger",
+      "Available Amount": 500,
+      "Price": 7.5
+    },
+    {
+      "ProductName": "Fries",
+      "ProductType": "sides",
+      "Available Amount": 1000,
+      "Price": 2.5
+    }
+  ]
+}

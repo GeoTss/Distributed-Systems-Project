@@ -1,0 +1,29 @@
+{
+  "StoreName": "Crispy Burger",
+  "Latitude": 13.151607,
+  "Longitude": -20.177323,
+  "FoodCategory": "pizza",
+  "Stars": 3.2,
+  "NoOfVotes": 447,
+  "StoreLogo": "/images/crispy_burger_logo.png",
+  "Products": [
+    {
+      "ProductName": "Pepperoni Pizza",
+      "ProductType": "pizza",
+      "Available Amount": 835,
+      "Price": 9.69
+    },
+    {
+      "ProductName": "Margherita Pizza",
+      "ProductType": "pizza",
+      "Available Amount": 970,
+      "Price": 12.31
+    },
+    {
+      "ProductName": "BBQ Chicken Pizza",
+      "ProductType": "pizza",
+      "Available Amount": 121,
+      "Price": 2.83
+    }
+  ]
+}

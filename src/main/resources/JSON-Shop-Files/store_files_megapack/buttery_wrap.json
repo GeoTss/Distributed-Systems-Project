@@ -1,0 +1,29 @@
+{
+  "StoreName": "Buttery Wrap",
+  "Latitude": -8.540835,
+  "Longitude": -47.507697,
+  "FoodCategory": "sushi",
+  "Stars": 3.6,
+  "NoOfVotes": 352,
+  "StoreLogo": "/images/buttery_wrap_logo.png",
+  "Products": [
+    {
+      "ProductName": "Spicy Tuna Roll",
+      "ProductType": "sushi",
+      "Available Amount": 579,
+      "Price": 7.21
+    },
+    {
+      "ProductName": "California Roll",
+      "ProductType": "sushi",
+      "Available Amount": 461,
+      "Price": 13.02
+    },
+    {
+      "ProductName": "Salmon Nigiri",
+      "ProductType": "sushi",
+      "Available Amount": 592,
+      "Price": 5.0
+    }
+  ]
+}

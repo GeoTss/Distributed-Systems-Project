@@ -1,0 +1,29 @@
+{
+  "StoreName": "Sweet Corner",
+  "Latitude": -47.139275,
+  "Longitude": -150.87513,
+  "FoodCategory": "bbq",
+  "Stars": 4.3,
+  "NoOfVotes": 316,
+  "StoreLogo": "/images/sweet_corner_logo.png",
+  "Products": [
+    {
+      "ProductName": "BBQ Ribs",
+      "ProductType": "bbq",
+      "Available Amount": 183,
+      "Price": 13.74
+    },
+    {
+      "ProductName": "Brisket Plate",
+      "ProductType": "bbq",
+      "Available Amount": 153,
+      "Price": 2.76
+    },
+    {
+      "ProductName": "Pulled Pork Sandwich",
+      "ProductType": "bbq",
+      "Available Amount": 965,
+      "Price": 4.81
+    }
+  ]
+}

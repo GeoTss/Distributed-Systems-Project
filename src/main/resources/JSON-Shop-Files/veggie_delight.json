@@ -1,0 +1,29 @@
+{
+  "StoreName": "Veggie Delight",
+  "Latitude": 37.981120,
+  "Longitude": 23.732010,
+  "FoodCategory": "vegetarian",
+  "Stars": 4.3,
+  "NoOfVotes": 76,
+  "StoreLogo": "/images/veggie_delight_logo.png",
+  "Products": [
+    {
+      "ProductName": "Avocado Wrap",
+      "ProductType": "wrap",
+      "Available Amount": 600,
+      "Price": 6.5
+    },
+    {
+      "ProductName": "Vegan Bowl",
+      "ProductType": "bowl",
+      "Available Amount": 400,
+      "Price": 7.2
+    },
+    {
+      "ProductName": "Kale Smoothie",
+      "ProductType": "smoothie",
+      "Available Amount": 350,
+      "Price": 4.8
+    }
+  ]
+}

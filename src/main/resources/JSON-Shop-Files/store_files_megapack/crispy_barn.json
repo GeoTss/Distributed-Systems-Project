@@ -1,0 +1,29 @@
+{
+  "StoreName": "Crispy Barn",
+  "Latitude": 81.718634,
+  "Longitude": -130.615765,
+  "FoodCategory": "bbq",
+  "Stars": 3.9,
+  "NoOfVotes": 45,
+  "StoreLogo": "/images/crispy_barn_logo.png",
+  "Products": [
+    {
+      "ProductName": "Brisket Plate",
+      "ProductType": "bbq",
+      "Available Amount": 516,
+      "Price": 2.85
+    },
+    {
+      "ProductName": "Pulled Pork Sandwich",
+      "ProductType": "bbq",
+      "Available Amount": 452,
+      "Price": 10.93
+    },
+    {
+      "ProductName": "BBQ Ribs",
+      "ProductType": "bbq",
+      "Available Amount": 908,
+      "Price": 10.95
+    }
+  ]
+}

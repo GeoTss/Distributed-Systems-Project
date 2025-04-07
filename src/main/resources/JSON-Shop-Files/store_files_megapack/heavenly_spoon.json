@@ -1,0 +1,29 @@
+{
+  "StoreName": "Heavenly Spoon",
+  "Latitude": -39.318401,
+  "Longitude": 74.108926,
+  "FoodCategory": "coffee",
+  "Stars": 4.7,
+  "NoOfVotes": 385,
+  "StoreLogo": "/images/heavenly_spoon_logo.png",
+  "Products": [
+    {
+      "ProductName": "Espresso",
+      "ProductType": "coffee",
+      "Available Amount": 611,
+      "Price": 12.3
+    },
+    {
+      "ProductName": "Iced Latte",
+      "ProductType": "coffee",
+      "Available Amount": 982,
+      "Price": 11.47
+    },
+    {
+      "ProductName": "Cappuccino",
+      "ProductType": "coffee",
+      "Available Amount": 486,
+      "Price": 11.01
+    }
+  ]
+}

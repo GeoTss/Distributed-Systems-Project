@@ -1,0 +1,29 @@
+{
+  "StoreName": "Golden Garden",
+  "Latitude": 61.054926,
+  "Longitude": -146.937616,
+  "FoodCategory": "salad",
+  "Stars": 3.8,
+  "NoOfVotes": 83,
+  "StoreLogo": "/images/golden_garden_logo.png",
+  "Products": [
+    {
+      "ProductName": "Quinoa Salad",
+      "ProductType": "salad",
+      "Available Amount": 917,
+      "Price": 12.39
+    },
+    {
+      "ProductName": "Greek Salad",
+      "ProductType": "salad",
+      "Available Amount": 464,
+      "Price": 3.5
+    },
+    {
+      "ProductName": "Caesar Salad",
+      "ProductType": "salad",
+      "Available Amount": 584,
+      "Price": 7.79
+    }
+  ]
+}

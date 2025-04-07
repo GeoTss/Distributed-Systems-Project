@@ -1,0 +1,29 @@
+{
+  "StoreName": "Taco Loco",
+  "Latitude": 5.212426,
+  "Longitude": -112.525035,
+  "FoodCategory": "pizza",
+  "Stars": 3.5,
+  "NoOfVotes": 396,
+  "StoreLogo": "/images/taco_loco_logo.png",
+  "Products": [
+    {
+      "ProductName": "Pepperoni Pizza",
+      "ProductType": "pizza",
+      "Available Amount": 199,
+      "Price": 9.82
+    },
+    {
+      "ProductName": "Margherita Pizza",
+      "ProductType": "pizza",
+      "Available Amount": 961,
+      "Price": 8.4
+    },
+    {
+      "ProductName": "BBQ Chicken Pizza",
+      "ProductType": "pizza",
+      "Available Amount": 382,
+      "Price": 9.64
+    }
+  ]
+}

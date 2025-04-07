@@ -1,0 +1,29 @@
+{
+  "StoreName": "Sizzling Bite",
+  "Latitude": -5.785255,
+  "Longitude": -143.960719,
+  "FoodCategory": "pasta",
+  "Stars": 3.8,
+  "NoOfVotes": 467,
+  "StoreLogo": "/images/sizzling_bite_logo.png",
+  "Products": [
+    {
+      "ProductName": "Lasagna",
+      "ProductType": "pasta",
+      "Available Amount": 197,
+      "Price": 14.92
+    },
+    {
+      "ProductName": "Spaghetti Bolognese",
+      "ProductType": "pasta",
+      "Available Amount": 424,
+      "Price": 11.07
+    },
+    {
+      "ProductName": "Penne Alfredo",
+      "ProductType": "pasta",
+      "Available Amount": 638,
+      "Price": 3.28
+    }
+  ]
+}

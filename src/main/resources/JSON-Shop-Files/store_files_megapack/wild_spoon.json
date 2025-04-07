@@ -1,0 +1,29 @@
+{
+  "StoreName": "Wild Spoon",
+  "Latitude": 77.872251,
+  "Longitude": 131.141786,
+  "FoodCategory": "burger",
+  "Stars": 4.9,
+  "NoOfVotes": 90,
+  "StoreLogo": "/images/wild_spoon_logo.png",
+  "Products": [
+    {
+      "ProductName": "Bacon Double Cheeseburger",
+      "ProductType": "burger",
+      "Available Amount": 968,
+      "Price": 2.18
+    },
+    {
+      "ProductName": "Veggie Burger",
+      "ProductType": "burger",
+      "Available Amount": 948,
+      "Price": 14.51
+    },
+    {
+      "ProductName": "Classic Burger",
+      "ProductType": "burger",
+      "Available Amount": 993,
+      "Price": 7.23
+    }
+  ]
+}

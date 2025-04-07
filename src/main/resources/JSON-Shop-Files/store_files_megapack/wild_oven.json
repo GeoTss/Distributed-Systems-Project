@@ -1,0 +1,29 @@
+{
+  "StoreName": "Wild Oven",
+  "Latitude": -64.130796,
+  "Longitude": -113.003898,
+  "FoodCategory": "bbq",
+  "Stars": 4.8,
+  "NoOfVotes": 308,
+  "StoreLogo": "/images/wild_oven_logo.png",
+  "Products": [
+    {
+      "ProductName": "Pulled Pork Sandwich",
+      "ProductType": "bbq",
+      "Available Amount": 338,
+      "Price": 3.93
+    },
+    {
+      "ProductName": "BBQ Ribs",
+      "ProductType": "bbq",
+      "Available Amount": 450,
+      "Price": 10.9
+    },
+    {
+      "ProductName": "Brisket Plate",
+      "ProductType": "bbq",
+      "Available Amount": 929,
+      "Price": 9.01
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "StoreName": "Smoothie Station",
+  "Latitude": -73.78706,
+  "Longitude": -137.264968,
+  "FoodCategory": "salad",
+  "Stars": 2.8,
+  "NoOfVotes": 285,
+  "StoreLogo": "/images/smoothie_station_logo.png",
+  "Products": [
+    {
+      "ProductName": "Quinoa Salad",
+      "ProductType": "salad",
+      "Available Amount": 380,
+      "Price": 2.73
+    },
+    {
+      "ProductName": "Caesar Salad",
+      "ProductType": "salad",
+      "Available Amount": 391,
+      "Price": 3.96
+    },
+    {
+      "ProductName": "Greek Salad",
+      "ProductType": "salad",
+      "Available Amount": 611,
+      "Price": 9.48
+    }
+  ]
+}

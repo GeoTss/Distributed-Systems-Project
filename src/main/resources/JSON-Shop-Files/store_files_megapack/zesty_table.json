@@ -1,0 +1,29 @@
+{
+  "StoreName": "Zesty Table",
+  "Latitude": 57.088814,
+  "Longitude": -36.624702,
+  "FoodCategory": "pasta",
+  "Stars": 3.6,
+  "NoOfVotes": 304,
+  "StoreLogo": "/images/zesty_table_logo.png",
+  "Products": [
+    {
+      "ProductName": "Spaghetti Bolognese",
+      "ProductType": "pasta",
+      "Available Amount": 868,
+      "Price": 9.26
+    },
+    {
+      "ProductName": "Lasagna",
+      "ProductType": "pasta",
+      "Available Amount": 790,
+      "Price": 8.75
+    },
+    {
+      "ProductName": "Penne Alfredo",
+      "ProductType": "pasta",
+      "Available Amount": 135,
+      "Price": 5.56
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "StoreName": "Crispy Slice",
+  "Latitude": -82.713837,
+  "Longitude": -53.953466,
+  "FoodCategory": "pizza",
+  "Stars": 2.8,
+  "NoOfVotes": 487,
+  "StoreLogo": "/images/crispy_slice_logo.png",
+  "Products": [
+    {
+      "ProductName": "Pepperoni Pizza",
+      "ProductType": "pizza",
+      "Available Amount": 792,
+      "Price": 3.86
+    },
+    {
+      "ProductName": "Margherita Pizza",
+      "ProductType": "pizza",
+      "Available Amount": 547,
+      "Price": 6.24
+    },
+    {
+      "ProductName": "BBQ Chicken Pizza",
+      "ProductType": "pizza",
+      "Available Amount": 551,
+      "Price": 5.62
+    }
+  ]
+}

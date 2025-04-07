@@ -1,0 +1,29 @@
+{
+  "StoreName": "Zesty Grill",
+  "Latitude": 39.365859,
+  "Longitude": 107.667925,
+  "FoodCategory": "salad",
+  "Stars": 3.4,
+  "NoOfVotes": 349,
+  "StoreLogo": "/images/zesty_grill_logo.png",
+  "Products": [
+    {
+      "ProductName": "Quinoa Salad",
+      "ProductType": "salad",
+      "Available Amount": 474,
+      "Price": 12.99
+    },
+    {
+      "ProductName": "Greek Salad",
+      "ProductType": "salad",
+      "Available Amount": 250,
+      "Price": 7.13
+    },
+    {
+      "ProductName": "Caesar Salad",
+      "ProductType": "salad",
+      "Available Amount": 859,
+      "Price": 11.23
+    }
+  ]
+}

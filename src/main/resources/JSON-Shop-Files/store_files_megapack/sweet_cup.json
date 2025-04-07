@@ -1,0 +1,29 @@
+{
+  "StoreName": "Sweet Cup",
+  "Latitude": -61.167373,
+  "Longitude": 45.956162,
+  "FoodCategory": "coffee",
+  "Stars": 3.6,
+  "NoOfVotes": 294,
+  "StoreLogo": "/images/sweet_cup_logo.png",
+  "Products": [
+    {
+      "ProductName": "Cappuccino",
+      "ProductType": "coffee",
+      "Available Amount": 238,
+      "Price": 8.45
+    },
+    {
+      "ProductName": "Iced Latte",
+      "ProductType": "coffee",
+      "Available Amount": 194,
+      "Price": 7.13
+    },
+    {
+      "ProductName": "Espresso",
+      "ProductType": "coffee",
+      "Available Amount": 221,
+      "Price": 3.84
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "StoreName": "Juicy Burger",
+  "Latitude": -85.027326,
+  "Longitude": -124.773361,
+  "FoodCategory": "vegan",
+  "Stars": 4.6,
+  "NoOfVotes": 415,
+  "StoreLogo": "/images/juicy_burger_logo.png",
+  "Products": [
+    {
+      "ProductName": "Vegan Burger",
+      "ProductType": "vegan",
+      "Available Amount": 150,
+      "Price": 6.07
+    },
+    {
+      "ProductName": "Tofu Salad",
+      "ProductType": "vegan",
+      "Available Amount": 881,
+      "Price": 13.93
+    },
+    {
+      "ProductName": "Vegan Bowl",
+      "ProductType": "vegan",
+      "Available Amount": 421,
+      "Price": 9.27
+    }
+  ]
+}

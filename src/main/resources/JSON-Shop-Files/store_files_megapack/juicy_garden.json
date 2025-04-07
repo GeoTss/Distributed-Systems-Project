@@ -1,0 +1,29 @@
+{
+  "StoreName": "Juicy Garden",
+  "Latitude": -29.524318,
+  "Longitude": -106.753265,
+  "FoodCategory": "sushi",
+  "Stars": 4.0,
+  "NoOfVotes": 344,
+  "StoreLogo": "/images/juicy_garden_logo.png",
+  "Products": [
+    {
+      "ProductName": "Salmon Nigiri",
+      "ProductType": "sushi",
+      "Available Amount": 528,
+      "Price": 5.56
+    },
+    {
+      "ProductName": "California Roll",
+      "ProductType": "sushi",
+      "Available Amount": 796,
+      "Price": 6.57
+    },
+    {
+      "ProductName": "Spicy Tuna Roll",
+      "ProductType": "sushi",
+      "Available Amount": 671,
+      "Price": 6.54
+    }
+  ]
+}

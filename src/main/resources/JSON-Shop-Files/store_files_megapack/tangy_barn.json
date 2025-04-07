@@ -1,0 +1,29 @@
+{
+  "StoreName": "Tangy Barn",
+  "Latitude": -84.770162,
+  "Longitude": -35.510489,
+  "FoodCategory": "sushi",
+  "Stars": 4.3,
+  "NoOfVotes": 259,
+  "StoreLogo": "/images/tangy_barn_logo.png",
+  "Products": [
+    {
+      "ProductName": "California Roll",
+      "ProductType": "sushi",
+      "Available Amount": 435,
+      "Price": 11.85
+    },
+    {
+      "ProductName": "Salmon Nigiri",
+      "ProductType": "sushi",
+      "Available Amount": 356,
+      "Price": 12.65
+    },
+    {
+      "ProductName": "Spicy Tuna Roll",
+      "ProductType": "sushi",
+      "Available Amount": 692,
+      "Price": 12.45
+    }
+  ]
+}

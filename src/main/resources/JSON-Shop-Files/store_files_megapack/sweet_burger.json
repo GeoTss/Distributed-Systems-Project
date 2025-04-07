@@ -1,0 +1,29 @@
+{
+  "StoreName": "Sweet Burger",
+  "Latitude": 13.664929,
+  "Longitude": 25.757401,
+  "FoodCategory": "salad",
+  "Stars": 2.8,
+  "NoOfVotes": 174,
+  "StoreLogo": "/images/sweet_burger_logo.png",
+  "Products": [
+    {
+      "ProductName": "Greek Salad",
+      "ProductType": "salad",
+      "Available Amount": 326,
+      "Price": 2.38
+    },
+    {
+      "ProductName": "Quinoa Salad",
+      "ProductType": "salad",
+      "Available Amount": 395,
+      "Price": 13.11
+    },
+    {
+      "ProductName": "Caesar Salad",
+      "ProductType": "salad",
+      "Available Amount": 860,
+      "Price": 5.27
+    }
+  ]
+}

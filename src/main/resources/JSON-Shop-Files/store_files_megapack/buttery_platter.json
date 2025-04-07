@@ -1,0 +1,29 @@
+{
+  "StoreName": "Buttery Platter",
+  "Latitude": -3.536523,
+  "Longitude": 116.451617,
+  "FoodCategory": "pasta",
+  "Stars": 3.4,
+  "NoOfVotes": 282,
+  "StoreLogo": "/images/buttery_platter_logo.png",
+  "Products": [
+    {
+      "ProductName": "Lasagna",
+      "ProductType": "pasta",
+      "Available Amount": 479,
+      "Price": 13.89
+    },
+    {
+      "ProductName": "Penne Alfredo",
+      "ProductType": "pasta",
+      "Available Amount": 384,
+      "Price": 12.31
+    },
+    {
+      "ProductName": "Spaghetti Bolognese",
+      "ProductType": "pasta",
+      "Available Amount": 722,
+      "Price": 14.79
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "StoreName": "Sandwich Stop",
+  "Latitude": 37.988888,
+  "Longitude": 23.736666,
+  "FoodCategory": "deli",
+  "Stars": 4.1,
+  "NoOfVotes": 57,
+  "StoreLogo": "/images/sandwich_stop_logo.png",
+  "Products": [
+    {
+      "ProductName": "Turkey Club",
+      "ProductType": "sandwich",
+      "Available Amount": 700,
+      "Price": 5.5
+    },
+    {
+      "ProductName": "Ham & Cheese",
+      "ProductType": "sandwich",
+      "Available Amount": 650,
+      "Price": 5.0
+    },
+    {
+      "ProductName": "BLT",
+      "ProductType": "sandwich",
+      "Available Amount": 550,
+      "Price": 5.8
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "StoreName": "Tangy Pit",
+  "Latitude": -66.423877,
+  "Longitude": 152.318108,
+  "FoodCategory": "dessert",
+  "Stars": 4.9,
+  "NoOfVotes": 74,
+  "StoreLogo": "/images/tangy_pit_logo.png",
+  "Products": [
+    {
+      "ProductName": "Ice Cream Sundae",
+      "ProductType": "dessert",
+      "Available Amount": 528,
+      "Price": 10.5
+    },
+    {
+      "ProductName": "Fruit Tart",
+      "ProductType": "dessert",
+      "Available Amount": 548,
+      "Price": 13.87
+    },
+    {
+      "ProductName": "Chocolate Cake",
+      "ProductType": "dessert",
+      "Available Amount": 618,
+      "Price": 13.92
+    }
+  ]
+}

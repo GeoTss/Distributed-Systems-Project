@@ -1,0 +1,29 @@
+{
+  "StoreName": "Yummy Burger",
+  "Latitude": -9.478042,
+  "Longitude": 179.051174,
+  "FoodCategory": "dessert",
+  "Stars": 4.6,
+  "NoOfVotes": 293,
+  "StoreLogo": "/images/yummy_burger_logo.png",
+  "Products": [
+    {
+      "ProductName": "Fruit Tart",
+      "ProductType": "dessert",
+      "Available Amount": 880,
+      "Price": 9.82
+    },
+    {
+      "ProductName": "Ice Cream Sundae",
+      "ProductType": "dessert",
+      "Available Amount": 149,
+      "Price": 12.44
+    },
+    {
+      "ProductName": "Chocolate Cake",
+      "ProductType": "dessert",
+      "Available Amount": 447,
+      "Price": 3.13
+    }
+  ]
+}

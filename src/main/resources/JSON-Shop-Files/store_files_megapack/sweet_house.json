@@ -1,0 +1,29 @@
+{
+  "StoreName": "Sweet House",
+  "Latitude": 44.805813,
+  "Longitude": 8.637768,
+  "FoodCategory": "pasta",
+  "Stars": 4.0,
+  "NoOfVotes": 349,
+  "StoreLogo": "/images/sweet_house_logo.png",
+  "Products": [
+    {
+      "ProductName": "Spaghetti Bolognese",
+      "ProductType": "pasta",
+      "Available Amount": 644,
+      "Price": 7.1
+    },
+    {
+      "ProductName": "Penne Alfredo",
+      "ProductType": "pasta",
+      "Available Amount": 794,
+      "Price": 4.47
+    },
+    {
+      "ProductName": "Lasagna",
+      "ProductType": "pasta",
+      "Available Amount": 145,
+      "Price": 7.83
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "StoreName": "Savory Garden",
+  "Latitude": 25.372262,
+  "Longitude": -133.91546,
+  "FoodCategory": "pizza",
+  "Stars": 4.1,
+  "NoOfVotes": 35,
+  "StoreLogo": "/images/savory_garden_logo.png",
+  "Products": [
+    {
+      "ProductName": "BBQ Chicken Pizza",
+      "ProductType": "pizza",
+      "Available Amount": 336,
+      "Price": 11.25
+    },
+    {
+      "ProductName": "Margherita Pizza",
+      "ProductType": "pizza",
+      "Available Amount": 236,
+      "Price": 8.93
+    },
+    {
+      "ProductName": "Pepperoni Pizza",
+      "ProductType": "pizza",
+      "Available Amount": 549,
+      "Price": 11.41
+    }
+  ]
+}

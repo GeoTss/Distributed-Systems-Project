@@ -1,0 +1,29 @@
+{
+  "StoreName": "Tasty Garden",
+  "Latitude": -84.521151,
+  "Longitude": -146.779522,
+  "FoodCategory": "salad",
+  "Stars": 2.6,
+  "NoOfVotes": 402,
+  "StoreLogo": "/images/tasty_garden_logo.png",
+  "Products": [
+    {
+      "ProductName": "Caesar Salad",
+      "ProductType": "salad",
+      "Available Amount": 164,
+      "Price": 7.17
+    },
+    {
+      "ProductName": "Quinoa Salad",
+      "ProductType": "salad",
+      "Available Amount": 249,
+      "Price": 4.41
+    },
+    {
+      "ProductName": "Greek Salad",
+      "ProductType": "salad",
+      "Available Amount": 979,
+      "Price": 11.6
+    }
+  ]
+}

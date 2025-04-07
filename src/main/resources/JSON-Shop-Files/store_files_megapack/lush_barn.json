@@ -1,0 +1,29 @@
+{
+  "StoreName": "Lush Barn",
+  "Latitude": 18.672374,
+  "Longitude": -119.087097,
+  "FoodCategory": "coffee",
+  "Stars": 3.1,
+  "NoOfVotes": 471,
+  "StoreLogo": "/images/lush_barn_logo.png",
+  "Products": [
+    {
+      "ProductName": "Iced Latte",
+      "ProductType": "coffee",
+      "Available Amount": 477,
+      "Price": 10.07
+    },
+    {
+      "ProductName": "Cappuccino",
+      "ProductType": "coffee",
+      "Available Amount": 891,
+      "Price": 5.44
+    },
+    {
+      "ProductName": "Espresso",
+      "ProductType": "coffee",
+      "Available Amount": 611,
+      "Price": 12.48
+    }
+  ]
+}

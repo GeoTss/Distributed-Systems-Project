@@ -1,0 +1,29 @@
+{
+  "StoreName": "The Hungry Spoon",
+  "Latitude": 43.31501,
+  "Longitude": -22.814687,
+  "FoodCategory": "coffee",
+  "Stars": 3.4,
+  "NoOfVotes": 255,
+  "StoreLogo": "/images/the_hungry_spoon_logo.png",
+  "Products": [
+    {
+      "ProductName": "Espresso",
+      "ProductType": "coffee",
+      "Available Amount": 922,
+      "Price": 9.93
+    },
+    {
+      "ProductName": "Iced Latte",
+      "ProductType": "coffee",
+      "Available Amount": 443,
+      "Price": 11.55
+    },
+    {
+      "ProductName": "Cappuccino",
+      "ProductType": "coffee",
+      "Available Amount": 399,
+      "Price": 11.69
+    }
+  ]
+}

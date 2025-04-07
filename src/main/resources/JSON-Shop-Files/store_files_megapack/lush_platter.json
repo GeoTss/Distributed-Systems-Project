@@ -1,0 +1,29 @@
+{
+  "StoreName": "Lush Platter",
+  "Latitude": -25.323742,
+  "Longitude": 14.504167,
+  "FoodCategory": "pizza",
+  "Stars": 3.4,
+  "NoOfVotes": 244,
+  "StoreLogo": "/images/lush_platter_logo.png",
+  "Products": [
+    {
+      "ProductName": "Margherita Pizza",
+      "ProductType": "pizza",
+      "Available Amount": 368,
+      "Price": 2.79
+    },
+    {
+      "ProductName": "BBQ Chicken Pizza",
+      "ProductType": "pizza",
+      "Available Amount": 317,
+      "Price": 5.39
+    },
+    {
+      "ProductName": "Pepperoni Pizza",
+      "ProductType": "pizza",
+      "Available Amount": 704,
+      "Price": 6.2
+    }
+  ]
+}

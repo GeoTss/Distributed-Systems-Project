@@ -1,0 +1,29 @@
+{
+  "StoreName": "Spicy Kitchen",
+  "Latitude": 44.488593,
+  "Longitude": -157.832975,
+  "FoodCategory": "coffee",
+  "Stars": 3.0,
+  "NoOfVotes": 342,
+  "StoreLogo": "/images/spicy_kitchen_logo.png",
+  "Products": [
+    {
+      "ProductName": "Iced Latte",
+      "ProductType": "coffee",
+      "Available Amount": 447,
+      "Price": 6.09
+    },
+    {
+      "ProductName": "Cappuccino",
+      "ProductType": "coffee",
+      "Available Amount": 790,
+      "Price": 7.49
+    },
+    {
+      "ProductName": "Espresso",
+      "ProductType": "coffee",
+      "Available Amount": 709,
+      "Price": 5.41
+    }
+  ]
+}

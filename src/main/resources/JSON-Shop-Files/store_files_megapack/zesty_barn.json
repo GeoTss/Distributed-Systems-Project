@@ -1,0 +1,29 @@
+{
+  "StoreName": "Zesty Barn",
+  "Latitude": -30.910136,
+  "Longitude": -17.442432,
+  "FoodCategory": "sushi",
+  "Stars": 3.9,
+  "NoOfVotes": 283,
+  "StoreLogo": "/images/zesty_barn_logo.png",
+  "Products": [
+    {
+      "ProductName": "Spicy Tuna Roll",
+      "ProductType": "sushi",
+      "Available Amount": 940,
+      "Price": 7.17
+    },
+    {
+      "ProductName": "Salmon Nigiri",
+      "ProductType": "sushi",
+      "Available Amount": 256,
+      "Price": 7.43
+    },
+    {
+      "ProductName": "California Roll",
+      "ProductType": "sushi",
+      "Available Amount": 318,
+      "Price": 6.4
+    }
+  ]
+}

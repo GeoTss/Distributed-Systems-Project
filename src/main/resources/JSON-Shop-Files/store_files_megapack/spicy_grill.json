@@ -1,0 +1,29 @@
+{
+  "StoreName": "Spicy Grill",
+  "Latitude": 18.710264,
+  "Longitude": 173.237569,
+  "FoodCategory": "coffee",
+  "Stars": 4.8,
+  "NoOfVotes": 461,
+  "StoreLogo": "/images/spicy_grill_logo.png",
+  "Products": [
+    {
+      "ProductName": "Espresso",
+      "ProductType": "coffee",
+      "Available Amount": 474,
+      "Price": 8.84
+    },
+    {
+      "ProductName": "Iced Latte",
+      "ProductType": "coffee",
+      "Available Amount": 988,
+      "Price": 2.67
+    },
+    {
+      "ProductName": "Cappuccino",
+      "ProductType": "coffee",
+      "Available Amount": 169,
+      "Price": 4.75
+    }
+  ]
+}

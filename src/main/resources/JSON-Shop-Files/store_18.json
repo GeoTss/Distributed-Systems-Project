@@ -1,0 +1,29 @@
+{
+  "StoreName": "The Vegan Spot",
+  "Latitude": -38.768839,
+  "Longitude": 10.676979,
+  "FoodCategory": "burger",
+  "Stars": 4.0,
+  "NoOfVotes": 58,
+  "StoreLogo": "/images/the_vegan_spot_logo.png",
+  "Products": [
+    {
+      "ProductName": "Bacon Double Cheeseburger",
+      "ProductType": "burger",
+      "Available Amount": 532,
+      "Price": 11.58
+    },
+    {
+      "ProductName": "Classic Burger",
+      "ProductType": "burger",
+      "Available Amount": 626,
+      "Price": 7.43
+    },
+    {
+      "ProductName": "Veggie Burger",
+      "ProductType": "burger",
+      "Available Amount": 123,
+      "Price": 13.85
+    }
+  ]
+}

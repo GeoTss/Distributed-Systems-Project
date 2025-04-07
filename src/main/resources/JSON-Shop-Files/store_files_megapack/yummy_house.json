@@ -1,0 +1,29 @@
+{
+  "StoreName": "Yummy House",
+  "Latitude": 37.735129,
+  "Longitude": -43.360687,
+  "FoodCategory": "burger",
+  "Stars": 3.6,
+  "NoOfVotes": 327,
+  "StoreLogo": "/images/yummy_house_logo.png",
+  "Products": [
+    {
+      "ProductName": "Bacon Double Cheeseburger",
+      "ProductType": "burger",
+      "Available Amount": 212,
+      "Price": 9.03
+    },
+    {
+      "ProductName": "Veggie Burger",
+      "ProductType": "burger",
+      "Available Amount": 417,
+      "Price": 3.38
+    },
+    {
+      "ProductName": "Classic Burger",
+      "ProductType": "burger",
+      "Available Amount": 433,
+      "Price": 14.09
+    }
+  ]
+}
