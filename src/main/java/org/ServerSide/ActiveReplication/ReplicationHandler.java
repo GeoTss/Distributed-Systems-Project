@@ -24,4 +24,17 @@ public class ReplicationHandler {
     public void setMain(WorkerHandler main) {
         this.main = main;
     }
+
+    @Override
+    public String toString(){
+        StringBuilder str = new StringBuilder();
+
+        str.append("Main worker ID: ").append(main.getHandlerId()).append("\n");
+        str.append("Fallback workers IDs: [\n");
+        for(WorkerHandler f_work: replicas){
+            str.append("\t").append(f_work.getHandlerId()).append("\n");
+        }
+        str.append("]");
+        return str.toString();
+    }
 }

@@ -26,8 +26,6 @@ public class MasterServer {
     private ArrayList<Shop> database_shops;
     private ServerConfigInfo config_info;
 
-    private int numberOfWorkers;
-
     private ArrayList<WorkerHandler> workerHandlers = new ArrayList<>();
     private ArrayList<ReplicationHandler> replicated_worker_handlers = new ArrayList<>();
 
@@ -44,15 +42,22 @@ public class MasterServer {
 
     void initializeWorkers() throws IOException, ClassNotFoundException, InterruptedException {
 
+        ArrayList<List<Shop>> shop_chunks = new ArrayList<>();
+        ArrayList<WorkerClient> worker_clients = new ArrayList<>();
+        ArrayList<WorkerHandler> worker_handlers = new ArrayList<>();
+
         int worker_chunk_size = config_info.getWorker_chunk();
 
-        for(int i = 0; i < database_shops.size(); i += worker_chunk_size){
-            List<Shop> shop_chunk = database_shops.subList(i, Math.min(i+worker_chunk_size, database_shops.size()));
+        for(int i = 0; i < database_shops.size(); i += worker_chunk_size) {
+            List<Shop> chunk = database_shops.subList(i, Math.min(i + worker_chunk_size, database_shops.size()));
+            shop_chunks.add(chunk);
+        }
 
-            ReplicationHandler handler = new ReplicationHandler();
+        for (List<Shop> shopChunk : shop_chunks) {
 
-            Thread t = new WorkerClient(shop_chunk);
-            t.start();
+            WorkerClient cl = new WorkerClient(shopChunk);
+            worker_clients.add(cl);
+            cl.start();
 
             Socket main_worker_socket;
             synchronized (CONNECTION_ACCEPT_LOCK) {
@@ -60,65 +65,52 @@ public class MasterServer {
                 main_worker_socket = connection.accept();
             }
 
-
             ObjectOutputStream out = new ObjectOutputStream(main_worker_socket.getOutputStream());
             ObjectInputStream in = new ObjectInputStream(main_worker_socket.getInputStream());
 
             WorkerHandler main_handler = new WorkerHandler(out, in);
-            handler.setMain(main_handler);
+            worker_handlers.add(main_handler);
+        }
 
-            for (int j = 0; j < config_info.getNumber_of_replicas(); ++j) {
-                Thread t_rep = new WorkerClient(shop_chunk);
-                t_rep.start();
+        int n = worker_clients.size();
 
-                Socket rep_worker;
-                synchronized (CONNECTION_ACCEPT_LOCK) {
-                    CONNECTION_ACCEPT_LOCK.wait();
-                    rep_worker = connection.accept();
-                }
-                ObjectOutputStream rep_out = new ObjectOutputStream(rep_worker.getOutputStream());
-                ObjectInputStream rep_in = new ObjectInputStream(rep_worker.getInputStream());
+        for (int i = 0; i < worker_clients.size(); i++) {
+            ReplicationHandler handler = new ReplicationHandler();
+            handler.setMain(worker_handlers.get(i));
 
-                WorkerHandler rep_handler = new WorkerHandler(rep_out, rep_in);
-                handler.add_replica(rep_handler);
+            for (int j = 1; j <= config_info.getNumber_of_replicas(); j++) {
+                int fallback_index = (i+j) % n;
+
+                worker_clients.get(fallback_index).add_backup(i, shop_chunks.get(i));
+
+                WorkerHandler fall_worker = worker_handlers.get(fallback_index);
+                System.out.println("At worker client " + i + " put: (" + fall_worker.getHandlerId() + ", " + fallback_index + "(" + shop_chunks.get(fallback_index) + "))");
+
+                handler.getReplicas().add(fall_worker);
             }
-
+            worker_handlers.get(i).start();
             replicated_worker_handlers.add(handler);
-            handler.getMain().start();
+        }
+
+        for(WorkerClient client: worker_clients){
+            System.out.println(client);
+        }
+
+        for(ReplicationHandler repl_worker: replicated_worker_handlers){
+            System.out.println(repl_worker);
         }
         System.out.println("All workers connected!");
     }
-
-    void acceptWorkers(int numberOfWorkers) throws IOException {
-        System.out.println("Waiting for " + numberOfWorkers + " workers to connect...");
-
-        for (int i = 0; i < numberOfWorkers; i++) {
-            Socket workerSocket = connection.accept();
-            System.out.println("Worker connected: " + workerSocket);
-
-            ObjectOutputStream out = new ObjectOutputStream(workerSocket.getOutputStream());
-            ObjectInputStream in = new ObjectInputStream(workerSocket.getInputStream());
-
-            WorkerHandler handler = new WorkerHandler(out, in);
-            workerHandlers.add(handler);
-            handler.start();
-        }
-
-        System.out.println("All workers connected!");
-    }
-
 
     void openServer() {
         try {
             connection = new ServerSocket(SERVER_CLIENT_PORT);
-            System.out.println("SERVER STARTED");
 
             initializeWorkers();
-//            acceptWorkers(numberOfWorkers);
 
-//            ClientRequestHandler.worker_handlers = workerHandlers;
             ClientRequestHandler.replicated_worker_handlers = replicated_worker_handlers;
 
+            System.out.println("SERVER STARTED");
             while (true) {
                 server_socket = connection.accept();
                 System.out.println(server_socket);

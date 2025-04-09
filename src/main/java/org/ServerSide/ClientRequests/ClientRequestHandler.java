@@ -106,6 +106,8 @@ public class ClientRequestHandler extends Thread {
                 }
 
                 ArrayList<RequestMonitor> monitors = new ArrayList<>();
+                int to_cause_problem = 0;
+                int to_cause_another_problem = 1;
 
                 for(ReplicationHandler replicated_worker: replicated_worker_handlers){
                     WorkerHandler main_handler = replicated_worker.getMain();
@@ -115,11 +117,17 @@ public class ClientRequestHandler extends Thread {
                     boolean successfully_sent = false;
 
                     try {
+                        if(to_cause_problem <= 1) {
+                            to_cause_problem++;
+                            throw new IOException();
+                        }
+
                         main_handler.registerMonitor(requestId, monitor);
 
                         synchronized (worker_out) {
                             worker_out.writeInt(Command.CommandTypeClient.FILTER.ordinal());
                             worker_out.writeLong(requestId);
+                            worker_out.writeInt(-1);
                             worker_out.writeObject(filters);
                             worker_out.flush();
                         }
@@ -133,20 +141,23 @@ public class ClientRequestHandler extends Thread {
                             ObjectOutputStream rep_worker_out = rep_handler.getWorker_out();
 
                             try {
+                                if(to_cause_another_problem <= 1){
+                                    to_cause_another_problem++;
+                                    throw new IOException();
+                                }
                                 rep_handler.registerMonitor(requestId, monitor);
                                 synchronized (rep_worker_out) {
                                     rep_worker_out.writeInt(Command.CommandTypeClient.FILTER.ordinal());
                                     rep_worker_out.writeLong(requestId);
+                                    rep_worker_out.writeInt(main_handler.getHandlerId());
                                     rep_worker_out.writeObject(filters);
                                     rep_worker_out.flush();
                                 }
-                                replicated_worker.add_replica(main_handler);
-                                replicated_worker.setMain(rep_handler);
-                                replicated_worker.getMain().start();
+
                                 successfully_sent = true;
                                 break;
                             } catch (IOException ex) {
-                                System.err.println("Replica failed.");
+                                System.err.println("Replica failed. Trying another one...");
                             }
                         }
                     }
