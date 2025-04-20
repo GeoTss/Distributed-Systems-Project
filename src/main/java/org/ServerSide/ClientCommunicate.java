@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.Set;
 import java.util.TreeSet;
 
-public class ClientCommunicate extends Thread{
+public class ClientCommunicate extends Thread {
 
     Socket request_socket = null;
     ObjectOutputStream out;
@@ -27,7 +27,7 @@ public class ClientCommunicate extends Thread{
     }
 
     @Override
-    public void run(){
+    public void run() {
         try {
 
             Location loc = new Location(45, 45);
@@ -46,9 +46,9 @@ public class ClientCommunicate extends Thread{
             PriceCategoryEnum pr_cat = PriceCategoryEnum.MEDIUM;
             out.writeInt(pr_cat.ordinal());
 
-//            out.writeInt(Filter.Types.FILTER_RADIUS.ordinal());
-//            double max_radius = 500.0;
-//            out.writeDouble(max_radius);
+            // out.writeInt(Filter.Types.FILTER_RADIUS.ordinal());
+            // double max_radius = 500.0;
+            // out.writeDouble(max_radius);
 
             out.writeInt(Filter.Types.END.ordinal());
             out.flush();
@@ -56,9 +56,12 @@ public class ClientCommunicate extends Thread{
             @SuppressWarnings("unchecked")
             ArrayList<Shop> filtered_shops = (ArrayList<Shop>) in.readObject();
 
-            for(Shop shop: filtered_shops){
+            for (Shop shop : filtered_shops) {
                 System.out.println(shop + "\n");
             }
+
+            out.writeInt(Command.CommandTypeClient.CHOSE_SHOP.ordinal());
+            out.writeObject(filtered_shops.get(0));
 
             out.writeInt(Command.CommandTypeClient.QUIT.ordinal());
             out.flush();

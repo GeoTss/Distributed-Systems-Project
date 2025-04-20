@@ -1,7 +1,9 @@
 package org.ServerSide.ClientRequests;
 
 import org.Domain.Location;
+import org.Domain.Product;
 import org.Domain.Shop;
+import org.Domain.Client;
 import org.Filters.*;
 import org.ServerSide.ActiveReplication.ReplicationHandler;
 import org.ServerSide.Command;
@@ -16,6 +18,8 @@ import java.util.ArrayList;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.ServerSide.MasterServer;
+
 public class ClientRequestHandler extends Thread {
 
     private ObjectInputStream in;
@@ -23,6 +27,8 @@ public class ClientRequestHandler extends Thread {
     private Socket connection;
 
     private Location client_location;
+    private Client client;
+    private Shop chosen_shop;
 
     public static ArrayList<WorkerHandler> worker_handlers;
     public static ArrayList<ReplicationHandler> replicated_worker_handlers;
@@ -38,10 +44,13 @@ public class ClientRequestHandler extends Thread {
             in = new ObjectInputStream(_connection.getInputStream());
             System.out.println("Got streams from " + _connection);
 
-        } catch (IOException ioException) {
+            client_location = (Location) in.readObject();
+            client = new Client(client_location);
+
+        } catch (IOException | ClassNotFoundException e) {
             System.out.println("Exception at: ");
             System.out.println("ClientRequestHandler.ClientRequestHandler");
-            ioException.printStackTrace();
+            e.printStackTrace();
             _connection.close();
         }
     }
@@ -52,9 +61,9 @@ public class ClientRequestHandler extends Thread {
         int ord_filter = in.readInt();
         Filter.Types specific_filters = Filter.Types.values()[ord_filter];
 
-        while(specific_filters != Filter.Types.END){
+        while (specific_filters != Filter.Types.END) {
             System.out.println("Received filter " + specific_filters.toString() + " with arguments: ");
-            Filter filter = switch (specific_filters){
+            Filter filter = switch (specific_filters) {
                 case FILTER_STARS -> {
                     float min_rating = in.readFloat();
                     System.out.println("Float: " + min_rating);
@@ -92,16 +101,19 @@ public class ClientRequestHandler extends Thread {
         return filters;
     }
 
-    public void handleCommand(Command.CommandTypeClient _client_command) throws IOException, ClassNotFoundException, InterruptedException {
+    public void handleCommand(Command.CommandTypeClient _client_command)
+            throws IOException, ClassNotFoundException, InterruptedException {
 
         long requestId = threadId();
 
-        switch (_client_command){
-            case QUIT, DEFAULT, END: break;
-            case FILTER:
+        switch (_client_command) {
+            case QUIT, DEFAULT, END -> {
+                break;
+            }
+            case FILTER -> {
                 ArrayList<Filter> filters = readFilterCommand();
                 System.out.println("Received Filters: ");
-                for(Filter f: filters){
+                for (Filter f : filters) {
                     System.out.println(f.getClass().getName());
                 }
 
@@ -109,21 +121,29 @@ public class ClientRequestHandler extends Thread {
                 int to_cause_problem = 0;
                 int to_cause_another_problem = 1;
 
-                for(ReplicationHandler replicated_worker: replicated_worker_handlers){
+                // get the main from each worker and if it fails go for replicas
+                for (ReplicationHandler replicated_worker : replicated_worker_handlers) {
+
                     WorkerHandler main_handler = replicated_worker.getMain();
 
+                    // monitor for the current request on the current worker
                     RequestMonitor monitor = new RequestMonitor();
                     ObjectOutputStream worker_out = main_handler.getWorker_out();
                     boolean successfully_sent = false;
 
                     try {
-                        if(to_cause_problem <= 1) {
+
+                        // register monitor before sending to worker?
+                        // What if it fails the monitor never gets result?
+                        main_handler.registerMonitor(requestId, monitor);
+
+                        if (to_cause_problem <= 1) {
                             to_cause_problem++;
                             throw new IOException();
                         }
 
-                        main_handler.registerMonitor(requestId, monitor);
-
+                        // synchronized is needed because many request handlers might send messages to a
+                        // worker at the same time
                         synchronized (worker_out) {
                             worker_out.writeInt(Command.CommandTypeClient.FILTER.ordinal());
                             worker_out.writeLong(requestId);
@@ -136,16 +156,18 @@ public class ClientRequestHandler extends Thread {
                     } catch (IOException e) {
                         System.err.println("Main worker failed. Going for replicas... " + e.getMessage());
 
-                        for(WorkerHandler rep_handler: replicated_worker.getReplicas()){
+                        for (WorkerHandler rep_handler : replicated_worker.getReplicas()) {
 
                             ObjectOutputStream rep_worker_out = rep_handler.getWorker_out();
 
                             try {
-                                if(to_cause_another_problem <= 1){
+                                rep_handler.registerMonitor(requestId, monitor);
+
+                                if (to_cause_another_problem <= 1) {
                                     to_cause_another_problem++;
                                     throw new IOException();
                                 }
-                                rep_handler.registerMonitor(requestId, monitor);
+
                                 synchronized (rep_worker_out) {
                                     rep_worker_out.writeInt(Command.CommandTypeClient.FILTER.ordinal());
                                     rep_worker_out.writeLong(requestId);
@@ -162,26 +184,241 @@ public class ClientRequestHandler extends Thread {
                         }
                     }
 
-                    if(!successfully_sent){
-                        System.err.println("Main worker and all replicas failed sending command and arguments for this chunk.");
+                    if (!successfully_sent) {
+                        System.err.println(
+                                "Main worker and all replicas failed sending command and arguments for this chunk.");
                     }
                     monitors.add(monitor);
                 }
 
                 ArrayList<Shop> resulting_shops = new ArrayList<>();
 
-                for(RequestMonitor monitor: monitors){
+                for (RequestMonitor monitor : monitors) {
                     @SuppressWarnings("unchecked")
                     ArrayList<Shop> filtered_worker_shops = (ArrayList<Shop>) monitor.getResult();
 
-                    resulting_shops.addAll(filtered_worker_shops);
+                    // if filtered_worker_shops is null the addAll thorws exception
+                    if (filtered_worker_shops != null)
+                        resulting_shops.addAll(filtered_worker_shops);
                 }
                 out.writeObject(resulting_shops);
                 out.flush();
 
                 break;
-            case ADD_TO_CART: break;
-            case REMOVE_FROM_CART:break;
+            }
+            case CHOSE_SHOP -> {
+                // gets chosen shop from client and sends back the chosen shop with extra steps?
+                chosen_shop = (Shop) in.readObject();
+
+                ReplicationHandler replicated_worker = MasterServer.getWorkerForShop(chosen_shop);
+                WorkerHandler responsibleWorker = replicated_worker.getMain();
+
+                ObjectOutputStream worker_out = responsibleWorker.getWorker_out();
+                synchronized (worker_out) {
+                    worker_out.writeInt(Command.CommandTypeClient.CHOSE_SHOP.ordinal());
+                    worker_out.writeLong(requestId);
+                    worker_out.writeObject(chosen_shop);
+                    worker_out.flush();
+                }
+
+                RequestMonitor monitor = responsibleWorker.registerRequest(requestId);
+                Object result = monitor.getResult();
+
+                out.writeObject(result);
+                out.flush();
+                break;
+            }
+            case ADD_TO_CART -> {
+
+                Shop currShop = (Shop) in.readObject();
+                Product product = (Product) in.readObject();
+                int quantity = in.readInt();
+
+                ReplicationHandler replicated_worker = MasterServer.getWorkerForShop(currShop);
+                WorkerHandler responsibleWorker = replicated_worker.getMain();
+
+                RequestMonitor monitor = new RequestMonitor();
+                ObjectOutputStream worker_out = responsibleWorker.getWorker_out();
+                boolean successfully_sent = false;
+
+                try {
+
+                    responsibleWorker.registerMonitor(requestId, monitor);
+
+                    synchronized (worker_out) {
+                        worker_out.writeInt(Command.CommandTypeClient.ADD_TO_CART.ordinal());
+                        worker_out.writeLong(requestId);
+                        worker_out.writeInt(-1);
+                        worker_out.writeObject(client);
+                        worker_out.writeObject(product);
+                        worker_out.writeInt(quantity);
+                        worker_out.flush();
+                    }
+                    successfully_sent = true;
+
+                } catch (IOException e) {
+                    System.err.println("Main worker failed. Going for replicas... " + e.getMessage());
+
+                    for (WorkerHandler rep_handler : replicated_worker.getReplicas()) {
+
+                        ObjectOutputStream rep_worker_out = rep_handler.getWorker_out();
+
+                        try {
+                            rep_handler.registerMonitor(requestId, monitor);
+                            synchronized (rep_worker_out) {
+                                rep_worker_out.writeInt(Command.CommandTypeClient.ADD_TO_CART.ordinal());
+                                rep_worker_out.writeLong(requestId);
+                                rep_worker_out.writeInt(-1);
+                                rep_worker_out.writeObject(client);
+                                rep_worker_out.writeObject(product);
+                                rep_worker_out.writeInt(quantity);
+                                rep_worker_out.flush();
+                            }
+                            successfully_sent = true;
+                        } catch (IOException ex) {
+                            System.err.println("Replica failed. Trying another one...");
+                        }
+                    }
+                }
+
+                if (!successfully_sent) {
+                    System.err.println(
+                            "Main worker and all replicas failed sending command and arguments for this chunk.");
+                }
+
+                boolean added_to_cart = (Boolean) monitor.getResult();
+                if (added_to_cart) {
+                    System.out.println(
+                            "Added  " + quantity + " " + product.getName() + " to " + client.getUsername() + "'s cart");
+                } else {
+                    System.err.println("not enough stock");
+                }
+
+                break;
+            }
+            case REMOVE_FROM_CART -> {
+
+                Shop currShop = (Shop) in.readObject();
+                Product product = (Product) in.readObject();
+                int quantity = in.readInt();
+
+                ReplicationHandler replicated_worker = MasterServer.getWorkerForShop(currShop);
+                WorkerHandler responsibleWorker = replicated_worker.getMain();
+
+                ObjectOutputStream worker_out = responsibleWorker.getWorker_out();
+                boolean successfully_sent = false;
+
+                try {
+
+                    synchronized (worker_out) {
+                        worker_out.writeInt(Command.CommandTypeClient.REMOVE_FROM_CART.ordinal());
+                        worker_out.writeLong(requestId);
+                        worker_out.writeInt(-1);
+                        worker_out.writeObject(client);
+                        worker_out.writeObject(product);
+                        worker_out.writeInt(quantity);
+                        worker_out.flush();
+                    }
+                    successfully_sent = true;
+
+                } catch (IOException e) {
+                    System.err.println("Main worker failed. Going for replicas... " + e.getMessage());
+
+                    for (WorkerHandler rep_handler : replicated_worker.getReplicas()) {
+
+                        ObjectOutputStream rep_worker_out = rep_handler.getWorker_out();
+
+                        try {
+
+                            synchronized (rep_worker_out) {
+                                rep_worker_out.writeInt(Command.CommandTypeClient.ADD_TO_CART.ordinal());
+                                rep_worker_out.writeLong(requestId);
+                                rep_worker_out.writeInt(-1);
+                                rep_worker_out.writeObject(client);
+                                rep_worker_out.writeObject(product);
+                                rep_worker_out.writeInt(quantity);
+                                rep_worker_out.flush();
+                            }
+                            successfully_sent = true;
+                        } catch (IOException ex) {
+                            System.err.println("Replica failed. Trying another one...");
+                        }
+                    }
+                }
+
+                if (!successfully_sent) {
+                    System.err.println(
+                            "Main worker and all replicas failed sending command and arguments for this chunk.");
+                }
+
+                if (successfully_sent) {
+                    System.out.println("Removed  " + quantity + " " + product.getName() + " from "
+                            + client.getUsername() + "'s cart");
+                }
+                break;
+            }
+            case CHECKOUT -> {
+
+                Shop currShop = (Shop) in.readObject();
+
+                ReplicationHandler replicated_worker = MasterServer.getWorkerForShop(currShop);
+                WorkerHandler responsibleWorker = replicated_worker.getMain();
+
+                RequestMonitor monitor = new RequestMonitor();
+                ObjectOutputStream worker_out = responsibleWorker.getWorker_out();
+                boolean successfully_sent = false;
+
+                try {
+
+                    responsibleWorker.registerMonitor(requestId, monitor);
+
+                    synchronized (worker_out) {
+                        worker_out.writeInt(Command.CommandTypeClient.CHECKOUT.ordinal());
+                        worker_out.writeLong(requestId);
+                        worker_out.writeInt(-1);
+                        worker_out.writeObject(client);
+                        worker_out.flush();
+                    }
+                    successfully_sent = true;
+
+                } catch (IOException e) {
+                    System.err.println("Main worker failed. Going for replicas... " + e.getMessage());
+
+                    for (WorkerHandler rep_handler : replicated_worker.getReplicas()) {
+
+                        ObjectOutputStream rep_worker_out = rep_handler.getWorker_out();
+
+                        try {
+                            rep_handler.registerMonitor(requestId, monitor);
+                            synchronized (rep_worker_out) {
+                                rep_worker_out.writeInt(Command.CommandTypeClient.CHECKOUT.ordinal());
+                                rep_worker_out.writeLong(requestId);
+                                rep_worker_out.writeInt(-1);
+                                rep_worker_out.writeObject(client);
+                                rep_worker_out.flush();
+                            }
+                            successfully_sent = true;
+                        } catch (IOException ex) {
+                            System.err.println("Replica failed. Trying another one...");
+                        }
+                    }
+                }
+
+                if (!successfully_sent) {
+                    System.err.println(
+                            "Main worker and all replicas failed sending command and arguments for this chunk.");
+                }
+
+                boolean checked_out = (Boolean) monitor.getResult();
+                if (checked_out) {
+                    System.out.println(
+                            "Client " + client.getUsername() + "checked out.");
+                } else {
+                    System.err.println("Couldn't checkout");
+                }
+
+                break;
+            }
         }
     }
 
@@ -193,9 +430,11 @@ public class ClientRequestHandler extends Thread {
             client_location = (Location) in.readObject();
             System.out.println("client_location = " + client_location);
 
+            Client client = new Client(client_location);
+
             Command.CommandTypeClient client_command = Command.CommandTypeClient.DEFAULT;
 
-            while(client_command != Command.CommandTypeClient.QUIT){
+            while (client_command != Command.CommandTypeClient.QUIT) {
                 int client_cmd_ord = in.readInt();
                 client_command = Command.CommandTypeClient.values()[client_cmd_ord];
 
