@@ -28,9 +28,7 @@ public class WorkerHandler extends Thread{
 
     public RequestMonitor registerRequest(long requestId){
         RequestMonitor monitor = new RequestMonitor();
-//        synchronized (monitors_responses){
-//            monitors_responses.put(requestId, monitor);
-//        }
+
         synchronized (monitor_responses_rep){
             monitor_responses_rep
                     .computeIfAbsent(requestId, (_) -> new ArrayList<>())
@@ -40,9 +38,6 @@ public class WorkerHandler extends Thread{
     }
 
     public void registerMonitor(long requestId, RequestMonitor monitor) {
-//        synchronized (monitors_responses){
-//            monitors_responses.put(requestId, monitor);
-//        }
 
         synchronized (monitor_responses_rep){
             monitor_responses_rep
@@ -59,9 +54,7 @@ public class WorkerHandler extends Thread{
                 Object result = worker_in.readObject();
 
                 RequestMonitor monitor;
-//                synchronized (monitors_responses) {
-//                    monitor = monitors_responses.remove(requestId);
-//                }
+
                 ArrayList<RequestMonitor> monitors_for_id;
                 synchronized (monitor_responses_rep){
                     monitors_for_id = monitor_responses_rep.get(requestId);
@@ -76,11 +69,6 @@ public class WorkerHandler extends Thread{
                     monitors_for_id.removeLast();
                 }
 
-//                if (monitor != null) {
-//                    monitor.setResult(result);
-//                } else {
-//                    System.err.println("No monitor found for requestId: " + requestId);
-//                }
             }
         } catch (IOException | ClassNotFoundException e) {
             System.err.println("WorkerHandler crashed: " + e.getMessage());

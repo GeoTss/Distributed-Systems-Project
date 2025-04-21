@@ -26,7 +26,6 @@ public class MasterServer {
     private ArrayList<Shop> database_shops;
     private ServerConfigInfo config_info;
 
-    private ArrayList<WorkerHandler> workerHandlers = new ArrayList<>();
     private ArrayList<ReplicationHandler> replicated_worker_handlers = new ArrayList<>();
 
     public static final Object CONNECTION_ACCEPT_LOCK = new Object();
@@ -84,7 +83,7 @@ public class MasterServer {
                 worker_clients.get(fallback_index).add_backup(i, shop_chunks.get(i));
 
                 WorkerHandler fall_worker = worker_handlers.get(fallback_index);
-                System.out.println("At worker client " + i + " put: (" + fall_worker.getHandlerId() + ", " + fallback_index + "(" + shop_chunks.get(fallback_index) + "))");
+                System.out.println("At worker client " + i + " put: (" + fall_worker.getHandlerId() + ", " + fallback_index + " chunk)");
 
                 handler.getReplicas().add(fall_worker);
             }

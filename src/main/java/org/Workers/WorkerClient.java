@@ -24,7 +24,6 @@ public class WorkerClient extends Thread {
     private ObjectOutputStream outputStream;
     private List<Shop> managed_shops;
     private HashMap<Integer, List<Shop>> backup_shops;
-//    private List<List<Shop>> backup_shops;
 
     public WorkerClient(List<Shop> shops) throws IOException, ClassNotFoundException {
         id = gl_id++;

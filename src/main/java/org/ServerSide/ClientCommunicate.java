@@ -38,17 +38,21 @@ public class ClientCommunicate extends Thread{
 
             out.writeInt(Filter.Types.FILTER_CATEGORY.ordinal());
             Set<String> categories = new TreeSet<>();
-            categories.add("sushi");
-            categories.add("coffee");
+            categories.add("bbq");
             out.writeObject(categories);
 
             out.writeInt(Filter.Types.FILTER_PRICE.ordinal());
             PriceCategoryEnum pr_cat = PriceCategoryEnum.MEDIUM;
             out.writeInt(pr_cat.ordinal());
 
-//            out.writeInt(Filter.Types.FILTER_RADIUS.ordinal());
-//            double max_radius = 500.0;
-//            out.writeDouble(max_radius);
+            out.writeInt(Filter.Types.FILTER_STARS.ordinal());
+            float min_rating = 4.5f;
+            out.writeFloat(min_rating);
+            out.flush();
+
+            out.writeInt(Filter.Types.FILTER_RADIUS.ordinal());
+            double max_radius = 5000;
+            out.writeDouble(max_radius);
 
             out.writeInt(Filter.Types.END.ordinal());
             out.flush();

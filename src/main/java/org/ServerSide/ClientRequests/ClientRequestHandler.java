@@ -106,8 +106,6 @@ public class ClientRequestHandler extends Thread {
                 }
 
                 ArrayList<RequestMonitor> monitors = new ArrayList<>();
-                int to_cause_problem = 0;
-                int to_cause_another_problem = 1;
 
                 for(ReplicationHandler replicated_worker: replicated_worker_handlers){
                     WorkerHandler main_handler = replicated_worker.getMain();
@@ -117,10 +115,6 @@ public class ClientRequestHandler extends Thread {
                     boolean successfully_sent = false;
 
                     try {
-                        if(to_cause_problem <= 1) {
-                            to_cause_problem++;
-                            throw new IOException();
-                        }
 
                         main_handler.registerMonitor(requestId, monitor);
 
@@ -141,10 +135,6 @@ public class ClientRequestHandler extends Thread {
                             ObjectOutputStream rep_worker_out = rep_handler.getWorker_out();
 
                             try {
-                                if(to_cause_another_problem <= 1){
-                                    to_cause_another_problem++;
-                                    throw new IOException();
-                                }
                                 rep_handler.registerMonitor(requestId, monitor);
                                 synchronized (rep_worker_out) {
                                     rep_worker_out.writeInt(Command.CommandTypeClient.FILTER.ordinal());
