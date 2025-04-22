@@ -6,13 +6,15 @@ import java.io.Serializable;
 import java.util.HashMap;
 
 public class Shop implements Rateable, Categorisable, PriceCategory, Locatable, Serializable {
+    private static Integer gl_id = 0;
+    private Integer id;
     private String name;
     private Location location;
     private String foodCategory;
     private float stars;
     private int noOfVotes;
     private String logoPath;
-    private HashMap<String, Product> products;
+    private HashMap<Integer, Product> products;
 
     public Shop(
         String _name,
@@ -23,6 +25,8 @@ public class Shop implements Rateable, Categorisable, PriceCategory, Locatable, 
         int _noOfVotes,
         String _logoPath
     ) {
+        id = gl_id++;
+
         this.name = _name;
         this.location = new Location(_latitude, _longitude);
         this.foodCategory = _foodCategory;
@@ -33,13 +37,13 @@ public class Shop implements Rateable, Categorisable, PriceCategory, Locatable, 
     }
 
     public void addProduct(Product _product) {
-        if (this.products.containsKey(_product.getName())) return;
-        this.products.put(_product.getName(), _product);
+        if (this.products.containsKey(_product.getId())) return;
+        this.products.put(_product.getId(), _product);
     }
 
     public void removeProduct(Product _product) {
-        if (!this.products.containsKey(_product.getName())) return;
-        this.products.remove(_product.getName());
+        if (!this.products.containsKey(_product.getId())) return;
+        this.products.remove(_product.getId());
     }
 
     public void updateRating(float _rating) {
@@ -90,11 +94,15 @@ public class Shop implements Rateable, Categorisable, PriceCategory, Locatable, 
     public String getLogoPath() {
         return this.logoPath;
     }
-    public Product getProductByName(String _name) {
-        return this.products.get(_name);
+    public Product getProductById(Integer _id) {
+        return this.products.get(_id);
     }
-    public HashMap<String, Product> getProducts() {
+    public HashMap<Integer, Product> getProducts() {
         return this.products;
+    }
+
+    public Integer getId() {
+        return id;
     }
 
 //    public String toString() {

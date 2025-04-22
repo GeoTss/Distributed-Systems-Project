@@ -24,7 +24,7 @@ public class MasterServer {
     private Socket server_socket = null;
 
     private ArrayList<Shop> database_shops;
-    private ServerConfigInfo config_info;
+    private static ServerConfigInfo config_info;
 
     private ArrayList<WorkerHandler> workerHandlers = new ArrayList<>();
     private ArrayList<ReplicationHandler> replicated_worker_handlers = new ArrayList<>();
@@ -129,6 +129,10 @@ public class MasterServer {
                 ioException.printStackTrace();
             }
         }
+    }
+
+    public static ServerConfigInfo getConfig_info(){
+        return config_info;
     }
 
     public static void main(String[] args) throws IOException, URISyntaxException, ClassNotFoundException {

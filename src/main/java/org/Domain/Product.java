@@ -3,6 +3,10 @@ package org.Domain;
 import java.io.Serializable;
 
 public class Product implements Serializable {
+
+    private static Integer gl_id = 0;
+
+    private Integer id;
     final private String name;
     final private String type;
     private int availableAmount;
@@ -14,6 +18,8 @@ public class Product implements Serializable {
         int _availableAmount,
         float _price
     ) {
+        id = gl_id++;
+
         this.name = _name;
         this.type = _type;
         this.availableAmount = _availableAmount;
@@ -28,7 +34,6 @@ public class Product implements Serializable {
         this.availableAmount = Math.max(this.availableAmount - _amount, 0);
     }
     public void sellProduct(int _numSold) {
-        this.availableAmount -= _numSold;
         this.sold += _numSold;
     }
     public float getSumSale() {
@@ -50,4 +55,15 @@ public class Product implements Serializable {
         return this.sold;
     }
 
+    @Override
+    public String toString(){
+        return "Name: " + name +
+                "\nType: " + type +
+                "\nAvailable amount: " + availableAmount +
+                "\nPrice: " + price;
+    }
+
+    public Integer getId() {
+        return id;
+    }
 }

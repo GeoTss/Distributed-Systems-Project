@@ -4,12 +4,11 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-import org.Domain.Client;
+import org.Domain.Cart;
 import org.Domain.Product;
 import org.Domain.Shop;
 import org.Filters.Filter;
@@ -57,40 +56,62 @@ public class WorkerClient extends Thread {
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
-    public boolean addToCart() throws IOException, ClassNotFoundException {
-        Client client = (Client) inputStream.readObject();
-        Product product = (Product) inputStream.readObject();
+    public synchronized Integer addToCart(Shop shop) throws IOException, ClassNotFoundException {
+
+        Integer product_id = inputStream.readInt();
+        Product product = shop.getProductById(product_id);
         int quantity = inputStream.readInt();
 
-        try {
-            synchronized (product) {
-                client.addToShoppingCart(product, quantity);
-            }
-            return true;
-        } catch (Exception e) {
-            // TODO: handle exception
-            return false;
+        if(product.getAvailableAmount() >= quantity){
+            product.removeAvailableAmount(quantity);
+            return product.getId();
+        }
+
+        return null;
+    }
+
+    public synchronized boolean removeFromCart(Shop shop) throws IOException, ClassNotFoundException {
+        Integer product_id = inputStream.readInt();
+        int quantity = inputStream.readInt();
+
+        System.out.println("Worker " + id + " got values for removal");
+
+        Product product = shop.getProductById(product_id);
+
+        product.addAvailableAmount(quantity);
+        return true;
+    }
+
+    public synchronized void checkout_cart(Shop shop, Cart cart){
+
+        for(Map.Entry<Integer, Integer> entry: cart.getProducts().entrySet()){
+            Product cart_product = shop.getProductById(entry.getKey());
+            cart_product.sellProduct(entry.getValue());
         }
     }
 
-    public void removeFromCart() throws IOException, ClassNotFoundException {
-        Client client = (Client) inputStream.readObject();
-        Product product = (Product) inputStream.readObject();
-        int quantity = inputStream.readInt();
-        synchronized (product) {
-            client.removeFromShoppingCart(product, quantity);
-        }
-    }
+    public synchronized boolean checkout(Shop shop, Cart cart) throws IOException, ClassNotFoundException {
 
-    public boolean checkout() throws IOException, ClassNotFoundException {
-        Client client = (Client) inputStream.readObject();
-        float balance = client.getBalance();
-        client.checkout();
-        if (client.getBalance() != balance) {
+        float balance = inputStream.readFloat();
+        float total_cost = getCartCost(shop, cart);
+        System.out.println("total_cost = " + total_cost);
+        if (total_cost <= balance) {
+            System.out.println("Transaction was successful.");
+            checkout_cart(shop, cart);
             return true;
         } else {
+            System.out.println("Transaction was not successful. Insufficient funds.");
             return false;
         }
+    }
+
+    private float getCartCost(Shop shop, Cart cart) {
+        float cost = 0;
+        for(Map.Entry<Integer, Integer> entry: cart.getProducts().entrySet()){
+            Product cart_product = shop.getProductById(entry.getKey());
+            cost += cart_product.getPrice() * entry.getValue();
+        }
+        return cost;
     }
 
     void connectServer() {
@@ -130,22 +151,39 @@ public class WorkerClient extends Thread {
                         outputStream.flush();
                     }
                     case CHOSE_SHOP -> {
-                        Shop chosen_shop = (Shop) inputStream.readObject();
+                        int chosen_shop_id =  inputStream.readInt();
+                        Shop corresponding_shop = getShopFromId(worker_id, chosen_shop_id);
+
                         outputStream.writeLong(requestId);
-                        outputStream.writeObject(chosen_shop);
+                        outputStream.writeObject(corresponding_shop);
                         outputStream.flush();
                     }
                     case ADD_TO_CART -> {
-                        boolean added_to_cart = addToCart();
-                        outputStream.writeBoolean(added_to_cart);
+                        int chosen_shop_id =  inputStream.readInt();
+                        Shop corresponding_shop = getShopFromId(worker_id, chosen_shop_id);
+
+                        Integer added_to_cart = addToCart(corresponding_shop);
+                        outputStream.writeLong(requestId);
+                        outputStream.writeObject(added_to_cart);
                         outputStream.flush();
                     }
                     case REMOVE_FROM_CART -> {
-                        removeFromCart();
+                        int chosen_shop_id =  inputStream.readInt();
+                        Shop corresponding_shop = getShopFromId(worker_id, chosen_shop_id);
+
+                        boolean removed = removeFromCart(corresponding_shop);
+                        outputStream.writeLong(requestId);
+                        outputStream.writeObject(removed);
+                        outputStream.flush();
                     }
                     case CHECKOUT -> {
-                        boolean checked_out = checkout();
-                        outputStream.writeBoolean(checked_out);
+                        int chosen_shop_id =  inputStream.readInt();
+                        Shop corresponding_shop = getShopFromId(worker_id, chosen_shop_id);
+
+                        Cart cart = (Cart) inputStream.readObject();
+                        boolean checked_out = checkout(corresponding_shop, cart);
+                        outputStream.writeLong(requestId);
+                        outputStream.writeObject(checked_out);
                         outputStream.flush();
                     }
                     default -> {
@@ -161,6 +199,14 @@ public class WorkerClient extends Thread {
 
     public HashMap<Integer, List<Shop>> getBackup_shops() {
         return backup_shops;
+    }
+
+    public Shop getShopFromId(int worker_id, int shop_id){
+
+        if(worker_id == -1)
+            return managed_shops.get(shop_id - managed_shops.size()*id);
+
+        return backup_shops.get(worker_id).get(shop_id - MasterServer.getConfig_info().getWorker_chunk()*worker_id);
     }
 
     @Override

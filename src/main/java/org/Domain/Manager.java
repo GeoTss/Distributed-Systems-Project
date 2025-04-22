@@ -15,12 +15,12 @@ public class Manager {
     public void addProduct(Product _product) {
         this.currShop.addProduct(_product);
     }
-    public void addAvailableProduct(Product _product, int _amount) {
-        this.currShop.getProductByName(_product.getName()).addAvailableAmount(_amount);
-    }
-    public void removeAvailableProduct(Product _product, int _amount) {
-        this.currShop.getProductByName(_product.getName()).removeAvailableAmount(_amount);
-    }
+//    public void addAvailableProduct(Product _product, int _amount) {
+//        this.currShop.getProductByName(_product.getName()).addAvailableAmount(_amount);
+//    }
+//    public void removeAvailableProduct(Product _product, int _amount) {
+//        this.currShop.getProductByName(_product.getName()).removeAvailableAmount(_amount);
+//    }
     public void removeProduct(Product _product) {
         this.currShop.removeProduct(_product);
     }
