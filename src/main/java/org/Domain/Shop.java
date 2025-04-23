@@ -105,24 +105,26 @@ public class Shop implements Rateable, Categorisable, PriceCategory, Locatable, 
         return id;
     }
 
-//    public String toString() {
-//        StringBuilder builder = new StringBuilder();
-//        builder.append("Shop: ").append(name).append("\n");
-//        builder.append("  Location: ").append(location).append("\n");
-//        builder.append("  Category: ").append(foodCategory).append("\n");
-//        builder.append("  Rating: ").append(String.format("%.2f", getRating()))
-//                .append(" (").append(noOfVotes).append(" reviews)\n");
-//        builder.append("  Price Category: ").append(getPriceCategory()).append("\n");
-//        builder.append("  Logo Path: ").append(logoPath).append("\n");
-//        builder.append("  Products:\n");
-//
-//        for (Product product : products.values()) {
-//            builder.append("    - ").append(product.getName())
-//                    .append(" (").append(product.getType()).append("): ")
-//                    .append(product.getAvailableAmount()).append(" available @ ")
-//                    .append(product.getPrice()).append("€\n");
-//        }
-//
-//        return builder.toString();
-//    }
+    public void showProducts(){
+        StringBuilder builder = new StringBuilder();
+        builder.append("Products:\n");
+        for (Product product : products.values()) {
+            builder.append(product);
+        }
+        System.out.println(builder);
+    }
+
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("Shop: ").append(name).append("\n");
+        builder.append("ID: ").append(id).append("\n");
+        builder.append("  Location: ").append(location).append("\n");
+        builder.append("  Category: ").append(foodCategory).append("\n");
+        builder.append("  Rating: ").append(String.format("%.2f", getRating()))
+                .append(" (").append(noOfVotes).append(" reviews)\n");
+        builder.append("  Price Category: ").append(getPriceCategory()).append("\n");
+        builder.append("  Logo Path: ").append(logoPath).append("\n");
+
+        return builder.toString();
+    }
 }

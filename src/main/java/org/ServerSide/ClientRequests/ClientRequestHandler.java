@@ -27,7 +27,7 @@ public class ClientRequestHandler extends Thread {
     private Client client;
     private Shop current_shop;
 
-    private Cart client_cart;
+    private ServerCart client_Server_cart;
 
     public static ArrayList<WorkerHandler> worker_handlers;
     public static ArrayList<ReplicationHandler> replicated_worker_handlers;
@@ -210,8 +210,8 @@ public class ClientRequestHandler extends Thread {
                 System.out.println("Resulting shop: " + result);
                 current_shop = result;
 
-                client_cart.setShop_id(current_shop.getId());
-                client_cart.clear_cart();
+                client_Server_cart.setShop_id(current_shop.getId());
+                client_Server_cart.clear_cart();
 
                 out.writeObject(result);
                 out.flush();
@@ -281,7 +281,7 @@ public class ClientRequestHandler extends Thread {
                 boolean added_to_cart;
                 if (product_to_be_added != null) {
                     added_to_cart = true;
-                    client_cart.add_product(product_to_be_added, quantity);
+                    client_Server_cart.add_product(product_to_be_added, quantity);
                     System.out.println(
                             "Added " + quantity + " " + product_to_be_added + " to " + client.getUsername() + "'s cart");
                 } else {
@@ -355,17 +355,67 @@ public class ClientRequestHandler extends Thread {
                 else
                     System.out.println("Problem during removal.");
 
-                client_cart.remove_product(product_id, quantity);
+                client_Server_cart.remove_product(product_id, quantity);
 
                 out.writeBoolean(removed);
                 out.flush();
             }
             case GET_CART -> {
-                out.reset();
-                out.writeObject(client_cart);
+
+                RequestMonitor monitor = new RequestMonitor();
+                ReplicationHandler replicated_worker = getWorkerForShop(current_shop.getId());
+                WorkerHandler responsibleWorker = replicated_worker.getMain();
+
+                ObjectOutputStream worker_out = responsibleWorker.getWorker_out();
+                boolean successfully_sent = false;
+
+                try {
+                    responsibleWorker.registerMonitor(requestId, monitor);
+                    synchronized (worker_out) {
+                        worker_out.reset();
+                        worker_out.writeInt(Command.CommandTypeClient.GET_CART.ordinal());
+                        worker_out.writeLong(requestId);
+                        worker_out.writeInt(-1);
+                        worker_out.writeInt(current_shop.getId());
+                        worker_out.writeObject(client_Server_cart);
+                        worker_out.flush();
+                    }
+                    successfully_sent = true;
+
+                } catch (IOException e) {
+                    System.err.println("Main worker failed. Going for replicas... " + e.getMessage());
+
+                    for (WorkerHandler rep_handler : replicated_worker.getReplicas()) {
+
+                        ObjectOutputStream rep_worker_out = rep_handler.getWorker_out();
+
+                        try {
+                            rep_handler.registerMonitor(requestId, monitor);
+                            synchronized (rep_worker_out) {
+                                rep_worker_out.reset();
+                                rep_worker_out.writeInt(Command.CommandTypeClient.GET_CART.ordinal());
+                                rep_worker_out.writeLong(requestId);
+                                rep_worker_out.writeInt(responsibleWorker.getHandlerId());
+                                rep_worker_out.writeInt(current_shop.getId());
+                                worker_out.writeObject(client_Server_cart);
+                                rep_worker_out.flush();
+                            }
+                            successfully_sent = true;
+                        } catch (IOException ex) {
+                            System.err.println("Replica failed. Trying another one...");
+                        }
+                    }
+                }
+
+                if (!successfully_sent) {
+                    System.err.println("Main worker and all replicas failed sending command and arguments for this chunk.");
+                    break;
+                }
+                ReadableCart actual_cart = (ReadableCart) monitor.getResult();
+                out.writeObject(actual_cart);
                 out.flush();
                 System.out.println("Sent " + client.getUsername() + "'s cart");
-                client_cart.getProducts().forEach((key, value) -> System.out.println("{\n" + key.toString() + "\nQuantity: " + value + "}"));
+
             }
             case CHECKOUT -> {
 
@@ -385,7 +435,7 @@ public class ClientRequestHandler extends Thread {
                         worker_out.writeLong(requestId);
                         worker_out.writeInt(-1);
                         worker_out.writeInt(current_shop.getId());
-                        worker_out.writeObject(client_cart);
+                        worker_out.writeObject(client_Server_cart);
                         worker_out.writeFloat(client.getBalance());
                         worker_out.flush();
                     }
@@ -405,7 +455,7 @@ public class ClientRequestHandler extends Thread {
                                 rep_worker_out.writeLong(requestId);
                                 rep_worker_out.writeInt(responsibleWorker.getHandlerId());
                                 worker_out.writeInt(current_shop.getId());
-                                rep_worker_out.writeObject(client_cart);
+                                rep_worker_out.writeObject(client_Server_cart);
                                 rep_worker_out.writeFloat(client.getBalance());
                                 rep_worker_out.flush();
                             }
@@ -424,13 +474,14 @@ public class ClientRequestHandler extends Thread {
 
                 boolean checked_out = (Boolean) monitor.getResult();
                 if (checked_out) {
-                    System.out.println(
-                            "Client " + client.getUsername() + " checked out.");
-                } else {
-                    System.err.println("Couldn't checkout");
+                    System.out.println("Client " + client.getUsername() + " checked out.");
+                    client_Server_cart.clear_cart();
                 }
+                else
+                    System.out.println("Couldn't checkout. Insufficient funds.");
 
-                break;
+                out.writeBoolean(checked_out);
+                out.flush();
             }
         }
     }
@@ -449,7 +500,7 @@ public class ClientRequestHandler extends Thread {
             client = (Client) in.readObject();
             System.out.println("Got client info.");
 
-            client_cart = new Cart();
+            client_Server_cart = new ServerCart();
 
             Command.CommandTypeClient client_command = Command.CommandTypeClient.DEFAULT;
 

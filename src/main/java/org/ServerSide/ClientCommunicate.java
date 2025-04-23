@@ -1,6 +1,6 @@
 package org.ServerSide;
 
-import org.Domain.Cart;
+import org.Domain.ServerCart;
 import org.Domain.Client;
 import org.Domain.Location;
 import org.Domain.Shop;
@@ -87,9 +87,9 @@ public class ClientCommunicate extends Thread {
             {
                 out.writeInt(Command.CommandTypeClient.GET_CART.ordinal());
                 out.flush();
-                Cart tempCart = (Cart) in.readObject();
+                ServerCart tempServerCart = (ServerCart) in.readObject();
 
-                tempCart.getProducts().forEach((key, value) -> System.out.println("{\n" + key.toString() + "\nQuantity: " + value + "}"));
+                tempServerCart.getProducts().forEach((key, value) -> System.out.println("{\n" + key.toString() + "\nQuantity: " + value + "}"));
             }
             out.writeInt(Command.CommandTypeClient.REMOVE_FROM_CART.ordinal());
             out.writeInt(product_id);
@@ -104,9 +104,9 @@ public class ClientCommunicate extends Thread {
             {
                 out.writeInt(Command.CommandTypeClient.GET_CART.ordinal());
                 out.flush();
-                Cart cart = (Cart) in.readObject();
+                ServerCart serverCart = (ServerCart) in.readObject();
 
-                cart.getProducts().forEach((key, value) -> System.out.println("{\n" + key.toString() + "\nQuantity: " + value + "}"));
+                serverCart.getProducts().forEach((key, value) -> System.out.println("{\n" + key.toString() + "\nQuantity: " + value + "}"));
             }
             System.out.println("Sending checkout command...");
             out.writeInt(Command.CommandTypeClient.CHECKOUT.ordinal());

@@ -2,12 +2,13 @@ package org.Domain;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.Map;
 
-public class Cart implements Serializable {
+public class ServerCart implements Serializable {
 
 //    private ArrayList<Pair<Product, Integer>> products;
     private Integer shop_id;
-    private HashMap<Integer, Integer> m_products = new HashMap<>();
+    private Map<Integer, Integer> m_products = new HashMap<>();
 
 
     public void add_product(Integer product_id, int amount) {
@@ -37,7 +38,7 @@ public class Cart implements Serializable {
         m_products.clear();
     }
 
-    public HashMap<Integer, Integer> getProducts(){
+    public Map<Integer, Integer> getProducts(){
         return m_products;
     }
 

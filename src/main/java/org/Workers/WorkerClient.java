@@ -6,9 +6,9 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-import org.Domain.Cart;
+import org.Domain.ReadableCart;
+import org.Domain.ServerCart;
 import org.Domain.Product;
 import org.Domain.Shop;
 import org.Filters.Filter;
@@ -82,22 +82,22 @@ public class WorkerClient extends Thread {
         return true;
     }
 
-    public synchronized void checkout_cart(Shop shop, Cart cart){
+    public synchronized void checkout_cart(Shop shop, ServerCart serverCart){
 
-        for(Map.Entry<Integer, Integer> entry: cart.getProducts().entrySet()){
+        for(Map.Entry<Integer, Integer> entry: serverCart.getProducts().entrySet()){
             Product cart_product = shop.getProductById(entry.getKey());
             cart_product.sellProduct(entry.getValue());
         }
     }
 
-    public synchronized boolean checkout(Shop shop, Cart cart) throws IOException, ClassNotFoundException {
+    public synchronized boolean checkout(Shop shop, ServerCart serverCart) throws IOException, ClassNotFoundException {
 
         float balance = inputStream.readFloat();
-        float total_cost = getCartCost(shop, cart);
+        float total_cost = getCartCost(shop, serverCart);
         System.out.println("total_cost = " + total_cost);
         if (total_cost <= balance) {
             System.out.println("Transaction was successful.");
-            checkout_cart(shop, cart);
+            checkout_cart(shop, serverCart);
             return true;
         } else {
             System.out.println("Transaction was not successful. Insufficient funds.");
@@ -105,11 +105,19 @@ public class WorkerClient extends Thread {
         }
     }
 
-    private float getCartCost(Shop shop, Cart cart) {
+    private float getCartCost(Shop shop, ServerCart serverCart) {
         float cost = 0;
-        for(Map.Entry<Integer, Integer> entry: cart.getProducts().entrySet()){
+        for(Map.Entry<Integer, Integer> entry: serverCart.getProducts().entrySet()){
             Product cart_product = shop.getProductById(entry.getKey());
             cost += cart_product.getPrice() * entry.getValue();
+        }
+        return cost;
+    }
+
+    private float getCartCost(Shop shop, ReadableCart cart) {
+        float cost = 0;
+        for(Map.Entry<Product, Integer> entry: cart.getProduct_quantity_map().entrySet()){
+            cost += entry.getKey().getPrice() * entry.getValue();
         }
         return cost;
     }
@@ -176,12 +184,26 @@ public class WorkerClient extends Thread {
                         outputStream.writeObject(removed);
                         outputStream.flush();
                     }
+                    case GET_CART -> {
+                        int chosen_shop_id = inputStream.readInt();
+                        ServerCart cart = (ServerCart) inputStream.readObject();
+                        Shop corresponding_shop = getShopFromId(worker_id, chosen_shop_id);
+
+                        ReadableCart result_cart = getActualCart(corresponding_shop, cart);
+
+                        Float total_cost = getCartCost(corresponding_shop, result_cart);
+                        result_cart.setTotal_cost(total_cost);
+
+                        outputStream.writeLong(requestId);
+                        outputStream.writeObject(result_cart);
+                        outputStream.flush();
+                    }
                     case CHECKOUT -> {
                         int chosen_shop_id =  inputStream.readInt();
                         Shop corresponding_shop = getShopFromId(worker_id, chosen_shop_id);
 
-                        Cart cart = (Cart) inputStream.readObject();
-                        boolean checked_out = checkout(corresponding_shop, cart);
+                        ServerCart serverCart = (ServerCart) inputStream.readObject();
+                        boolean checked_out = checkout(corresponding_shop, serverCart);
                         outputStream.writeLong(requestId);
                         outputStream.writeObject(checked_out);
                         outputStream.flush();
@@ -195,6 +217,17 @@ public class WorkerClient extends Thread {
         } catch (IOException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private ReadableCart getActualCart(Shop correspondingShop, ServerCart cart) {
+        ReadableCart resulting_cart = new ReadableCart();
+
+        cart.getProducts().forEach((product_id, quantity) -> resulting_cart.getProduct_quantity_map()
+                .put(correspondingShop.getProductById(product_id),
+                        quantity
+                )
+        );
+        return resulting_cart;
     }
 
     public HashMap<Integer, List<Shop>> getBackup_shops() {

@@ -56,12 +56,17 @@ public class Product implements Serializable {
     }
 
     @Override
-    public String toString(){
-        return "Name: " + name +
-                "\nType: " + type +
-                "\nAvailable amount: " + availableAmount +
-                "\nPrice: " + price;
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Product with ID: ").append(id).append("\n")
+                .append("\t- ").append(name)
+                .append(" (").append(type).append("): ")
+                .append(availableAmount).append(" available @ ")
+                .append(price).append("€\n");
+        return sb.toString();
     }
+
+
 
     public Integer getId() {
         return id;
