@@ -17,7 +17,7 @@ public class ApplyFiltersState implements ClientState{
     ApplyFiltersArgs filters = null;
 
     @Override
-    public void handleState(ClientHandlerInfo handler_info, ClientStateArgument arguments) throws IOException {
+    public StateTransition handleState(ClientHandlerInfo handler_info, ClientStateArgument arguments) throws IOException {
         System.out.println("ApplyFiltersState.handleState");
         if(arguments != null) {
             filters = (ApplyFiltersArgs) arguments;
@@ -58,12 +58,14 @@ public class ApplyFiltersState implements ClientState{
             @SuppressWarnings("unchecked")
             ArrayList<Shop> filtered_shops = (ArrayList<Shop>) handler_info.inputStream.readObject();
 
-            ClientState manage_shops = new ManageFilteredShopsState();
             ManageFilteredShopsArgs args = new ManageFilteredShopsArgs();
             args.filtered_shops = filtered_shops;
-            manage_shops.handleState(handler_info, args);
+
+            return new StateTransition(State.MANAGE_SHOPS, args);
         }catch (ClassNotFoundException exception){
             exception.printStackTrace();
         }
+        return null;
     }
+
 }

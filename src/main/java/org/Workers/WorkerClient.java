@@ -114,12 +114,90 @@ public class WorkerClient extends Thread {
         return cost;
     }
 
-    private float getCartCost(Shop shop, ReadableCart cart) {
+    private float getCartCost(ReadableCart cart) {
         float cost = 0;
         for(Map.Entry<Product, Integer> entry: cart.getProduct_quantity_map().entrySet()){
             cost += entry.getKey().getPrice() * entry.getValue();
         }
         return cost;
+    }
+
+    private ReadableCart getActualCart(Shop correspondingShop, ServerCart cart) {
+        ReadableCart resulting_cart = new ReadableCart();
+
+        cart.getProducts().forEach((product_id, quantity) -> resulting_cart.getProduct_quantity_map()
+                .put(correspondingShop.getProductById(product_id),
+                        quantity
+                )
+        );
+        return resulting_cart;
+    }
+
+    public Shop getShopFromId(int worker_id, int shop_id){
+
+        if(worker_id == -1)
+            return managed_shops.get(shop_id - managed_shops.size()*id);
+
+        return backup_shops.get(worker_id).get(shop_id - MasterServer.getConfig_info().getWorker_chunk()*worker_id);
+    }
+
+    private void sendBack(long request_id, Object result) throws IOException {
+        outputStream.writeLong(request_id);
+        outputStream.writeObject(result);
+        outputStream.flush();
+    }
+
+    private void handleCommand(long request_id, int worker_id, Command.CommandTypeClient command) throws IOException, ClassNotFoundException {
+        switch (command) {
+            case FILTER -> {
+                ArrayList<Shop> shops = applyFilters(worker_id);
+
+                sendBack(request_id, shops);
+            }
+            case CHOSE_SHOP -> {
+                int chosen_shop_id =  inputStream.readInt();
+                Shop corresponding_shop = getShopFromId(worker_id, chosen_shop_id);
+
+                sendBack(request_id, corresponding_shop);
+            }
+            case ADD_TO_CART -> {
+                int chosen_shop_id =  inputStream.readInt();
+                Shop corresponding_shop = getShopFromId(worker_id, chosen_shop_id);
+
+                Integer added_to_cart = addToCart(corresponding_shop);
+                sendBack(request_id, added_to_cart);
+            }
+            case REMOVE_FROM_CART -> {
+                int chosen_shop_id =  inputStream.readInt();
+                Shop corresponding_shop = getShopFromId(worker_id, chosen_shop_id);
+
+                Boolean removed = removeFromCart(corresponding_shop);
+                sendBack(request_id, removed);
+            }
+            case GET_CART -> {
+                int chosen_shop_id = inputStream.readInt();
+                ServerCart cart = (ServerCart) inputStream.readObject();
+                Shop corresponding_shop = getShopFromId(worker_id, chosen_shop_id);
+
+                ReadableCart result_cart = getActualCart(corresponding_shop, cart);
+
+                Float total_cost = getCartCost(result_cart);
+                result_cart.setTotal_cost(total_cost);
+
+                sendBack(request_id, result_cart);
+            }
+            case CHECKOUT -> {
+                int chosen_shop_id =  inputStream.readInt();
+                Shop corresponding_shop = getShopFromId(worker_id, chosen_shop_id);
+
+                ServerCart serverCart = (ServerCart) inputStream.readObject();
+                Boolean checked_out = checkout(corresponding_shop, serverCart);
+                sendBack(request_id, checked_out);
+            }
+            default -> {
+                System.out.println("Command not implemented yet: " + command);
+            }
+        }
     }
 
     void connectServer() {
@@ -147,99 +225,15 @@ public class WorkerClient extends Thread {
             Command.CommandTypeClient command = Command.CommandTypeClient.values()[inputStream.readInt()];
             while (command != Command.CommandTypeClient.QUIT) {
 
-                long requestId = inputStream.readLong();
+                long request_id = inputStream.readLong();
                 int worker_id = inputStream.readInt();
 
-                switch (command) {
-                    case FILTER -> {
-                        ArrayList<Shop> shops = applyFilters(worker_id);
-                        // send to worker handler the results in order to update the request monitor
-                        outputStream.writeLong(requestId);
-                        outputStream.writeObject(shops);
-                        outputStream.flush();
-                    }
-                    case CHOSE_SHOP -> {
-                        int chosen_shop_id =  inputStream.readInt();
-                        Shop corresponding_shop = getShopFromId(worker_id, chosen_shop_id);
-
-                        outputStream.writeLong(requestId);
-                        outputStream.writeObject(corresponding_shop);
-                        outputStream.flush();
-                    }
-                    case ADD_TO_CART -> {
-                        int chosen_shop_id =  inputStream.readInt();
-                        Shop corresponding_shop = getShopFromId(worker_id, chosen_shop_id);
-
-                        Integer added_to_cart = addToCart(corresponding_shop);
-                        outputStream.writeLong(requestId);
-                        outputStream.writeObject(added_to_cart);
-                        outputStream.flush();
-                    }
-                    case REMOVE_FROM_CART -> {
-                        int chosen_shop_id =  inputStream.readInt();
-                        Shop corresponding_shop = getShopFromId(worker_id, chosen_shop_id);
-
-                        boolean removed = removeFromCart(corresponding_shop);
-                        outputStream.writeLong(requestId);
-                        outputStream.writeObject(removed);
-                        outputStream.flush();
-                    }
-                    case GET_CART -> {
-                        int chosen_shop_id = inputStream.readInt();
-                        ServerCart cart = (ServerCart) inputStream.readObject();
-                        Shop corresponding_shop = getShopFromId(worker_id, chosen_shop_id);
-
-                        ReadableCart result_cart = getActualCart(corresponding_shop, cart);
-
-                        Float total_cost = getCartCost(corresponding_shop, result_cart);
-                        result_cart.setTotal_cost(total_cost);
-
-                        outputStream.writeLong(requestId);
-                        outputStream.writeObject(result_cart);
-                        outputStream.flush();
-                    }
-                    case CHECKOUT -> {
-                        int chosen_shop_id =  inputStream.readInt();
-                        Shop corresponding_shop = getShopFromId(worker_id, chosen_shop_id);
-
-                        ServerCart serverCart = (ServerCart) inputStream.readObject();
-                        boolean checked_out = checkout(corresponding_shop, serverCart);
-                        outputStream.writeLong(requestId);
-                        outputStream.writeObject(checked_out);
-                        outputStream.flush();
-                    }
-                    default -> {
-                        System.out.println("Command not implemented yet: " + command);
-                    }
-                }
+                handleCommand(request_id, worker_id, command);
                 command = Command.CommandTypeClient.values()[inputStream.readInt()];
             }
         } catch (IOException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    private ReadableCart getActualCart(Shop correspondingShop, ServerCart cart) {
-        ReadableCart resulting_cart = new ReadableCart();
-
-        cart.getProducts().forEach((product_id, quantity) -> resulting_cart.getProduct_quantity_map()
-                .put(correspondingShop.getProductById(product_id),
-                        quantity
-                )
-        );
-        return resulting_cart;
-    }
-
-    public HashMap<Integer, List<Shop>> getBackup_shops() {
-        return backup_shops;
-    }
-
-    public Shop getShopFromId(int worker_id, int shop_id){
-
-        if(worker_id == -1)
-            return managed_shops.get(shop_id - managed_shops.size()*id);
-
-        return backup_shops.get(worker_id).get(shop_id - MasterServer.getConfig_info().getWorker_chunk()*worker_id);
     }
 
     @Override
