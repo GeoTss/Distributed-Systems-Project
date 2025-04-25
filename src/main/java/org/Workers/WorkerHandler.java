@@ -25,24 +25,10 @@ public class WorkerHandler extends Thread {
         worker_in = in;
     }
 
-    public RequestMonitor registerRequest(long requestId) {
-        RequestMonitor monitor = new RequestMonitor();
-
-        synchronized (monitor_responses_rep) {
-            monitor_responses_rep
-                    .computeIfAbsent(requestId, (_) -> new ArrayList<>())
-                    .add(monitor);
-        }
-        return monitor;
-    }
-
     public void registerMonitor(long requestId, RequestMonitor monitor) {
-
-        synchronized (monitor_responses_rep) {
-            monitor_responses_rep
-                    .computeIfAbsent(requestId, (_) -> new ArrayList<>())
-                    .add(monitor);
-        }
+        monitor_responses_rep
+                .computeIfAbsent(requestId, (_) -> new ArrayList<>())
+                .add(monitor);
     }
 
     @Override

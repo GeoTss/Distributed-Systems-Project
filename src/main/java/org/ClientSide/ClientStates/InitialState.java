@@ -46,7 +46,7 @@ public class InitialState implements ClientState{
                         case FILTER_CATEGORY -> {
                             Set<String> categories = new TreeSet<>();
                             String category = "";
-                            System.out.print("Enter category for filtering: ");
+                            System.out.print("Enter category for filtering (of 'EOF' for not entering more): ");
                             category = ClientHandler.sc_input.next();
 
                             while(!category.equals("EOF")) {
@@ -62,14 +62,14 @@ public class InitialState implements ClientState{
                             System.out.println(PriceCategoryEnum.LOW.ordinal() + ". For low price.");
                             System.out.println(PriceCategoryEnum.MEDIUM.ordinal() + ". For medium price.");
                             System.out.println(PriceCategoryEnum.HIGH.ordinal() + ". For high price.");
-                            System.out.print("Enter the price category you are looking for:");
+                            System.out.print("Enter the price category you are looking for: ");
 
                             PriceCategoryEnum pr_cat = PriceCategoryEnum.values()[ClientHandler.sc_input.nextInt()];
                             filter_arguments.filter_types.add(Filter.Types.FILTER_PRICE);
                             filter_arguments.additional_filter_args.put(Filter.Types.FILTER_PRICE, pr_cat);
                         }
                         case FILTER_RADIUS -> {
-                            System.out.print("Enter maximum distance radius:");
+                            System.out.print("Enter maximum distance radius: ");
                             Double radius = ClientHandler.sc_input.nextDouble();
 
                             filter_arguments.filter_types.add(Filter.Types.FILTER_RADIUS);

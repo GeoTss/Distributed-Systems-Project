@@ -1,6 +1,6 @@
 package org.ServerSide;
 
-import org.Domain.ServerCart;
+import org.Domain.Cart.ServerCart;
 import org.Domain.Client;
 import org.Domain.Location;
 import org.Domain.Shop;

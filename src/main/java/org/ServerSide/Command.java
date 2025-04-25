@@ -9,8 +9,9 @@ public class Command {
         DEFAULT,
         END,
         GET_CART,
-        ADD_TO_CART, // ADD_TO_CART product_name amount
-        REMOVE_FROM_CART, // REMOVE_FROM_CART product_name amount
+        ADD_TO_CART,
+        REMOVE_FROM_CART,
+        CLEAR_CART,
         FILTER,
         CHOSE_SHOP,
         CHECKOUT
@@ -20,10 +21,10 @@ public class Command {
         QUIT,
         DEFAULT,
         END,
-        ADD_SHOP, // ADD_SHOP shop_name
-        ADD_PRODUCT, // ADD_PRODUCT product_name
-        ADD_AVAILABLE_PRODUCT, // ADD_AVAILABLE_PRODUCT product_name amount
-        REMOVE_AVAILABLE_PRODUCT, // REMOVE_AVAILABLE_PRODUCT product_name amount
+        ADD_SHOP,
+        ADD_PRODUCT,
+        ADD_AVAILABLE_PRODUCT,
+        REMOVE_AVAILABLE_PRODUCT,
     }
 
     private String command;

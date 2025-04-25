@@ -3,10 +3,10 @@ package org.ClientSide;
 import org.ClientSide.ClientStates.ClientHandlerInfo;
 import org.ClientSide.ClientStates.ClientState;
 import org.ClientSide.ClientStates.ClientStateArgs.ClientStateArgument;
-import org.ClientSide.ClientStates.InitialState;
 import org.ClientSide.ClientStates.StateTransition;
 import org.Domain.Client;
 import org.ServerSide.Command;
+import org.ServerSide.ConnectionType;
 import org.ServerSide.MasterServer;
 
 import java.io.*;
@@ -35,6 +35,9 @@ public class ClientHandler extends Thread {
             outputStream = new ObjectOutputStream(request_socket.getOutputStream());
             inputStream = new ObjectInputStream(request_socket.getInputStream());
 
+            outputStream.writeInt(ConnectionType.CLIENT.ordinal());
+            outputStream.flush();
+
             outputStream.writeObject(client_info);
             outputStream.flush();
 
@@ -42,8 +45,8 @@ public class ClientHandler extends Thread {
             handler_info.outputStream = outputStream;
             handler_info.inputStream = inputStream;
 
-            ClientState.State currentState = null;
-            ClientStateArgument currentArgs = null;
+            ClientState.State currentState;
+            ClientStateArgument currentArgs;
 
             StateTransition transition = new StateTransition(ClientState.State.INITIAL, null);
 
@@ -58,9 +61,9 @@ public class ClientHandler extends Thread {
             outputStream.writeInt(Command.CommandTypeClient.QUIT.ordinal());
             outputStream.flush();
 
-        } catch (IOException e) {
+        } catch (IOException | ClassNotFoundException e) {
             throw new RuntimeException(e);
-        }finally {
+        } finally {
             try {
                 outputStream.close();
                 inputStream.close();

@@ -1,0 +1,22 @@
+package org.Workers;
+
+public enum WorkerCommandType {
+    QUIT,
+    ADD_BACKUP,
+    END_BACKUP_LIST,
+    IS_FULL,
+    ADD_SHOP,
+    SYNC_ADD_SHOP,
+    CHOSE_SHOP,
+    ADD_PRODUCT_TO_SHOP,
+    SYNC_ADD_PRODUCT_TO_SHOP,
+    REMOVE_PRODUCT_FROM_SHOP,
+    SYNC_REMOVE_PRODUCT_FROM_SHOP,
+    GET_CART,
+    ADD_TO_CART,
+    REMOVE_FROM_CART,
+    CLEAR_CART,
+    CHECKOUT_CART,
+    SYNC_CHECKOUT_CART,
+    FILTER
+}

@@ -1,4 +1,4 @@
-package org.Domain;
+package org.Domain.Cart;
 
 import java.io.Serializable;
 import java.util.HashMap;

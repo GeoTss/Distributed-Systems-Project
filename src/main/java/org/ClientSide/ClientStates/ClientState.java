@@ -23,5 +23,5 @@ public interface ClientState {
         }
     };
 
-    StateTransition handleState(ClientHandlerInfo handler_info, ClientStateArgument arguments) throws IOException;
+    StateTransition handleState(ClientHandlerInfo handler_info, ClientStateArgument arguments) throws IOException, ClassNotFoundException;
 }

@@ -12,6 +12,9 @@ public class Product implements Serializable {
     private int availableAmount;
     final private float price;
     private int sold;
+
+    private boolean is_removed;
+
     public Product(
         String _name,
         String _type,
@@ -25,7 +28,10 @@ public class Product implements Serializable {
         this.availableAmount = _availableAmount;
         this.price = _price;
         this.sold = 0;
+
+        is_removed = false;
     }
+
     public void addAvailableAmount(int _amount) {
         if (_amount < 0) return;
         this.availableAmount += _amount;
@@ -35,9 +41,6 @@ public class Product implements Serializable {
     }
     public void sellProduct(int _numSold) {
         this.sold += _numSold;
-    }
-    public float getSumSale() {
-        return this.sold * this.price; 
     }
     public String getName() {
         return this.name;
@@ -70,5 +73,13 @@ public class Product implements Serializable {
 
     public Integer getId() {
         return id;
+    }
+
+    public void set_removed_status(boolean is_removed) {
+        this.is_removed = is_removed;
+    }
+
+    public boolean is_removed() {
+        return is_removed;
     }
 }

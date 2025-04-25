@@ -1,10 +1,13 @@
-package org.Domain;
+package org.Domain.Cart;
+
+import org.Domain.Product;
 
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
 public class ReadableCart implements Serializable {
+    private CartStatus server_sync_status;
     private Map<Product, Integer> product_quantity_map = new HashMap<>();
     private Float total_cost;
 
@@ -43,4 +46,11 @@ public class ReadableCart implements Serializable {
         return sb.toString();
     }
 
+    public CartStatus getServer_sync_status() {
+        return server_sync_status;
+    }
+
+    public void setServer_sync_status(CartStatus server_sync_status) {
+        this.server_sync_status = server_sync_status;
+    }
 }

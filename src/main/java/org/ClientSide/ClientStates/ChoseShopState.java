@@ -3,12 +3,13 @@ package org.ClientSide.ClientStates;
 import org.ClientSide.ClientHandler;
 import org.ClientSide.ClientStates.ClientStateArgs.ChoseShopArgs;
 import org.ClientSide.ClientStates.ClientStateArgs.ClientStateArgument;
-import org.Domain.ReadableCart;
+import org.Domain.Cart.CartStatus;
+import org.Domain.Cart.ReadableCart;
+import org.Domain.CheckoutResultWrapper;
 import org.Domain.Shop;
 import org.ServerSide.Command;
 
 import java.io.IOException;
-import java.util.Scanner;
 
 public class ChoseShopState implements ClientState{
 
@@ -22,7 +23,7 @@ public class ChoseShopState implements ClientState{
     }
 
     @Override
-    public StateTransition handleState(ClientHandlerInfo handler_info, ClientStateArgument arguments) throws IOException {
+    public StateTransition handleState(ClientHandlerInfo handler_info, ClientStateArgument arguments) throws IOException, ClassNotFoundException {
         System.out.println("ChoseShopState.handleState");
         ChoseShopArgs args = (ChoseShopArgs) arguments;
 
@@ -39,7 +40,7 @@ public class ChoseShopState implements ClientState{
         resulting_shop.showProducts();
 
         printChoices();
-        System.out.println("Enter choice:");
+        System.out.print("Enter choice: ");
 
         int choice = ClientHandler.sc_input.nextInt();
 
@@ -47,6 +48,9 @@ public class ChoseShopState implements ClientState{
 
             switch (choice){
                 case 1 -> {
+                    handler_info.outputStream.writeInt(Command.CommandTypeClient.CLEAR_CART.ordinal());
+                    handler_info.outputStream.flush();
+
                     return new StateTransition(State.APPLY_FILTERS, null);
                 }
                 case 2 -> handleCheckout(handler_info);
@@ -60,18 +64,23 @@ public class ChoseShopState implements ClientState{
             choice = ClientHandler.sc_input.nextInt();
         }
 
+        handler_info.outputStream.writeInt(Command.CommandTypeClient.CLEAR_CART.ordinal());
+        handler_info.outputStream.flush();
+
         return new StateTransition(State.INITIAL, null);
     }
 
-    private void handleCheckout(ClientHandlerInfo handler_info) throws IOException {
+    private void handleCheckout(ClientHandlerInfo handler_info) throws IOException, ClassNotFoundException {
         handler_info.outputStream.writeInt(Command.CommandTypeClient.CHECKOUT.ordinal());
         handler_info.outputStream.flush();
 
-        boolean checked_out = handler_info.inputStream.readBoolean();
-        if (checked_out)
-            System.out.println("Checked out successfully.");
-        else
+        CheckoutResultWrapper checkout_result = (CheckoutResultWrapper) handler_info.inputStream.readObject();
+        if (checkout_result.in_sync_status == CartStatus.OUT_OF_SYNC)
+            System.out.println("Couldn't checkout. Cart out of sync.");
+        else if(!checkout_result.checked_out)
             System.out.println("Couldn't checkout. Insufficient funds");
+        else
+            System.out.println("Checked out successfully.");
     }
 
     private void handleAddToCart(ClientHandlerInfo handler_info) throws IOException {
