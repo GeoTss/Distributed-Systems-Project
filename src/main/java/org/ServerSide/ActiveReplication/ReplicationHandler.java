@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ReplicationHandler {
+    private int id;
     private WorkerHandler main;
     private List<WorkerHandler> replicas = new ArrayList<>();
 
@@ -36,5 +37,22 @@ public class ReplicationHandler {
         }
         str.append("]");
         return str.toString();
+    }
+
+    public void promoteToMain(WorkerHandler replica) {
+        replicas.remove(replica);
+
+        if (main != null) {
+            replicas.add(main);
+        }
+        main = replica;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

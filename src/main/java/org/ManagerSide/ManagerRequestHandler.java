@@ -2,7 +2,7 @@ package org.ManagerSide;
 
 import org.Domain.*;
 import org.ServerSide.ActiveReplication.ReplicationHandler;
-import org.ServerSide.ClientRequests.ThrowingBiConsumer;
+import org.ServerSide.ClientRequests.ThrowingConsumer;
 import org.ServerSide.Command;
 import org.ServerSide.RequestMonitor;
 import org.Workers.WorkerHandler;
@@ -13,6 +13,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class ManagerRequestHandler extends Thread {
 
@@ -23,7 +24,7 @@ public class ManagerRequestHandler extends Thread {
 
     private Manager manager;
 
-    public static ArrayList<ReplicationHandler> replicated_worker_handlers;
+    public static HashMap<Integer, ReplicationHandler> replicated_worker_handlers;
 
     public ManagerRequestHandler(Socket connection, ObjectOutputStream out, ObjectInputStream in) throws IOException {
         this.connection = connection;
@@ -34,13 +35,13 @@ public class ManagerRequestHandler extends Thread {
     /**
      * Try sending to main worker, on failure fail over to replicas.
      */
-    private boolean sendToWorkerWithReplicas(ReplicationHandler replicatedWorker, long requestId, ThrowingBiConsumer<ObjectOutputStream, Integer> writeLogic, RequestMonitor monitor) {
+    private boolean sendToWorkerWithReplicas(ReplicationHandler replicatedWorker, long requestId, ThrowingConsumer<ObjectOutputStream> writeLogic, RequestMonitor monitor) {
         WorkerHandler main = replicatedWorker.getMain();
         try {
             ObjectOutputStream wout = main.getWorker_out();
             synchronized (main) {
                 main.registerMonitor(requestId, monitor);
-                writeLogic.accept(wout, -1);
+                writeLogic.accept(wout);
                 wout.flush();
             }
             return true;
@@ -51,7 +52,7 @@ public class ManagerRequestHandler extends Thread {
                     ObjectOutputStream rout = replica.getWorker_out();
                     synchronized (replica) {
                         replica.registerMonitor(requestId, monitor);
-                        writeLogic.accept(rout, main.getHandlerId());
+                        writeLogic.accept(rout);
                         rout.flush();
                     }
                     return true;
@@ -85,10 +86,10 @@ public class ManagerRequestHandler extends Thread {
         int initialVotes = in.readInt();
         String logoPath = in.readUTF();
 
-        ThrowingBiConsumer<ObjectOutputStream, Integer> writer = (wout, workerId) -> {
+        ThrowingConsumer<ObjectOutputStream> writer = (wout) -> {
             wout.writeInt(Command.CommandTypeManager.ADD_SHOP.ordinal());
             wout.writeLong(requestId);
-            wout.writeInt(workerId);
+//            wout.writeInt(workerId);
             wout.writeUTF(name);
             wout.writeDouble(latitude);
             wout.writeDouble(longitude);
@@ -109,24 +110,22 @@ public class ManagerRequestHandler extends Thread {
 
     private void handleAddProduct(long requestId)
             throws IOException, ClassNotFoundException, InterruptedException {
-        // read a Product object from client
+
         Product prod = (Product) in.readObject();
 
-        // broadcast to all replication groups
         ArrayList<RequestMonitor> monitors = new ArrayList<>();
-        ThrowingBiConsumer<ObjectOutputStream, Integer> writer = (wout, workerId) -> {
+        ThrowingConsumer<ObjectOutputStream> writer = (wout) -> {
             wout.writeInt(Command.CommandTypeManager.ADD_PRODUCT.ordinal());
             wout.writeLong(requestId);
-            wout.writeInt(workerId);
+//            wout.writeInt(workerId);
             wout.writeObject(prod);
         };
-        for (ReplicationHandler r : replicated_worker_handlers) {
+        for (ReplicationHandler r : replicated_worker_handlers.values()) {
             RequestMonitor m = new RequestMonitor();
             sendToWorkerWithReplicas(r, requestId, writer, m);
             monitors.add(m);
         }
 
-        // collect confirmations
         boolean success = true;
         for (RequestMonitor m : monitors) {
             Boolean ok = (Boolean) m.getResult();
@@ -144,12 +143,12 @@ public class ManagerRequestHandler extends Thread {
         int quantity = in.readInt();
 
         ReplicationHandler handler = getWorkerForShop(shopId);
+        assert handler != null;
         RequestMonitor monitor = new RequestMonitor();
-
-        ThrowingBiConsumer<ObjectOutputStream, Integer> writer = (wout, workerId) -> {
+        ThrowingConsumer<ObjectOutputStream> writer = (wout) -> {
             wout.writeInt(Command.CommandTypeManager.ADD_AVAILABLE_PRODUCT.ordinal());
             wout.writeLong(requestId);
-            wout.writeInt(workerId);
+            wout.writeInt(handler.getId());
             wout.writeInt(shopId);
             wout.writeInt(productId);
             wout.writeInt(quantity);
@@ -168,12 +167,12 @@ public class ManagerRequestHandler extends Thread {
         int quantity = in.readInt();
 
         ReplicationHandler handler = getWorkerForShop(shopId);
+        assert handler != null;
         RequestMonitor monitor = new RequestMonitor();
-
-        ThrowingBiConsumer<ObjectOutputStream, Integer> writer = (wout, workerId) -> {
+        ThrowingConsumer<ObjectOutputStream> writer = (wout) -> {
             wout.writeInt(Command.CommandTypeManager.REMOVE_AVAILABLE_PRODUCT.ordinal());
             wout.writeLong(requestId);
-            wout.writeInt(workerId);
+            wout.writeInt(handler.getId());
             wout.writeInt(shopId);
             wout.writeInt(productId);
             wout.writeInt(quantity);
@@ -186,8 +185,9 @@ public class ManagerRequestHandler extends Thread {
     }
 
     private static ReplicationHandler getWorkerForShop(int shopId) {
-        int chunk = MasterServer.getConfig_info().getWorker_chunk();
-        return replicated_worker_handlers.get(shopId / chunk);
+//        int chunk = MasterServer.getConfig_info().getWorker_chunk();
+//        return replicated_worker_handlers.get(shopId / chunk);
+        return null;
     }
 
     @Override

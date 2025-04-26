@@ -11,8 +11,6 @@ import java.util.HashMap;
 
 public class WorkerHandler extends Thread {
 
-    public static Integer gl_id = 0;
-
     private Integer id;
     private final ObjectOutputStream worker_out;
     private final ObjectInputStream worker_in;
@@ -20,7 +18,6 @@ public class WorkerHandler extends Thread {
     private final HashMap<Long, ArrayList<RequestMonitor>> monitor_responses_rep = new HashMap<>();
 
     public WorkerHandler(ObjectOutputStream out, ObjectInputStream in) {
-        id = gl_id++;
         worker_out = out;
         worker_in = in;
     }
@@ -64,5 +61,9 @@ public class WorkerHandler extends Thread {
 
     public Integer getHandlerId() {
         return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

@@ -1,5 +1,4 @@
 package org.ServerSide;
-
 import java.io.IOException;
 
 import java.io.ObjectInputStream;
@@ -8,8 +7,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.HashMap;
 
 import org.Domain.Shop;
 import org.ManagerSide.ManagerRequestHandler;
@@ -27,100 +25,133 @@ public class MasterServer {
     private Socket server_socket = null;
     private static boolean has_manager_connected = false;
 
-    private ArrayList<Shop> database_shops;
     private static ServerConfigInfo config_info;
 
-    private ArrayList<ReplicationHandler> replicated_worker_handlers = new ArrayList<>();
+    public static HashMap<Integer, ReplicationHandler> replicated_worker_handlers = new HashMap<>();
+    public static HashMap<Integer, Integer> shop_id_hash = new HashMap<>();
 
     public static final Object CONNECTION_ACCEPT_LOCK = new Object();
 
     MasterServer() throws IOException, URISyntaxException, ClassNotFoundException {
-        database_shops = new ArrayList<>();
 
         config_info = ServerFileLoader.load_config();
-        database_shops = ServerFileLoader.load_shops();
 
         System.out.println(config_info);
     }
 
-    void initializeWorkers() throws IOException, ClassNotFoundException, InterruptedException {
+    static int hashStore(Shop shop){
+        return shop.getId();
+    }
 
-        ArrayList<ArrayList<Shop>> shop_chunks = new ArrayList<>();
-        ArrayList<WorkerClient> worker_clients = new ArrayList<>();
-        ArrayList<WorkerHandler> worker_handlers = new ArrayList<>();
+    public static int getWorkerHashToLookFor(int chosen_shop_id){
+        return shop_id_hash.get(chosen_shop_id);
+    }
 
-        int worker_chunk_size = config_info.getWorker_chunk();
+    public static ReplicationHandler getWorkerFromHashID(int worker_hash){
+        return replicated_worker_handlers.get(worker_hash);
+    }
 
-        for(int i = 0; i < database_shops.size(); i += worker_chunk_size) {
-            ArrayList<Shop> chunk = new ArrayList<>(database_shops.subList(i, Math.min(i + worker_chunk_size, database_shops.size())));
-            shop_chunks.add(chunk);
+    public static ReplicationHandler getWorkerForShop(int chosen_shop_id) {
+        Integer worker_id = shop_id_hash.get(chosen_shop_id);
+        System.out.println("[LOOKUP] shop " + chosen_shop_id + " → worker_id " + worker_id);
+
+        ReplicationHandler h = replicated_worker_handlers.get(worker_id);
+        System.out.println("[LOOKUP] found handler for key " + worker_id + ": " + h);
+        return h;
+    }
+
+
+    void initializeWorkers() throws IOException, ClassNotFoundException, InterruptedException, URISyntaxException {
+
+        ArrayList<Shop> database_shops = ServerFileLoader.load_shops();
+
+        HashMap<Integer, ArrayList<Shop>> worker_shop_map = new HashMap<>();
+        int worker_count = config_info.getWorker_count();
+
+        for(int i = 0; i < worker_count; ++i)
+            worker_shop_map.put(i, new ArrayList<>());
+
+        for(Shop shop: database_shops) {
+            int worker_hash = hashStore(shop) % worker_count;
+            System.out.println("Assigning shop ID " + shop.getId() + " to worker " + worker_hash);
+            shop_id_hash.put(shop.getId(), worker_hash);
+            worker_shop_map.get(worker_hash).add(shop);
         }
 
-        for (ArrayList<Shop> shopChunk : shop_chunks) {
+        ArrayList<WorkerClient> worker_clients = new ArrayList<>();
+        HashMap<Integer, WorkerHandler> worker_handlers = new HashMap<>();
+        worker_shop_map.forEach((worker_id, shop_list) -> {
 
-            WorkerClient cl = new WorkerClient();
-            worker_clients.add(cl);
-            cl.start();
+            WorkerClient worker_client = new WorkerClient(worker_id);
+            worker_clients.add(worker_client);
+            worker_client.start();
 
             Socket main_worker_socket;
-            synchronized (CONNECTION_ACCEPT_LOCK) {
-                CONNECTION_ACCEPT_LOCK.wait();
-                main_worker_socket = connection.accept();
+            ObjectOutputStream out = null;
+            ObjectInputStream in = null;
+            try {
+                synchronized (CONNECTION_ACCEPT_LOCK) {
+                    CONNECTION_ACCEPT_LOCK.wait();
+                    main_worker_socket = connection.accept();
+                }
+
+                out = new ObjectOutputStream(main_worker_socket.getOutputStream());
+                in = new ObjectInputStream(main_worker_socket.getInputStream());
+
+                out.writeObject(shop_list);
+                out.flush();
+            } catch(InterruptedException | IOException e){
+                e.printStackTrace();
             }
-
-            ObjectOutputStream out = new ObjectOutputStream(main_worker_socket.getOutputStream());
-            ObjectInputStream in = new ObjectInputStream(main_worker_socket.getInputStream());
-
-            out.writeObject(shopChunk);
-            out.flush();
 
             WorkerHandler main_handler = new WorkerHandler(out, in);
-            worker_handlers.add(main_handler);
+            main_handler.setId(worker_id);
+            System.out.println("For " + worker_id + " the worker handler has ID: " + main_handler.getHandlerId());
+            worker_handlers.put(worker_id, main_handler);
             main_handler.start();
-        }
+        });
 
-        int n = worker_clients.size();
+        worker_shop_map.forEach((worker_id, shop_list) -> {
+            try {
+                ReplicationHandler replicated_worker = new ReplicationHandler();
+                replicated_worker.setMain(worker_handlers.get(worker_id));
+                System.out.println("For " + worker_id + " the replicated worker handler has ID: " + replicated_worker.getMain().getHandlerId());
 
-        for (int i = 0; i < worker_clients.size(); i++) {
-            ReplicationHandler handler = new ReplicationHandler();
-            WorkerHandler main_handler = worker_handlers.get(i);
+                replicated_worker.getReplicas().clear();
+                for (int j = 1; j <= config_info.get_number_of_replicas(); ++j) {
+                    int fallback_index = (worker_id + j) % worker_count;
 
+                    WorkerHandler fallback = worker_handlers.get(fallback_index);
+                    ObjectOutputStream fallback_out = fallback.getWorker_out();
 
-            handler.setMain(main_handler);
+                    fallback_out.writeInt(WorkerCommandType.ADD_BACKUP.ordinal());
+                    fallback_out.writeInt(worker_id);
+                    fallback_out.writeObject(shop_list);
+                    fallback_out.flush();
 
-            ObjectOutputStream to_worker_out = main_handler.getWorker_out();
-
-            for (int j = 1; j <= config_info.getNumber_of_replicas(); j++) {
-                int fallback_index = (i+j) % n;
-
-                WorkerHandler fallback = worker_handlers.get(fallback_index);
-                ObjectOutputStream fallback_out = fallback.getWorker_out();
-
-//                worker_clients.get(fallback_index).add_backup(i, shop_chunks.get(i));
-                fallback_out.writeInt(WorkerCommandType.ADD_BACKUP.ordinal());
-                fallback_out.writeInt(i);
-                fallback_out.writeObject(shop_chunks.get(i));
-                fallback_out.flush();
-
-                WorkerHandler fall_worker = worker_handlers.get(fallback_index);
-
-                handler.getReplicas().add(fall_worker);
+                    WorkerHandler fallback_handler = worker_handlers.get(fallback_index);
+                    replicated_worker.add_replica(fallback_handler);
+                }
+                replicated_worker.setId(worker_id);
+                replicated_worker_handlers.put(worker_id, replicated_worker);
+            }catch (IOException e){
+                e.printStackTrace();
             }
-            replicated_worker_handlers.add(handler);
-        }
+        });
 
-        for(WorkerHandler handler: worker_handlers) {
-            handler.getWorker_out().writeInt(WorkerCommandType.END_BACKUP_LIST.ordinal());
-            handler.getWorker_out().flush();
-        }
+        worker_handlers.values().forEach(handler -> {
+            try {
+                handler.getWorker_out().writeInt(WorkerCommandType.END_BACKUP_LIST.ordinal());
+                handler.getWorker_out().flush();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
 
-        for(WorkerClient client: worker_clients){
-            System.out.println(client);
-        }
+        replicated_worker_handlers.forEach((id, repl) -> {
+            System.out.println("Main ID: " + id + " Handler: " + repl);
+        });
 
-        for(ReplicationHandler repl_worker: replicated_worker_handlers){
-            System.out.println(repl_worker);
-        }
         System.out.println("All workers connected!");
     }
 
@@ -130,7 +161,6 @@ public class MasterServer {
 
             initializeWorkers();
 
-            ClientRequestHandler.replicated_worker_handlers = replicated_worker_handlers;
             ManagerRequestHandler.replicated_worker_handlers = replicated_worker_handlers;
 
             System.out.println("SERVER STARTED");
@@ -172,7 +202,7 @@ public class MasterServer {
             }
         } catch (IOException ioException) {
             ioException.printStackTrace();
-        } catch (ClassNotFoundException | InterruptedException e) {
+        } catch (ClassNotFoundException | InterruptedException | URISyntaxException e) {
             throw new RuntimeException(e);
         } finally {
             try {

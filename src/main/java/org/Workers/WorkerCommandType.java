@@ -15,7 +15,6 @@ public enum WorkerCommandType {
     GET_CART,
     ADD_TO_CART,
     REMOVE_FROM_CART,
-    CLEAR_CART,
     CHECKOUT_CART,
     SYNC_CHECKOUT_CART,
     FILTER

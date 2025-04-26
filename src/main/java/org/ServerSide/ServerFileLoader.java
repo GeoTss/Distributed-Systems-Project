@@ -108,6 +108,6 @@ public class ServerFileLoader {
 
         ServerConfigInfo config = ServerFileLoader.load_config();
 
-        System.out.println("WorkerChunks = " + config.getWorker_chunk());
+//        System.out.println("WorkerChunks = " + config.getWorker_chunk());
     }
 }

@@ -19,18 +19,16 @@ import org.ServerSide.MasterServer;
 
 public class WorkerClient extends Thread {
 
-    private static int gl_id = 0;
-
     private int id;
     private Socket socket;
     private ObjectInputStream inputStream;
     private ObjectOutputStream outputStream;
-    private ArrayList<Shop> managed_shops;
-    private HashMap<Integer, ArrayList<Shop>> backup_shops;
+//    private ArrayList<Shop> managed_shops;
+    private HashMap<Integer, ArrayList<Shop>> managed_shops;
 
-    public WorkerClient() {
-        id = gl_id++;
-        backup_shops = new HashMap<>();
+    public WorkerClient(int _id) {
+        id = _id;
+        managed_shops = new HashMap<>();
     }
 
     public ArrayList<Shop> applyFilters(int worker_id) throws IOException, ClassNotFoundException {
@@ -56,15 +54,6 @@ public class WorkerClient extends Thread {
         }
 
         return -1;
-    }
-
-    public void clearCart(Shop shop, ServerCart cart) {
-        cart.getProducts().forEach((product_id, quantity) -> {
-            Product product = shop.getProductById(product_id);
-            synchronized (product) {
-                product.addAvailableAmount(quantity);
-            }
-        });
     }
 
     public void checkout_cart(Shop shop, ServerCart serverCart) {
@@ -138,16 +127,13 @@ public class WorkerClient extends Thread {
     }
 
     public ArrayList<Shop> getShopListFromId(int worker_id) {
-        return (worker_id == -1 || worker_id == id) ? managed_shops : backup_shops.get(worker_id);
+        return managed_shops.get(worker_id);
     }
 
     public Shop getShopFromId(int worker_id, int shop_id) {
         ArrayList<Shop> shop_list = getShopListFromId(worker_id);
 
-        if (worker_id == -1 || worker_id == id)
-            return shop_list.get(shop_id - managed_shops.size() * id);
-
-        return shop_list.get(shop_id - MasterServer.getConfig_info().getWorker_chunk() * worker_id);
+        return shop_list.stream().filter(shop -> shop_id == shop.getId()).findFirst().orElse(null);
     }
 
     private void sendBack(long request_id, Object result) throws IOException {
@@ -158,11 +144,6 @@ public class WorkerClient extends Thread {
 
     private void handleCommand(long request_id, int worker_id, WorkerCommandType command) throws IOException, ClassNotFoundException {
         switch (command) {
-
-            case IS_FULL -> {
-                boolean is_full = managed_shops.size() >= MasterServer.getConfig_info().getWorker_chunk();
-                sendBack(request_id, is_full);
-            }
 
             case ADD_SHOP -> {
                 Shop new_shop = (Shop) inputStream.readObject();
@@ -198,6 +179,7 @@ public class WorkerClient extends Thread {
                 int chosen_shop_id = inputStream.readInt();
                 Shop corresponding_shop = getShopFromId(worker_id, chosen_shop_id);
 
+                System.out.println("Sending shop back " + corresponding_shop);
                 sendBack(request_id, corresponding_shop);
             }
             case ADD_TO_CART -> {
@@ -218,13 +200,6 @@ public class WorkerClient extends Thread {
                 result_cart.setTotal_cost(total_cost);
 
                 sendBack(request_id, result_cart);
-            }
-            case CLEAR_CART -> {
-                int chosen_shop_id = inputStream.readInt();
-                ServerCart cart = (ServerCart) inputStream.readObject();
-                Shop corresponding_shop = getShopFromId(worker_id, chosen_shop_id);
-
-                clearCart(corresponding_shop, cart);
             }
             case CHECKOUT_CART -> {
                 int chosen_shop_id = inputStream.readInt();
@@ -271,7 +246,8 @@ public class WorkerClient extends Thread {
         try {
             connectServer();
 
-            managed_shops = (ArrayList<Shop>) inputStream.readObject();
+            ArrayList<Shop> main_shop_list = (ArrayList<Shop>) inputStream.readObject();
+            managed_shops.put(id, main_shop_list);
 
             int worker_command_ord = inputStream.readInt();
             WorkerCommandType worker_command = WorkerCommandType.values()[worker_command_ord];
@@ -279,11 +255,11 @@ public class WorkerClient extends Thread {
             while (worker_command != WorkerCommandType.END_BACKUP_LIST) {
 
                 int worker_backup_id = inputStream.readInt();
-                ArrayList<Shop> worker_backup_shops = (ArrayList<Shop>) inputStream.readObject();
-                System.out.println("Worker id: " + id + " Received " + worker_backup_id + " and list with " + worker_backup_shops.size() + " shops");
+                ArrayList<Shop> worker_managed_shops = (ArrayList<Shop>) inputStream.readObject();
+                System.out.println("Worker id: " + id + " Received " + worker_backup_id + " and list with " + worker_managed_shops.size() + " shops");
 
-                backup_shops.put(worker_backup_id, new ArrayList<>(worker_backup_shops));
-                System.out.println("Worker " + id + " in map: " + backup_shops.get(worker_backup_id).size());
+                managed_shops.put(worker_backup_id, new ArrayList<>(worker_managed_shops));
+                System.out.println("Worker " + id + " in map: " + managed_shops.get(worker_backup_id).size());
 
                 worker_command_ord = inputStream.readInt();
                 worker_command = WorkerCommandType.values()[worker_command_ord];
@@ -307,10 +283,12 @@ public class WorkerClient extends Thread {
     public String toString() {
         StringBuilder str = new StringBuilder();
 
-        str.append("Backups for workers with ID: [\n");
-        for (Integer key : backup_shops.keySet()) {
-            str.append("\t").append(key).append("\n");
-        }
+        str.append("Managed shops for worker with ID: ").append(id).append(" [\n");
+
+        managed_shops.forEach((worker_id, shop_list) -> {
+            str.append("ID: ").append(worker_id).append(" Shops: ").append(shop_list).append("\n");
+        });
+
         str.append("]");
 
         return str.toString();

@@ -1,4 +1,4 @@
 {
-  "WorkerChunks": 16,
+  "WorkerCount": 5,
   "NumberOfReplicas": 2
 }

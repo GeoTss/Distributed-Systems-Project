@@ -11,7 +11,7 @@ public class ServerConfigDeserializer implements JsonDeserializer<ServerConfigIn
     public ServerConfigInfo deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
         JsonObject obj = json.getAsJsonObject();
         ServerConfigInfo configInfo = new ServerConfigInfo(
-                obj.get("WorkerChunks").getAsInt(),
+                obj.get("WorkerCount").getAsInt(),
                 obj.get("NumberOfReplicas").getAsInt()
         );
 
