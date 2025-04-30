@@ -1,7 +1,7 @@
 package org.ReducerSide;
 
 import org.Domain.Shop;
-import org.Domain.Utils;
+import org.Domain.Utils.Pair;
 import org.ServerSide.MasterServer;
 import org.ServerSide.RequestMonitor;
 import org.Workers.Listeners.ReplicationListener;
@@ -10,6 +10,7 @@ import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.lang.reflect.Array;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -81,30 +82,37 @@ public class Reducer{
         server_output_stream.flush();
     }
 
+    private ArrayList<RequestMonitor> prepareListeners(long request_id, Object extra_args){
+
+        @SuppressWarnings("unchecked")
+        ArrayList<Pair<Integer, Integer>> workers_sent_to = (ArrayList<Pair<Integer, Integer>>) extra_args;
+        System.out.println(workers_sent_to);
+
+        ArrayList<RequestMonitor> result_monitors = new ArrayList<>();
+        for(Pair<Integer, Integer> worker_sent_to: workers_sent_to){
+
+            synchronized (System.out) {
+                System.out.println("Handling " + worker_sent_to);
+                System.out.println("Registering monitor in listener " + worker_sent_to.second + " for worker " + worker_sent_to.first);
+            }
+
+            RequestMonitor monitor = new RequestMonitor();
+            ReplicationListener listener = worker_listeners.get(worker_sent_to.second);
+            synchronized (listener) {
+                monitor = listener.registerMonitor(request_id, worker_sent_to.first, monitor);
+            }
+            result_monitors.add(monitor);
+        }
+        System.out.println("Added listeners");
+
+        return result_monitors;
+    }
+
     private void handlePreparation(long request_id, ReducerPreparationType preparation, Object extra_args) throws InterruptedException, IOException {
         switch (preparation){
             case REDUCER_PREPARE_FILTER -> {
 
-                @SuppressWarnings("unchecked")
-                ArrayList<Utils.Pair<Integer, Integer>> workers_sent_to = (ArrayList<Utils.Pair<Integer, Integer>>) extra_args;
-                System.out.println(workers_sent_to);
-
-                ArrayList<RequestMonitor> result_monitors = new ArrayList<>();
-                for(Utils.Pair<Integer, Integer> worker_sent_to: workers_sent_to){
-
-                    synchronized (System.out) {
-                        System.out.println("Handling " + worker_sent_to);
-                        System.out.println("Registering monitor in listener " + worker_sent_to.second + " for worker " + worker_sent_to.first);
-                    }
-
-                    RequestMonitor monitor = new RequestMonitor();
-                    ReplicationListener listener = worker_listeners.get(worker_sent_to.second);
-                    synchronized (listener) {
-                        monitor = listener.registerMonitor(request_id, worker_sent_to.first, monitor);
-                    }
-                    result_monitors.add(monitor);
-                }
-                System.out.println("Added listeners");
+                ArrayList<RequestMonitor> result_monitors = prepareListeners(request_id, extra_args);
 
                 System.out.println("Waiting for all workers to send results...");
                 ArrayList<Shop> resulting_shops = new ArrayList<>();
@@ -116,6 +124,25 @@ public class Reducer{
                 System.out.println("Received results from all shops.");
 
                 sendToServer(request_id, resulting_shops);
+            }
+
+            case REDUCER_PREPARE_SHOP_CATEGORY_SALES, REDUCER_PREPARE_PRODUCT_CATEGORY_SALES -> {
+                ArrayList<RequestMonitor> result_monitors = prepareListeners(request_id, extra_args);
+
+                Pair<ArrayList<Pair<String, Integer>>, Integer> result = new Pair<>(new ArrayList<>(), 0);
+
+                for(RequestMonitor monitor: result_monitors){
+                    @SuppressWarnings("unchecked")
+                    ArrayList<Pair<String, Integer>> sales = (ArrayList<Pair<String, Integer>>) monitor.getResult();
+                    result.first.addAll(sales);
+                }
+                System.out.println("Received results from all shops.");
+
+                result.second = result.first.stream()
+                                .map(Pair::getSecond)
+                                .reduce(0, Integer::sum);
+
+                sendToServer(request_id, result_monitors);
             }
         }
     }

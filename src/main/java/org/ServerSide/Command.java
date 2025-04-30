@@ -23,13 +23,15 @@ public class Command {
         END,
         ADD_SHOP,
         ADD_PRODUCT,
+        REMOVE_PRODUCT,
         ADD_AVAILABLE_PRODUCT,
         REMOVE_AVAILABLE_PRODUCT,
+        GET_PRODUCT_CATEGORY_SALES,
+        GET_SHOP_CATEGORY_SALES
     }
 
     private String command;
     private String[] args;
-    private boolean isManager = false;
 
     public Command(String _line) {
         String[] temp = _line.split(" ");
@@ -43,10 +45,6 @@ public class Command {
 
     public CommandTypeManager getCommandManagerType() {
         return CommandTypeManager.valueOf(this.command.toUpperCase());
-    }
-
-    public void setManager(boolean _isManager) {
-        this.isManager = _isManager;
     }
 
     public String getCommand() {

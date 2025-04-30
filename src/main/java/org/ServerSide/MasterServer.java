@@ -202,8 +202,6 @@ public class MasterServer {
             initializeWorkers();
             System.out.println("Workers Initialized!");
 
-            ManagerRequestHandler.replicated_worker_handlers = replicated_worker_handlers;
-
             System.out.println("SERVER STARTED");
             while (true) {
                 server_socket = connection.accept();

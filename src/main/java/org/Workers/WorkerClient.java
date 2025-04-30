@@ -14,6 +14,7 @@ import org.Domain.Cart.ServerCart;
 import org.Domain.CheckoutResultWrapper;
 import org.Domain.Product;
 import org.Domain.Shop;
+import org.Domain.Utils.Pair;
 import org.Filters.Filter;
 import org.ReducerSide.Reducer;
 import org.ReducerSide.ReducerPreparationType;
@@ -148,14 +149,14 @@ public class WorkerClient extends Thread {
     private void handleCommand(long request_id, int worker_id, WorkerCommandType command) throws IOException, ClassNotFoundException {
         switch (command) {
 
-            case ADD_SHOP -> {
+            case ADD_SHOP, SYNC_ADD_SHOP -> {
                 Shop new_shop = (Shop) server_input_stream.readObject();
 
                 ArrayList<Shop> shop_list = getShopListFromId(worker_id);
                 shop_list.add(new_shop);
             }
 
-            case ADD_PRODUCT_TO_SHOP -> {
+            case ADD_PRODUCT_TO_SHOP, SYNC_ADD_PRODUCT_TO_SHOP -> {
                 int shop_id = server_input_stream.readInt();
                 Product new_product = (Product) server_input_stream.readObject();
 
@@ -163,7 +164,7 @@ public class WorkerClient extends Thread {
                 shop.addProduct(new_product);
             }
 
-            case REMOVE_PRODUCT_FROM_SHOP -> {
+            case REMOVE_PRODUCT_FROM_SHOP, SYNC_REMOVE_PRODUCT_FROM_SHOP -> {
                 int shop_id = server_input_stream.readInt();
                 int product_id = server_input_stream.readInt();
 
@@ -171,6 +172,54 @@ public class WorkerClient extends Thread {
                 Product product = shop.getProductById(product_id);
 
                 product.set_removed_status(true);
+            }
+
+            case ADD_PRODUCT_STOCK, SYNC_ADD_PRODUCT_STOCK -> {
+                int shop_id = server_input_stream.readInt();
+                int product_id = server_input_stream.readInt();
+                int quantity = server_input_stream.readInt();
+
+                Shop shop = getShopFromId(worker_id, shop_id);
+                Product product = shop.getProductById(product_id);
+
+                product.addAvailableAmount(quantity);
+            }
+
+            case REMOVE_PRODUCT_STOCK, SYNC_REMOVE_PRODUCT_STOCK -> {
+                int shop_id = server_input_stream.readInt();
+                int product_id = server_input_stream.readInt();
+                int quantity = server_input_stream.readInt();
+
+                Shop shop = getShopFromId(worker_id, shop_id);
+                Product product = shop.getProductById(product_id);
+
+                product.removeAvailableAmount(quantity);
+            }
+
+            case GET_SHOP_CATEGORY_SALES -> {
+                String category = server_input_stream.readUTF();
+
+                ArrayList<Shop> shops = getShopListFromId(worker_id);
+
+                ArrayList<Pair<String, Integer>> shop_sales = shops.stream()
+                        .filter(shop -> shop.getCategory().equals(category))
+                        .map(shop -> new Pair<>(shop.getName(), shop.getTotalSales()))
+                        .collect(Collectors.toCollection(ArrayList::new));
+
+                send(reducer_output_stream, request_id, worker_id, shop_sales);
+            }
+
+            case GET_PRODUCT_CATEGORY_SALES -> {
+                String category = server_input_stream.readUTF();
+
+                ArrayList<Shop> shops = getShopListFromId(worker_id);
+
+                ArrayList<Pair<String, Integer>> shop_product_sales = shops.stream()
+                        .filter(shop -> shop.getCategory().equals(category))
+                        .map(shop -> new Pair<>(shop.getName(), shop.getTotalSalesForProductType(category)))
+                        .collect(Collectors.toCollection(ArrayList::new));
+
+                send(reducer_output_stream, request_id, worker_id, shop_product_sales);
             }
 
             case FILTER -> {

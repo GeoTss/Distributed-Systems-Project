@@ -72,18 +72,37 @@ public class Shop implements Rateable, Categorisable, PriceCategory, Locatable, 
         }
     }
 
+    public Integer getTotalSales(){
+        return products.values().stream()
+                .map(Product::getSold)
+                .reduce(0, Integer::sum);
+    }
+
+    public Integer getTotalSalesForProductType(String product_type){
+        return products.values().stream()
+                .filter(product -> product.getType().equals(product_type))
+                .map(Product::getSold)
+                .reduce(0, Integer::sum);
+    }
+
+    @Override
     public float getRating() {
         return this.stars;
     }
 
-    public String getName() {
-        return this.name;
-    }
+    @Override
     public Location getLocation() {
         return this.location;
     }
+
+    @Override
     public String getCategory() {
         return this.foodCategory;
+    }
+
+
+    public String getName() {
+        return this.name;
     }
     public float getStars() {
         return this.stars;
