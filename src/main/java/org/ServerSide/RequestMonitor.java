@@ -18,4 +18,8 @@ public class RequestMonitor {
         }
         return result;
     }
+
+    public synchronized void clear_result(){
+        result = null;
+    }
 }

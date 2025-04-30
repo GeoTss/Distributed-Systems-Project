@@ -5,8 +5,6 @@ import org.ServerSide.ActiveReplication.ReplicationHandler;
 import org.ServerSide.ClientRequests.ThrowingConsumer;
 import org.ServerSide.Command;
 import org.ServerSide.RequestMonitor;
-import org.Workers.WorkerHandler;
-import org.ServerSide.MasterServer;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -32,35 +30,32 @@ public class ManagerRequestHandler extends Thread {
         this.in = in;
     }
 
-    /**
-     * Try sending to main worker, on failure fail over to replicas.
-     */
     private boolean sendToWorkerWithReplicas(ReplicationHandler replicatedWorker, long requestId, ThrowingConsumer<ObjectOutputStream> writeLogic, RequestMonitor monitor) {
-        WorkerHandler main = replicatedWorker.getMain();
-        try {
-            ObjectOutputStream wout = main.getWorker_out();
-            synchronized (main) {
-                main.registerMonitor(requestId, monitor);
-                writeLogic.accept(wout);
-                wout.flush();
-            }
-            return true;
-        } catch (IOException e) {
-            System.err.println("Main worker failed, trying replicas: " + e.getMessage());
-            for (WorkerHandler replica : replicatedWorker.getReplicas()) {
-                try {
-                    ObjectOutputStream rout = replica.getWorker_out();
-                    synchronized (replica) {
-                        replica.registerMonitor(requestId, monitor);
-                        writeLogic.accept(rout);
-                        rout.flush();
-                    }
-                    return true;
-                } catch (IOException ex) {
-                    System.err.println("Replica failed, trying next...");
-                }
-            }
-        }
+//        Listener main = replicatedWorker.getMain();
+//        try {
+//            ObjectOutputStream wout = main.getWorker_out();
+//            synchronized (main) {
+//                main.registerMonitor(requestId, monitor);
+//                writeLogic.accept(wout);
+//                wout.flush();
+//            }
+//            return true;
+//        } catch (IOException e) {
+//            System.err.println("Main worker failed, trying replicas: " + e.getMessage());
+//            for (Listener replica : replicatedWorker.getReplicas()) {
+//                try {
+//                    ObjectOutputStream rout = replica.getWorker_out();
+//                    synchronized (replica) {
+//                        replica.registerMonitor(requestId, monitor);
+//                        writeLogic.accept(rout);
+//                        rout.flush();
+//                    }
+//                    return true;
+//                } catch (IOException ex) {
+//                    System.err.println("Replica failed, trying next...");
+//                }
+//            }
+//        }
         return false;
     }
 

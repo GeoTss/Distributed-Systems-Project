@@ -1,7 +1,9 @@
 package org.Domain;
 
+import java.io.Serializable;
+
 public class Utils {
-    public static class Pair<K, V> {
+    public static class Pair<K, V> implements Serializable {
         public final K first;
         public final V second;
 

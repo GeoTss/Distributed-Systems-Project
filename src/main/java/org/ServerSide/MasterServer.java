@@ -11,15 +11,17 @@ import java.util.HashMap;
 
 import org.Domain.Shop;
 import org.ManagerSide.ManagerRequestHandler;
+import org.ReducerSide.ReducerPreparationType;
 import org.ServerSide.ActiveReplication.ReplicationHandler;
 import org.ServerSide.ClientRequests.ClientRequestHandler;
 import org.Workers.WorkerClient;
 import org.Workers.WorkerCommandType;
-import org.Workers.WorkerHandler;
+import org.Workers.Listeners.ReplicationListener;
 
 public class MasterServer {
     public static final int SERVER_CLIENT_PORT = 7777;
     public static final String SERVER_LOCAL_HOST = "127.0.0.1";
+    public static final int MASTER_SERVER_ID = Integer.MAX_VALUE;
 
     private ServerSocket connection = null;
     private Socket server_socket = null;
@@ -31,6 +33,12 @@ public class MasterServer {
     public static HashMap<Integer, Integer> shop_id_hash = new HashMap<>();
 
     public static final Object CONNECTION_ACCEPT_LOCK = new Object();
+
+    public static HashMap<Integer, ReplicationListener> worker_handlers = new HashMap<>();
+
+    public static ReplicationListener reducer_listener = null;
+    public static final int REDUCER_ID = Integer.MAX_VALUE-1;
+    public static ObjectOutputStream reducer_writer = null;
 
     MasterServer() throws IOException, URISyntaxException, ClassNotFoundException {
 
@@ -47,10 +55,6 @@ public class MasterServer {
         return shop_id_hash.get(chosen_shop_id);
     }
 
-    public static ReplicationHandler getWorkerFromHashID(int worker_hash){
-        return replicated_worker_handlers.get(worker_hash);
-    }
-
     public static ReplicationHandler getWorkerForShop(int chosen_shop_id) {
         Integer worker_id = shop_id_hash.get(chosen_shop_id);
         System.out.println("[LOOKUP] shop " + chosen_shop_id + " → worker_id " + worker_id);
@@ -60,6 +64,27 @@ public class MasterServer {
         return h;
     }
 
+    void connectReducer(){
+        ObjectInputStream reducer_in = null;
+        try {
+
+            Socket reducer_socket = connection.accept();
+
+            reducer_writer = new ObjectOutputStream(reducer_socket.getOutputStream());
+            reducer_in = new ObjectInputStream(reducer_socket.getInputStream());
+
+            reducer_writer.writeInt(REDUCER_ID);
+            reducer_writer.writeInt(config_info.getWorker_count());
+            reducer_writer.flush();
+
+            reducer_listener = new ReplicationListener(reducer_in);
+            reducer_listener.setId(REDUCER_ID);
+            reducer_listener.start();
+
+        } catch(IOException e){
+            e.printStackTrace();
+        }
+    }
 
     void initializeWorkers() throws IOException, ClassNotFoundException, InterruptedException, URISyntaxException {
 
@@ -73,16 +98,17 @@ public class MasterServer {
 
         for(Shop shop: database_shops) {
             int worker_hash = hashStore(shop) % worker_count;
-            System.out.println("Assigning shop ID " + shop.getId() + " to worker " + worker_hash);
             shop_id_hash.put(shop.getId(), worker_hash);
             worker_shop_map.get(worker_hash).add(shop);
         }
 
         ArrayList<WorkerClient> worker_clients = new ArrayList<>();
-        HashMap<Integer, WorkerHandler> worker_handlers = new HashMap<>();
+
+        HashMap<Integer, ObjectOutputStream> worker_out_streams = new HashMap<>();
+
         worker_shop_map.forEach((worker_id, shop_list) -> {
 
-            WorkerClient worker_client = new WorkerClient(worker_id);
+            WorkerClient worker_client = new WorkerClient();
             worker_clients.add(worker_client);
             worker_client.start();
 
@@ -90,59 +116,70 @@ public class MasterServer {
             ObjectOutputStream out = null;
             ObjectInputStream in = null;
             try {
-                synchronized (CONNECTION_ACCEPT_LOCK) {
-                    CONNECTION_ACCEPT_LOCK.wait();
-                    main_worker_socket = connection.accept();
-                }
+
+                main_worker_socket = connection.accept();
 
                 out = new ObjectOutputStream(main_worker_socket.getOutputStream());
                 in = new ObjectInputStream(main_worker_socket.getInputStream());
 
+                worker_out_streams.put(worker_id, out);
+
+                out.writeInt(worker_id);
                 out.writeObject(shop_list);
                 out.flush();
-            } catch(InterruptedException | IOException e){
+
+                reducer_writer.writeInt(ReducerPreparationType.REDUCER_ADD_WORKER_CONNECTION.ordinal());
+                reducer_writer.flush();
+
+            } catch(IOException e){
                 e.printStackTrace();
             }
 
-            WorkerHandler main_handler = new WorkerHandler(out, in);
+            ReplicationListener main_handler = new ReplicationListener(in);
             main_handler.setId(worker_id);
-            System.out.println("For " + worker_id + " the worker handler has ID: " + main_handler.getHandlerId());
+
+            System.out.println("For " + worker_id + " the listener has ID: " + main_handler.getHandlerId());
             worker_handlers.put(worker_id, main_handler);
             main_handler.start();
         });
 
+        reducer_writer.writeInt(ReducerPreparationType.REDUCER_END_OF_WORKERS.ordinal());
+        reducer_writer.flush();
+
         worker_shop_map.forEach((worker_id, shop_list) -> {
             try {
                 ReplicationHandler replicated_worker = new ReplicationHandler();
-                replicated_worker.setMain(worker_handlers.get(worker_id));
-                System.out.println("For " + worker_id + " the replicated worker handler has ID: " + replicated_worker.getMain().getHandlerId());
+                replicated_worker.clearData();
 
-                replicated_worker.getReplicas().clear();
+                replicated_worker.setId(worker_id);
+                replicated_worker.setMainId(worker_id);
+                replicated_worker.setMain(worker_out_streams.get(worker_id));
+
+                System.out.println("For " + worker_id + " the replicated worker handler has ID: " + replicated_worker.getId());
+
                 for (int j = 1; j <= config_info.get_number_of_replicas(); ++j) {
                     int fallback_index = (worker_id + j) % worker_count;
 
-                    WorkerHandler fallback = worker_handlers.get(fallback_index);
-                    ObjectOutputStream fallback_out = fallback.getWorker_out();
+                    ObjectOutputStream fallback_out = worker_out_streams.get(fallback_index);
 
                     fallback_out.writeInt(WorkerCommandType.ADD_BACKUP.ordinal());
                     fallback_out.writeInt(worker_id);
                     fallback_out.writeObject(shop_list);
                     fallback_out.flush();
 
-                    WorkerHandler fallback_handler = worker_handlers.get(fallback_index);
-                    replicated_worker.add_replica(fallback_handler);
+                    replicated_worker.add_replica(fallback_index, fallback_out);
                 }
-                replicated_worker.setId(worker_id);
+
                 replicated_worker_handlers.put(worker_id, replicated_worker);
             }catch (IOException e){
                 e.printStackTrace();
             }
         });
 
-        worker_handlers.values().forEach(handler -> {
+        worker_out_streams.values().forEach(worker_writer -> {
             try {
-                handler.getWorker_out().writeInt(WorkerCommandType.END_BACKUP_LIST.ordinal());
-                handler.getWorker_out().flush();
+                worker_writer.writeInt(WorkerCommandType.END_BACKUP_LIST.ordinal());
+                worker_writer.flush();
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -159,7 +196,11 @@ public class MasterServer {
         try {
             connection = new ServerSocket(SERVER_CLIENT_PORT);
 
+            connectReducer();
+            System.out.println("Reducer Connected!");
+
             initializeWorkers();
+            System.out.println("Workers Initialized!");
 
             ManagerRequestHandler.replicated_worker_handlers = replicated_worker_handlers;
 
