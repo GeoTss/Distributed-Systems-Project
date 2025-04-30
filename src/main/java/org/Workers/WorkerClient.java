@@ -37,6 +37,8 @@ public class WorkerClient extends Thread {
 
         @SuppressWarnings("unchecked")
         ArrayList<Filter> received_filters = (ArrayList<Filter>) server_input_stream.readObject();
+        if(received_filters.isEmpty())
+            return shops_to_work_on;
 
         return shops_to_work_on.stream()
                 .filter(shop -> received_filters.stream().allMatch(filter -> filter.satisfy(shop)))

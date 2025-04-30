@@ -6,6 +6,7 @@ import org.ServerSide.MasterServer;
 import org.ServerSide.RequestMonitor;
 import org.Workers.Listeners.ReplicationListener;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -105,12 +106,14 @@ public class Reducer{
                 }
                 System.out.println("Added listeners");
 
+                System.out.println("Waiting for all workers to send results...");
                 ArrayList<Shop> resulting_shops = new ArrayList<>();
                 for(RequestMonitor monitor: result_monitors){
                     @SuppressWarnings("unchecked")
                     ArrayList<Shop> shops = (ArrayList<Shop>) monitor.getResult();
                     resulting_shops.addAll(shops);
                 }
+                System.out.println("Received results from all shops.");
 
                 sendToServer(request_id, resulting_shops);
             }

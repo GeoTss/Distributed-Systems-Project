@@ -55,8 +55,10 @@ public class ApplyFiltersState implements ClientState{
         handler_info.outputStream.flush();
 
         try {
+            System.out.println("Waiting for filtering to finish...");
             @SuppressWarnings("unchecked")
             ArrayList<Shop> filtered_shops = (ArrayList<Shop>) handler_info.inputStream.readObject();
+            System.out.println("Received filtered shops!");
 
             ManageFilteredShopsArgs args = new ManageFilteredShopsArgs();
             args.filtered_shops = filtered_shops;

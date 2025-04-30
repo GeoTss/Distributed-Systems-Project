@@ -44,7 +44,7 @@ public class ClientRequestHandler extends Thread {
         try {
             handler = worker_handlers.get(main_id);
             synchronized (handler){
-                handler.registerMonitor(request_id, worker_id, monitor);
+                monitor = handler.registerMonitor(request_id, worker_id, monitor);
             }
 
             ObjectOutputStream main_worker_writer = replicatedWorker.getMain();
@@ -65,7 +65,7 @@ public class ClientRequestHandler extends Thread {
                 try {
                     handler = worker_handlers.get(replica_id);
                     synchronized (handler){
-                        handler.registerMonitor(request_id, worker_id, monitor);
+                        monitor = handler.registerMonitor(request_id, worker_id, monitor);
                     }
 
                     ObjectOutputStream replica_writer = replicatedWorker.getReplicaOutput(replica_id);
@@ -214,7 +214,7 @@ public class ClientRequestHandler extends Thread {
         System.out.println(workers_sent_to);
         RequestMonitor reducer_monitor = new RequestMonitor();
         synchronized (reducer_listener) {
-            reducer_listener.registerMonitor(requestId, REDUCER_ID, reducer_monitor);
+            reducer_monitor = reducer_listener.registerMonitor(requestId, REDUCER_ID, reducer_monitor);
         }
 
         synchronized (reducer_writer) {
@@ -224,8 +224,10 @@ public class ClientRequestHandler extends Thread {
             reducer_writer.flush();
         }
 
+        System.out.println("Waiting for filtered shops from reducer for " + requestId + "...");
         @SuppressWarnings("unchecked")
         ArrayList<Shop> resulting_shops = (ArrayList<Shop>) reducer_monitor.getResult();
+        System.out.println("Received filtered shops for " + requestId);
 
         out.writeObject(resulting_shops);
         out.flush();

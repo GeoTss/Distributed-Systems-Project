@@ -43,11 +43,11 @@ public class ReplicationListener extends Thread {
                     }
 
                     if (worker_results == null) {
-                        System.err.println("No monitors found for requestId: " + requestId);
+                        System.err.println("From listener with " + id + ": no monitors found for requestId: " + requestId);
                     } else {
                         RequestMonitor corresponding_monitor = worker_results.get(from_id);
                         if(corresponding_monitor == null) {
-                            System.out.println("Registering new monitor for request " + requestId + " in listener " + id + " for worker " + from_id + " which wasn't registered before.");
+                            System.out.println("From listener with " + id + ": Registering new monitor for request " + requestId + " in listener " + id + " for worker " + from_id + " which wasn't registered before.");
                             corresponding_monitor = new RequestMonitor();
                             corresponding_monitor.setResult(result);
                             registerMonitor(requestId, from_id, corresponding_monitor);
