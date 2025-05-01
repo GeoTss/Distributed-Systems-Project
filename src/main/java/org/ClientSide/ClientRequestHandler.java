@@ -1,4 +1,4 @@
-package org.ServerSide.ClientRequests;
+package org.ClientSide;
 
 import org.Domain.*;
 import org.Domain.Cart.CartStatus;
@@ -9,6 +9,7 @@ import org.ReducerSide.ReducerPreparationType;
 import org.ServerSide.ActiveReplication.ReplicationHandler;
 import org.ServerSide.Command;
 import org.ServerSide.RequestMonitor;
+import org.ServerSide.ThrowingConsumer;
 import org.Workers.WorkerCommandType;
 import org.Workers.Listeners.ReplicationListener;
 
@@ -42,7 +43,7 @@ public class ClientRequestHandler extends Thread {
         ReplicationListener handler = null;
         int main_id = replicatedWorker.getMainId();
         try {
-            handler = worker_handlers.get(main_id);
+            handler = worker_listeners.get(main_id);
             synchronized (handler){
                 monitor = handler.registerMonitor(request_id, worker_id, monitor);
             }
@@ -63,7 +64,7 @@ public class ClientRequestHandler extends Thread {
 
             for (Integer replica_id : replicatedWorker.getReplicaIds()) {
                 try {
-                    handler = worker_handlers.get(replica_id);
+                    handler = worker_listeners.get(replica_id);
                     synchronized (handler){
                         monitor = handler.registerMonitor(request_id, worker_id, monitor);
                     }

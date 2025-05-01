@@ -141,7 +141,7 @@ public class WorkerClient extends Thread {
         return shop_list.stream().filter(shop -> shop_id == shop.getId()).findFirst().orElse(null);
     }
 
-    private void send(ObjectOutputStream out, long request_id, int worker_id, Object result) throws IOException {
+    private synchronized void send(ObjectOutputStream out, long request_id, int worker_id, Object result) throws IOException {
         out.writeInt(worker_id);
         out.writeLong(request_id);
         out.writeObject(result);
@@ -184,7 +184,11 @@ public class WorkerClient extends Thread {
                 Shop shop = getShopFromId(worker_id, shop_id);
                 Product product = shop.getProductById(product_id);
 
+                System.out.println("Product: " + product);
+
+                System.out.println("Previous: " + product);
                 product.addAvailableAmount(quantity);
+                System.out.println("Updated: " + product);
             }
 
             case REMOVE_PRODUCT_STOCK, SYNC_REMOVE_PRODUCT_STOCK -> {
@@ -195,7 +199,13 @@ public class WorkerClient extends Thread {
                 Shop shop = getShopFromId(worker_id, shop_id);
                 Product product = shop.getProductById(product_id);
 
-                product.removeAvailableAmount(quantity);
+                synchronized (shop) {
+                    System.out.println("Product: " + product);
+
+                    System.out.println("Previous stock: " + product.getAvailableAmount());
+                    product.removeAvailableAmount(quantity);
+                    System.out.println("New stock: " + product.getAvailableAmount());
+                }
             }
 
             case GET_SHOP_CATEGORY_SALES -> {
@@ -227,6 +237,7 @@ public class WorkerClient extends Thread {
             case FILTER -> {
                 ArrayList<Shop> shops = applyFilters(worker_id);
 
+                server_output_stream.reset();
                 send(reducer_output_stream, request_id, worker_id, shops);
             }
             case CHOSE_SHOP -> {
@@ -234,6 +245,7 @@ public class WorkerClient extends Thread {
                 Shop corresponding_shop = getShopFromId(worker_id, chosen_shop_id);
 
                 System.out.println("Sending shop back " + corresponding_shop);
+                server_output_stream.reset();
                 send(server_output_stream, request_id, worker_id, corresponding_shop);
             }
             case ADD_TO_CART -> {
@@ -253,6 +265,7 @@ public class WorkerClient extends Thread {
                 Float total_cost = getCartCost(result_cart);
                 result_cart.setTotal_cost(total_cost);
 
+                server_output_stream.reset();
                 send(server_output_stream, request_id, worker_id, result_cart);
             }
             case CHECKOUT_CART -> {
@@ -341,15 +354,22 @@ public class WorkerClient extends Thread {
                 worker_command = WorkerCommandType.values()[worker_command_ord];
             }
 
-            worker_command = WorkerCommandType.values()[server_input_stream.readInt()];
-            while (worker_command != WorkerCommandType.QUIT) {
-
+            do {
+                worker_command = WorkerCommandType.values()[server_input_stream.readInt()];
                 long request_id = server_input_stream.readLong();
                 int worker_id = server_input_stream.readInt();
 
                 handleCommand(request_id, worker_id, worker_command);
-                worker_command = WorkerCommandType.values()[server_input_stream.readInt()];
-            }
+            }while(worker_command != WorkerCommandType.QUIT);
+
+//            while (worker_command != WorkerCommandType.QUIT) {
+//
+//                long request_id = server_input_stream.readLong();
+//                int worker_id = server_input_stream.readInt();
+//
+//                handleCommand(request_id, worker_id, worker_command);
+//                worker_command = WorkerCommandType.values()[server_input_stream.readInt()];
+//            }
         } catch (IOException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }

@@ -2,17 +2,20 @@ package org.ClientSide.ClientStates;
 
 import org.ClientSide.ClientHandler;
 import org.ClientSide.ClientStates.ClientStateArgs.ApplyFiltersArgs;
-import org.ClientSide.ClientStates.ClientStateArgs.ClientStateArgument;
+import org.StatePattern.HandlerInfo;
+import org.StatePattern.StateArguments;
 import org.Filters.Filter;
 import org.Filters.PriceCategoryEnum;
+import org.StatePattern.StateInterface;
+import org.StatePattern.StateTransition;
 
 import java.io.IOException;
 import java.util.*;
 
-public class InitialState implements ClientState{
+public class InitialState extends ClientStates {
 
     @Override
-    public StateTransition handleState(ClientHandlerInfo handler_info, ClientStateArgument arguments) throws IOException {
+    public StateTransition handleState(HandlerInfo handler_info, StateArguments arguments) throws IOException {
         System.out.println("InitialState.handleState");
 
         int command;
@@ -81,7 +84,7 @@ public class InitialState implements ClientState{
 
                 filter_arguments.filter_types.add(Filter.Types.END);
 
-                return new StateTransition(State.APPLY_FILTERS, filter_arguments);
+                return new StateTransition(State.APPLY_FILTERS.getCorresponding_state(), filter_arguments);
             }
 
         }while(command != 0);

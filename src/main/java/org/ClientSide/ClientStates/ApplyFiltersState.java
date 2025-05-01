@@ -1,23 +1,25 @@
 package org.ClientSide.ClientStates;
 
 import org.ClientSide.ClientStates.ClientStateArgs.ApplyFiltersArgs;
-import org.ClientSide.ClientStates.ClientStateArgs.ClientStateArgument;
+import org.StatePattern.HandlerInfo;
+import org.StatePattern.StateArguments;
 import org.ClientSide.ClientStates.ClientStateArgs.ManageFilteredShopsArgs;
 import org.Domain.Shop;
 import org.Filters.Filter;
 import org.Filters.PriceCategoryEnum;
 import org.ServerSide.Command;
+import org.StatePattern.StateTransition;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.TreeSet;
 
-public class ApplyFiltersState implements ClientState{
+public class ApplyFiltersState extends ClientStates {
 
     ApplyFiltersArgs filters = null;
 
     @Override
-    public StateTransition handleState(ClientHandlerInfo handler_info, ClientStateArgument arguments) throws IOException {
+    public StateTransition handleState(HandlerInfo handler_info, StateArguments arguments) throws IOException {
         System.out.println("ApplyFiltersState.handleState");
         if(arguments != null) {
             filters = (ApplyFiltersArgs) arguments;
@@ -63,7 +65,7 @@ public class ApplyFiltersState implements ClientState{
             ManageFilteredShopsArgs args = new ManageFilteredShopsArgs();
             args.filtered_shops = filtered_shops;
 
-            return new StateTransition(State.MANAGE_SHOPS, args);
+            return new StateTransition(State.MANAGE_SHOPS.getCorresponding_state(), args);
         }catch (ClassNotFoundException exception){
             exception.printStackTrace();
         }

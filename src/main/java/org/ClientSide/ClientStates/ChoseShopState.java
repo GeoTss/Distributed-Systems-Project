@@ -2,16 +2,18 @@ package org.ClientSide.ClientStates;
 
 import org.ClientSide.ClientHandler;
 import org.ClientSide.ClientStates.ClientStateArgs.ChoseShopArgs;
-import org.ClientSide.ClientStates.ClientStateArgs.ClientStateArgument;
+import org.StatePattern.HandlerInfo;
+import org.StatePattern.StateArguments;
 import org.Domain.Cart.CartStatus;
 import org.Domain.Cart.ReadableCart;
 import org.Domain.CheckoutResultWrapper;
 import org.Domain.Shop;
 import org.ServerSide.Command;
+import org.StatePattern.StateTransition;
 
 import java.io.IOException;
 
-public class ChoseShopState implements ClientState{
+public class ChoseShopState extends ClientStates {
 
     private static void printChoices(){
         System.out.println("0. Go back to home screen.");
@@ -23,7 +25,7 @@ public class ChoseShopState implements ClientState{
     }
 
     @Override
-    public StateTransition handleState(ClientHandlerInfo handler_info, ClientStateArgument arguments) throws IOException, ClassNotFoundException {
+    public StateTransition handleState(HandlerInfo handler_info, StateArguments arguments) throws IOException, ClassNotFoundException {
         System.out.println("ChoseShopState.handleState");
         ChoseShopArgs args = (ChoseShopArgs) arguments;
 
@@ -51,7 +53,7 @@ public class ChoseShopState implements ClientState{
                     handler_info.outputStream.writeInt(Command.CommandTypeClient.CLEAR_CART.ordinal());
                     handler_info.outputStream.flush();
 
-                    return new StateTransition(State.APPLY_FILTERS, null);
+                    return new StateTransition(State.APPLY_FILTERS.getCorresponding_state(), null);
                 }
                 case 2 -> handleCheckout(handler_info);
                 case 3 -> handleAddToCart(handler_info);
@@ -67,10 +69,10 @@ public class ChoseShopState implements ClientState{
         handler_info.outputStream.writeInt(Command.CommandTypeClient.CLEAR_CART.ordinal());
         handler_info.outputStream.flush();
 
-        return new StateTransition(State.INITIAL, null);
+        return new StateTransition(State.INITIAL.getCorresponding_state(), null);
     }
 
-    private void handleCheckout(ClientHandlerInfo handler_info) throws IOException, ClassNotFoundException {
+    private void handleCheckout(HandlerInfo handler_info) throws IOException, ClassNotFoundException {
         handler_info.outputStream.writeInt(Command.CommandTypeClient.CHECKOUT.ordinal());
         handler_info.outputStream.flush();
 
@@ -83,7 +85,7 @@ public class ChoseShopState implements ClientState{
             System.out.println("Checked out successfully.");
     }
 
-    private void handleAddToCart(ClientHandlerInfo handler_info) throws IOException {
+    private void handleAddToCart(HandlerInfo handler_info) throws IOException {
         handler_info.outputStream.writeInt(Command.CommandTypeClient.ADD_TO_CART.ordinal());
         System.out.print("Enter the product ID of the product you want to add: ");
         int product_id = ClientHandler.sc_input.nextInt();
@@ -102,7 +104,7 @@ public class ChoseShopState implements ClientState{
             System.out.println("Product wasn't added to cart successfully.");
     }
 
-    private void handleRemoveFromCart(ClientHandlerInfo handler_info) throws IOException {
+    private void handleRemoveFromCart(HandlerInfo handler_info) throws IOException {
         handler_info.outputStream.writeInt(Command.CommandTypeClient.REMOVE_FROM_CART.ordinal());
         System.out.print("Enter product ID of the product you want to remove: ");
         int product_id = ClientHandler.sc_input.nextInt();
@@ -119,7 +121,7 @@ public class ChoseShopState implements ClientState{
             System.out.println("Removal was successful.");
     }
 
-    private void handleShowCart(ClientHandlerInfo handler_info) throws IOException {
+    private void handleShowCart(HandlerInfo handler_info) throws IOException {
         handler_info.outputStream.writeInt(Command.CommandTypeClient.GET_CART.ordinal());
         handler_info.outputStream.flush();
         System.out.println("My Cart:");

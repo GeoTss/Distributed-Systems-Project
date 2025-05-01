@@ -21,6 +21,8 @@ public class Command {
         QUIT,
         DEFAULT,
         END,
+        CHOSE_SHOP,
+        GET_SHOPS,
         ADD_SHOP,
         ADD_PRODUCT,
         REMOVE_PRODUCT,

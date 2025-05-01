@@ -76,7 +76,7 @@ public class Reducer{
         }
     }
 
-    private void sendToServer(long request_id, Object result) throws IOException {
+    private synchronized void sendToServer(long request_id, Object result) throws IOException {
         server_output_stream.writeInt(id);
         server_output_stream.writeLong(request_id);
         server_output_stream.writeObject(result);
@@ -174,6 +174,7 @@ public class Reducer{
                 }
 
                 ReducerPreparationType preparation = ReducerPreparationType.values()[preparation_ord];
+                System.out.println("Got " + preparation);
 
                 handlePreparation(request_id, preparation, extra_args);
             }

@@ -1,9 +1,11 @@
 package org.ManagerSide;
 
 import org.Domain.*;
+import org.Filters.Filter;
 import org.ReducerSide.ReducerPreparationType;
 import org.ServerSide.ActiveReplication.ReplicationHandler;
-import org.ServerSide.ClientRequests.ThrowingConsumer;
+import org.ServerSide.MasterServer;
+import org.ServerSide.ThrowingConsumer;
 import org.ServerSide.Command;
 import org.ServerSide.RequestMonitor;
 import org.Workers.Listeners.ReplicationListener;
@@ -27,6 +29,8 @@ public class ManagerRequestHandler extends Thread {
 
     private Manager manager;
 
+    int current_shop_id;
+
     public ManagerRequestHandler(Socket connection, ObjectOutputStream out, ObjectInputStream in) throws IOException {
         this.connection = connection;
         this.out = out;
@@ -37,7 +41,7 @@ public class ManagerRequestHandler extends Thread {
         ReplicationListener handler = null;
         int main_id = replicatedWorker.getMainId();
         try {
-            handler = worker_handlers.get(main_id);
+            handler = worker_listeners.get(main_id);
             synchronized (handler){
                 monitor = handler.registerMonitor(request_id, worker_id, monitor);
             }
@@ -58,7 +62,7 @@ public class ManagerRequestHandler extends Thread {
 
             for (Integer replica_id : replicatedWorker.getReplicaIds()) {
                 try {
-                    handler = worker_handlers.get(replica_id);
+                    handler = worker_listeners.get(replica_id);
                     synchronized (handler){
                         monitor = handler.registerMonitor(request_id, worker_id, monitor);
                     }
@@ -167,6 +171,8 @@ public class ManagerRequestHandler extends Thread {
         long requestId = threadId();
         switch (cmd) {
             case QUIT, DEFAULT, END -> { /* no‐ops for now */ }
+            case GET_SHOPS -> handleGetShops(requestId);
+            case CHOSE_SHOP -> handleChooseShop(requestId);
             case ADD_SHOP -> handleAddShop(requestId);
             case ADD_PRODUCT -> handleAddProduct(requestId);
             case REMOVE_PRODUCT -> handleRemoveProduct(requestId);
@@ -175,6 +181,70 @@ public class ManagerRequestHandler extends Thread {
             case GET_SHOP_CATEGORY_SALES -> handleGetShopCategorySales(requestId);
             case GET_PRODUCT_CATEGORY_SALES -> handleGetProductCategorySales(requestId);
         }
+    }
+
+    private void handleChooseShop(long requestId) throws IOException, InterruptedException {
+        int shop_id = in.readInt();
+
+        ReplicationHandler replicated_worker = getWorkerForShop(shop_id);
+
+        ThrowingConsumer<ObjectOutputStream> chose_shop_writer = (out) -> {
+            out.writeInt(WorkerCommandType.CHOSE_SHOP.ordinal());
+            out.writeLong(requestId);
+            out.writeInt(replicated_worker.getId());
+            out.writeInt(shop_id);
+        };
+
+        RequestMonitor monitor = new RequestMonitor();
+        sendToWorkerWithReplicas(replicated_worker, chose_shop_writer, monitor, requestId, replicated_worker.getId());
+
+        System.out.println("Waiting for shop to return...");
+        Shop result = (Shop) monitor.getResult();
+        current_shop_id = result.getId();
+
+        System.out.println("Sending shop to client." + result);
+        out.writeObject(result);
+        out.flush();
+    }
+
+    private void handleGetShops(long requestId) throws IOException, InterruptedException {
+
+        ArrayList<Pair<Integer, Integer>> workers_sent_to = new ArrayList<>();
+
+        ArrayList<Filter> empty_arr = new ArrayList<>();
+        for(ReplicationHandler handler: replicated_worker_handlers.values()) {
+
+            ThrowingConsumer<ObjectOutputStream> empty_filter_writer = (out) -> {
+                out.writeInt(WorkerCommandType.FILTER.ordinal());
+                out.writeLong(requestId);
+                out.writeInt(handler.getId());
+                out.writeObject(empty_arr);
+            };
+
+            Pair<Integer, Integer> worker_sent_to = sendToWorkerWithReplicas(handler, empty_filter_writer);
+            workers_sent_to.add(worker_sent_to);
+        }
+        System.out.println(workers_sent_to);
+
+        RequestMonitor reducer_monitor = new RequestMonitor();
+        synchronized (reducer_listener){
+            reducer_monitor = reducer_listener.registerMonitor(requestId, REDUCER_ID, reducer_monitor);
+        }
+
+        synchronized (reducer_writer){
+            reducer_writer.writeLong(requestId);
+            reducer_writer.writeInt(ReducerPreparationType.REDUCER_PREPARE_FILTER.ordinal());
+            reducer_writer.writeObject(workers_sent_to);
+            reducer_writer.flush();
+        }
+
+        System.out.println("Waiting for filtered shops from reducer for " + requestId + "...");
+        @SuppressWarnings("unchecked")
+        ArrayList<Shop> resulting_shops = (ArrayList<Shop>) reducer_monitor.getResult();
+        System.out.println("Received filtered shops for " + requestId);
+
+        out.writeObject(resulting_shops);
+        out.flush();
     }
 
     private void handleAddShop(long requestId)
@@ -275,17 +345,17 @@ public class ManagerRequestHandler extends Thread {
     }
 
     private void handleRemoveProduct(long requestId) throws IOException {
-        int shopId = in.readInt();
+
         int productId = in.readInt();
 
-        ReplicationHandler handler = getWorkerForShop(shopId);
+        ReplicationHandler handler = getWorkerForShop(current_shop_id);
         assert handler != null;
         RequestMonitor monitor = new RequestMonitor();
         ThrowingConsumer<ObjectOutputStream> writer = (wout) -> {
             wout.writeInt(WorkerCommandType.REMOVE_PRODUCT_FROM_SHOP.ordinal());
             wout.writeLong(requestId);
             wout.writeInt(handler.getId());
-            wout.writeInt(shopId);
+            wout.writeInt(current_shop_id);
             wout.writeInt(productId);
         };
 
@@ -300,7 +370,7 @@ public class ManagerRequestHandler extends Thread {
                 wout.writeInt(WorkerCommandType.SYNC_REMOVE_PRODUCT_FROM_SHOP.ordinal());
                 wout.writeLong(requestId);
                 wout.writeInt(handler.getId());
-                wout.writeInt(shopId);
+                wout.writeInt(current_shop_id);
                 wout.writeInt(productId);
             };
 
@@ -314,18 +384,18 @@ public class ManagerRequestHandler extends Thread {
 
     private void handleAddAvailableProduct(long requestId)
             throws IOException {
-        int shopId = in.readInt();
+
         int productId = in.readInt();
         int quantity = in.readInt();
 
-        ReplicationHandler handler = getWorkerForShop(shopId);
+        ReplicationHandler handler = getWorkerForShop(current_shop_id);
         assert handler != null;
-        RequestMonitor monitor = new RequestMonitor();
+
         ThrowingConsumer<ObjectOutputStream> writer = (wout) -> {
             wout.writeInt(WorkerCommandType.ADD_PRODUCT_STOCK.ordinal());
             wout.writeLong(requestId);
             wout.writeInt(handler.getId());
-            wout.writeInt(shopId);
+            wout.writeInt(current_shop_id);
             wout.writeInt(productId);
             wout.writeInt(quantity);
         };
@@ -334,13 +404,14 @@ public class ManagerRequestHandler extends Thread {
 
         boolean success = false;
         if(sent_to != -1){
+            success = true;
             System.out.println("Product was added successfully");
 
             writer = (wout) -> {
                 wout.writeInt(WorkerCommandType.SYNC_ADD_PRODUCT_STOCK.ordinal());
                 wout.writeLong(requestId);
                 wout.writeInt(handler.getId());
-                wout.writeInt(shopId);
+                wout.writeInt(current_shop_id);
                 wout.writeInt(productId);
                 wout.writeInt(quantity);
             };
@@ -355,23 +426,22 @@ public class ManagerRequestHandler extends Thread {
 
     private void handleRemoveAvailableProduct(long requestId)
             throws IOException {
-        int shopId = in.readInt();
+
         int productId = in.readInt();
         int quantity = in.readInt();
 
-        ReplicationHandler handler = getWorkerForShop(shopId);
+        ReplicationHandler handler = getWorkerForShop(current_shop_id);
         assert handler != null;
-        RequestMonitor monitor = new RequestMonitor();
         ThrowingConsumer<ObjectOutputStream> writer = (wout) -> {
             wout.writeInt(WorkerCommandType.REMOVE_PRODUCT_STOCK.ordinal());
             wout.writeLong(requestId);
             wout.writeInt(handler.getId());
-            wout.writeInt(shopId);
+            wout.writeInt(current_shop_id);
             wout.writeInt(productId);
             wout.writeInt(quantity);
         };
 
-        int sent_to = sendToWorkerWithReplicas(handler, writer, monitor, requestId, handler.getId());
+        int sent_to = sendToWorkerWithReplicas(handler, writer, requestId, handler.getId());
 
         boolean success = false;
         if(sent_to != -1){
@@ -382,7 +452,7 @@ public class ManagerRequestHandler extends Thread {
                 wout.writeInt(WorkerCommandType.SYNC_REMOVE_PRODUCT_STOCK.ordinal());
                 wout.writeLong(requestId);
                 wout.writeInt(handler.getId());
-                wout.writeInt(shopId);
+                wout.writeInt(current_shop_id);
                 wout.writeInt(productId);
                 wout.writeInt(quantity);
             };
@@ -448,8 +518,6 @@ public class ManagerRequestHandler extends Thread {
         try {
             System.out.println("Manager connected: " + connection.getInetAddress());
 
-            manager = (Manager) in.readObject();
-
             Command.CommandTypeManager cmd = Command.CommandTypeManager.DEFAULT;
             while (cmd != Command.CommandTypeManager.QUIT) {
                 int ord = in.readInt();
@@ -462,6 +530,7 @@ public class ManagerRequestHandler extends Thread {
             System.err.println("Manager connection error.");
         } finally {
             try {
+                has_manager_connected = false;
                 out.close();
                 in.close();
                 connection.close();

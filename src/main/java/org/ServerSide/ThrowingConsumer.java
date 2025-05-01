@@ -1,4 +1,4 @@
-package org.ServerSide.ClientRequests;
+package org.ServerSide;
 
 import java.io.IOException;
 

@@ -9,34 +9,33 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 import org.Domain.Shop;
+import org.Domain.Utils;
 import org.ManagerSide.ManagerRequestHandler;
 import org.ReducerSide.ReducerPreparationType;
 import org.ServerSide.ActiveReplication.ReplicationHandler;
-import org.ServerSide.ClientRequests.ClientRequestHandler;
+import org.ClientSide.ClientRequestHandler;
 import org.Workers.WorkerClient;
 import org.Workers.WorkerCommandType;
 import org.Workers.Listeners.ReplicationListener;
+import org.Workers.WorkerManagerCommandType;
 
 public class MasterServer {
     public static final int SERVER_CLIENT_PORT = 7777;
     public static String SERVER_HOST = "127.0.0.1";
-    public static final int MASTER_SERVER_ID = Integer.MAX_VALUE;
 
     private ServerSocket connection = null;
     private Socket server_socket = null;
-    private static boolean has_manager_connected = false;
+    public static boolean has_manager_connected = false;
 
     private static ServerConfigInfo config_info;
 
     public static HashMap<Integer, ReplicationHandler> replicated_worker_handlers = new HashMap<>();
     public static HashMap<Integer, Integer> shop_id_hash = new HashMap<>();
 
-    public static final Object CONNECTION_ACCEPT_LOCK = new Object();
-
-    public static HashMap<Integer, ReplicationListener> worker_handlers = new HashMap<>();
+    public static HashMap<Integer, ReplicationListener> worker_listeners = new HashMap<>();
 
     public static ReplicationListener reducer_listener = null;
-    public static final int REDUCER_ID = Integer.MAX_VALUE-1;
+    public static final int REDUCER_ID = Integer.MAX_VALUE;
     public static ObjectOutputStream reducer_writer = null;
 
     MasterServer() throws IOException, URISyntaxException, ClassNotFoundException {
@@ -63,6 +62,21 @@ public class MasterServer {
         return h;
     }
 
+    Utils.Pair<ObjectOutputStream, ObjectInputStream> connectWorkerManager() {
+        try{
+
+            Socket worker_manager_sock = connection.accept();
+            ObjectOutputStream out = new ObjectOutputStream(worker_manager_sock.getOutputStream());
+            ObjectInputStream in = new ObjectInputStream(worker_manager_sock.getInputStream());
+
+            return new Utils.Pair<>(out, in);
+
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     void connectReducer(){
         ObjectInputStream reducer_in = null;
         try {
@@ -85,7 +99,7 @@ public class MasterServer {
         }
     }
 
-    void initializeWorkers() throws IOException, ClassNotFoundException, InterruptedException, URISyntaxException {
+    void initializeWorkers(ObjectOutputStream worker_manager_writer, ObjectInputStream worker_manager_input) throws IOException, ClassNotFoundException, InterruptedException, URISyntaxException {
 
         ArrayList<Shop> database_shops = ServerFileLoader.load_shops();
 
@@ -107,9 +121,13 @@ public class MasterServer {
 
         worker_shop_map.forEach((worker_id, shop_list) -> {
 
-            WorkerClient worker_client = new WorkerClient();
-            worker_clients.add(worker_client);
-            worker_client.start();
+            try {
+                worker_manager_writer.writeInt(WorkerManagerCommandType.INITIAZE_WORKER.ordinal());
+                worker_manager_writer.flush();
+            } catch (IOException e) {
+                e.printStackTrace();
+                throw new RuntimeException(e);
+            }
 
             Socket main_worker_socket;
             ObjectOutputStream out = null;
@@ -138,12 +156,15 @@ public class MasterServer {
             main_handler.setId(worker_id);
 
             System.out.println("For " + worker_id + " the listener has ID: " + main_handler.getHandlerId());
-            worker_handlers.put(worker_id, main_handler);
+            worker_listeners.put(worker_id, main_handler);
             main_handler.start();
         });
 
         reducer_writer.writeInt(ReducerPreparationType.REDUCER_END_OF_WORKERS.ordinal());
         reducer_writer.flush();
+
+        worker_manager_writer.writeInt(WorkerManagerCommandType.END_OF_INITIALIZATION.ordinal());
+        worker_manager_writer.flush();
 
         worker_shop_map.forEach((worker_id, shop_list) -> {
             try {
@@ -213,8 +234,10 @@ public class MasterServer {
 
             connectReducer();
             System.out.println("Reducer Connected!");
+            Utils.Pair<ObjectOutputStream, ObjectInputStream> socket_streams = connectWorkerManager();
+            System.out.println("Worker manager connected!");
 
-            initializeWorkers();
+            initializeWorkers(socket_streams.first, socket_streams.second);
             System.out.println("Workers Initialized!");
 
             System.out.println("SERVER STARTED");
@@ -275,4 +298,3 @@ public class MasterServer {
         new MasterServer().openServer();
     }
 }
-

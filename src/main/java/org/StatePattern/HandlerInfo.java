@@ -1,9 +1,9 @@
-package org.ClientSide.ClientStates;
+package org.StatePattern;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-public class ClientHandlerInfo {
+public class HandlerInfo {
     public ObjectOutputStream outputStream;
     public ObjectInputStream inputStream;
 }

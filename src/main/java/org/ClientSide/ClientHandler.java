@@ -1,9 +1,10 @@
 package org.ClientSide;
 
-import org.ClientSide.ClientStates.ClientHandlerInfo;
-import org.ClientSide.ClientStates.ClientState;
-import org.ClientSide.ClientStates.ClientStateArgs.ClientStateArgument;
-import org.ClientSide.ClientStates.StateTransition;
+import org.ClientSide.ClientStates.ClientStates;
+import org.StatePattern.HandlerInfo;
+import org.StatePattern.StateArguments;
+import org.StatePattern.StateInterface;
+import org.StatePattern.StateTransition;
 import org.Domain.Client;
 import org.ServerSide.Command;
 import org.ServerSide.ConnectionType;
@@ -46,21 +47,20 @@ public class ClientHandler extends Thread {
             outputStream.writeObject(client_info);
             outputStream.flush();
 
-            ClientHandlerInfo handler_info = new ClientHandlerInfo();
+            HandlerInfo handler_info = new HandlerInfo();
             handler_info.outputStream = outputStream;
             handler_info.inputStream = inputStream;
 
-            ClientState.State currentState;
-            ClientStateArgument currentArgs;
+            ClientStates currentState;
+            StateArguments currentArgs;
 
-            StateTransition transition = new StateTransition(ClientState.State.INITIAL, null);
+            StateTransition transition = new StateTransition(ClientStates.State.INITIAL.getCorresponding_state(), null);
 
             do {
-                currentState = transition.nextState;
+                currentState = (ClientStates) transition.nextState;
                 currentArgs = transition.nextArgs;
 
-                ClientState currentHandler = currentState.getCorresponding_state();
-                transition = currentHandler.handleState(handler_info, currentArgs);
+                transition = currentState.handleState(handler_info, currentArgs);
             } while(transition != null);
 
             outputStream.writeInt(Command.CommandTypeClient.QUIT.ordinal());

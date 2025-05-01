@@ -1,14 +1,23 @@
 package org.ManagerSide;
 
+import org.StatePattern.HandlerInfo;
+import org.StatePattern.StateTransition;
+import org.ManagerSide.ManagerStates.ManagerState;
+import org.ServerSide.Command;
 import org.ServerSide.ConnectionType;
 import org.ServerSide.MasterServer;
+import org.StatePattern.StateArguments;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.InetAddress;
 import java.net.Socket;
+import java.util.Scanner;
 
 public class ManagerHandler extends Thread{
+
+    public static Scanner sc_input = new Scanner(System.in);
 
     ObjectOutputStream outputStream;
     ObjectInputStream inputStream;
@@ -17,19 +26,43 @@ public class ManagerHandler extends Thread{
     public void run(){
         Socket request_socket = null;
         try {
-            request_socket = new Socket(MasterServer.SERVER_HOST, MasterServer.SERVER_CLIENT_PORT);
+            InetAddress wifiAddress = MasterServer.getWifiInetAddress();
+            System.out.println("Inet Address: " + wifiAddress);
+            request_socket = new Socket(wifiAddress, MasterServer.SERVER_CLIENT_PORT);
 
-            ObjectOutputStream outputStream = new ObjectOutputStream(request_socket.getOutputStream());
-            ObjectInputStream inputStream = new ObjectInputStream(request_socket.getInputStream());
+            outputStream = new ObjectOutputStream(request_socket.getOutputStream());
+            inputStream = new ObjectInputStream(request_socket.getInputStream());
 
             outputStream.writeInt(ConnectionType.MANAGER.ordinal());
             outputStream.flush();
-        } catch (IOException e) {
+
+            HandlerInfo handler_info = new HandlerInfo();
+            handler_info.outputStream = outputStream;
+            handler_info.inputStream = inputStream;
+
+
+            ManagerState currentState;
+            StateArguments currentArgs;
+
+            StateTransition transition = new StateTransition(ManagerState.State.INITIAL.getCorresponding_state(), null);
+
+            do {
+                currentState = (ManagerState) transition.nextState;
+                currentArgs = transition.nextArgs;
+
+                transition = currentState.handleState(handler_info, currentArgs);
+            } while(transition != null);
+
+            outputStream.writeInt(Command.CommandTypeClient.QUIT.ordinal());
+            outputStream.flush();
+
+        } catch (IOException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         } finally {
             try {
                 outputStream.close();
                 inputStream.close();
+                sc_input.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }

@@ -1,0 +1,29 @@
+package org.ManagerSide.ManagerStates;
+
+import org.ManagerSide.ManagerStates.ManagerStateArgs.ManagerStateArgument;
+import org.StatePattern.HandlerInfo;
+import org.StatePattern.StateArguments;
+import org.StatePattern.StateInterface;
+import org.StatePattern.StateTransition;
+
+import java.io.IOException;
+
+public abstract class ManagerState implements StateInterface {
+
+        public enum State{
+            INITIAL(new InitialState()),
+            CHOSE_SHOP(new ChoseShopState()), // Will have the add/remove (available) product.
+            DISPLAY_TOTAL_SALES(new DisplayTotalSalesState());
+
+            private StateInterface corresponding_state;
+
+            State(StateInterface correspondingState) {
+                corresponding_state = correspondingState;
+            }
+
+            public StateInterface getCorresponding_state(){
+                return corresponding_state;
+            }
+        };
+}
+

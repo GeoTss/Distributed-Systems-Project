@@ -1,5 +1,7 @@
 package org.ClientSide.ClientStates.ClientStateArgs;
 
-public class ChoseShopArgs implements ClientStateArgument{
+import org.StatePattern.StateArguments;
+
+public class ChoseShopArgs implements StateArguments {
     public Integer shop_id;
 }

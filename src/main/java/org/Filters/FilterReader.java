@@ -1,8 +1,7 @@
-package org.ServerSide.ClientRequests;
+package org.Filters;
 
 import org.Domain.Client;
 import org.Domain.Shop;
-import org.Filters.*;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
