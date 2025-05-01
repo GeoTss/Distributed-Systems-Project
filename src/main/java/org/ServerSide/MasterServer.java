@@ -3,11 +3,10 @@ import java.io.IOException;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.net.URISyntaxException;
+import java.net.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
 import org.Domain.Shop;
 import org.ManagerSide.ManagerRequestHandler;
@@ -20,7 +19,7 @@ import org.Workers.Listeners.ReplicationListener;
 
 public class MasterServer {
     public static final int SERVER_CLIENT_PORT = 7777;
-    public static final String SERVER_LOCAL_HOST = "127.0.0.1";
+    public static String SERVER_HOST = "127.0.0.1";
     public static final int MASTER_SERVER_ID = Integer.MAX_VALUE;
 
     private ServerSocket connection = null;
@@ -192,9 +191,25 @@ public class MasterServer {
         System.out.println("All workers connected!");
     }
 
+    public static InetAddress getWifiInetAddress() throws SocketException {
+        for (Iterator<NetworkInterface> it = NetworkInterface.getNetworkInterfaces().asIterator(); it.hasNext(); ) {
+            NetworkInterface netIf = it.next();
+            if (netIf.isUp() && !netIf.isLoopback() && !netIf.isVirtual()) {
+                for (InetAddress addr : java.util.Collections.list(netIf.getInetAddresses())) {
+                    if (addr instanceof Inet4Address && !addr.isLoopbackAddress()) {
+                        return addr;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
     void openServer() {
         try {
-            connection = new ServerSocket(SERVER_CLIENT_PORT);
+            InetAddress wifiAddress = getWifiInetAddress();
+            System.out.println("Inet Address: " + wifiAddress);
+            connection = new ServerSocket(SERVER_CLIENT_PORT, 0, wifiAddress);
 
             connectReducer();
             System.out.println("Reducer Connected!");

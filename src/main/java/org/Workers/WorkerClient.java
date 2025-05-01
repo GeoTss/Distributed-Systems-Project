@@ -2,8 +2,8 @@ package org.Workers;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
+import java.net.InetAddress;
 import java.net.Socket;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -17,8 +17,9 @@ import org.Domain.Shop;
 import org.Domain.Utils.Pair;
 import org.Filters.Filter;
 import org.ReducerSide.Reducer;
-import org.ReducerSide.ReducerPreparationType;
 import org.ServerSide.MasterServer;
+
+import static org.ServerSide.MasterServer.getWifiInetAddress;
 
 public class WorkerClient extends Thread {
 
@@ -26,6 +27,7 @@ public class WorkerClient extends Thread {
     private Socket socket;
     private ObjectInputStream server_input_stream;
     private ObjectOutputStream server_output_stream;
+    InetAddress wifiAddress;
 
     private ObjectInputStream reducer_input_stream;
     private ObjectOutputStream reducer_output_stream;
@@ -279,8 +281,7 @@ public class WorkerClient extends Thread {
     void connectToServer() {
         try {
 
-            socket = new Socket(MasterServer.SERVER_LOCAL_HOST, MasterServer.SERVER_CLIENT_PORT);
-
+            socket = new Socket(wifiAddress, MasterServer.SERVER_CLIENT_PORT);
             server_output_stream = new ObjectOutputStream(socket.getOutputStream());
             server_input_stream = new ObjectInputStream(socket.getInputStream());
 
@@ -294,7 +295,7 @@ public class WorkerClient extends Thread {
     void connectToReducer(){
         try {
 
-            socket = new Socket(Reducer.REDUCER_HOST, Reducer.REDUCER_WORKER_PORT);
+            socket = new Socket(wifiAddress, Reducer.REDUCER_WORKER_PORT);
 
             reducer_output_stream = new ObjectOutputStream(socket.getOutputStream());
             reducer_input_stream = new ObjectInputStream(socket.getInputStream());
@@ -312,6 +313,7 @@ public class WorkerClient extends Thread {
     @Override
     public void run() {
         try {
+            wifiAddress = getWifiInetAddress();
             connectToServer();
 
             id = server_input_stream.readInt();

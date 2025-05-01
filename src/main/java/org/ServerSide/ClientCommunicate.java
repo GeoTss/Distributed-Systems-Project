@@ -22,7 +22,7 @@ public class ClientCommunicate extends Thread {
     ObjectInputStream in;
 
     public ClientCommunicate() throws IOException {
-        request_socket = new Socket(MasterServer.SERVER_LOCAL_HOST, MasterServer.SERVER_CLIENT_PORT);
+        request_socket = new Socket(MasterServer.SERVER_HOST, MasterServer.SERVER_CLIENT_PORT);
         out = new ObjectOutputStream(request_socket.getOutputStream());
         in = new ObjectInputStream(request_socket.getInputStream());
     }

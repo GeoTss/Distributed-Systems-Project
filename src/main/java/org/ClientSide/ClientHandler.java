@@ -10,6 +10,7 @@ import org.ServerSide.ConnectionType;
 import org.ServerSide.MasterServer;
 
 import java.io.*;
+import java.net.InetAddress;
 import java.net.Socket;
 import java.util.Scanner;
 
@@ -19,6 +20,7 @@ public class ClientHandler extends Thread {
 
     private Client client_info;
 
+    private InetAddress wifiAddress;
     private ObjectOutputStream outputStream;
     private ObjectInputStream inputStream;
 
@@ -30,7 +32,10 @@ public class ClientHandler extends Thread {
     public void run(){
 
         try {
-            Socket request_socket = new Socket(MasterServer.SERVER_LOCAL_HOST, MasterServer.SERVER_CLIENT_PORT);
+
+            wifiAddress = MasterServer.getWifiInetAddress();
+            System.out.println("Inet Address: " + wifiAddress);
+            Socket request_socket = new Socket(wifiAddress, MasterServer.SERVER_CLIENT_PORT);
 
             outputStream = new ObjectOutputStream(request_socket.getOutputStream());
             inputStream = new ObjectInputStream(request_socket.getInputStream());

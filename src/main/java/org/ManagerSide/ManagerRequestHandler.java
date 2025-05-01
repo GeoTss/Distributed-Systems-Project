@@ -396,7 +396,7 @@ public class ManagerRequestHandler extends Thread {
     }
 
     public void handleCategoryQuery(long requestId, WorkerCommandType query, ReducerPreparationType query_prep_type) throws IOException, InterruptedException {
-        String cateogory = in.readUTF();
+        String category = in.readUTF();
 
         ArrayList<Pair<Integer, Integer>> workers_sent_to = new ArrayList<>();
 
@@ -405,7 +405,7 @@ public class ManagerRequestHandler extends Thread {
                 wout.writeInt(query.ordinal());
                 wout.writeLong(requestId);
                 wout.writeInt(handler.getId());
-                wout.writeUTF(cateogory);
+                wout.writeUTF(category);
             };
 
             Pair<Integer, Integer> worker_sent_to = sendToWorkerWithReplicas(handler, writer);

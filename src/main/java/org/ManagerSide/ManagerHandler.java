@@ -17,7 +17,7 @@ public class ManagerHandler extends Thread{
     public void run(){
         Socket request_socket = null;
         try {
-            request_socket = new Socket(MasterServer.SERVER_LOCAL_HOST, MasterServer.SERVER_CLIENT_PORT);
+            request_socket = new Socket(MasterServer.SERVER_HOST, MasterServer.SERVER_CLIENT_PORT);
 
             ObjectOutputStream outputStream = new ObjectOutputStream(request_socket.getOutputStream());
             ObjectInputStream inputStream = new ObjectInputStream(request_socket.getInputStream());
