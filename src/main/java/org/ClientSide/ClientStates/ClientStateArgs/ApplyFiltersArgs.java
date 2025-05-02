@@ -6,6 +6,6 @@ import org.StatePattern.StateArguments;
 import java.util.*;
 
 public class ApplyFiltersArgs implements StateArguments {
-    public ArrayList<Filter.Types> filter_types = new ArrayList<>();
+    public Set<Filter.Types> filter_types = new TreeSet<>();
     public Map<Filter.Types, Object> additional_filter_args = new HashMap<>();
 }

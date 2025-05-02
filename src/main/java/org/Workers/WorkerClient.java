@@ -17,6 +17,7 @@ import org.Domain.Shop;
 import org.Domain.Utils.Pair;
 import org.Filters.Filter;
 import org.MessagePKG.Message;
+import org.MessagePKG.MessageType;
 import org.ReducerSide.Reducer;
 import org.ServerSide.MasterServer;
 
@@ -142,7 +143,7 @@ public class WorkerClient extends Thread {
         }
     }
 
-    private void handleCommand(long request_id, int worker_id, WorkerCommandType command, Message message) throws IOException, ClassNotFoundException {
+    private void handleCommand(long request_id, int worker_id, MessageType command, Message message) throws IOException, ClassNotFoundException {
         switch (command) {
 
             case ADD_SHOP, SYNC_ADD_SHOP -> {
@@ -361,9 +362,9 @@ public class WorkerClient extends Thread {
             connectToReducer();
 
             int worker_command_ord = server_input_stream.readInt();
-            WorkerCommandType worker_command = WorkerCommandType.values()[worker_command_ord];
+            MessageType worker_command = MessageType.values()[worker_command_ord];
 
-            while (worker_command != WorkerCommandType.END_BACKUP_LIST) {
+            while (worker_command != MessageType.END_BACKUP_LIST) {
 
                 int worker_backup_id = server_input_stream.readInt();
 
@@ -375,17 +376,18 @@ public class WorkerClient extends Thread {
                 System.out.println("Worker " + id + " in map: " + managed_shops.get(worker_backup_id).size());
 
                 worker_command_ord = server_input_stream.readInt();
-                worker_command = WorkerCommandType.values()[worker_command_ord];
+                worker_command = MessageType.values()[worker_command_ord];
             }
 
-            WorkerCommandType worker_command_c;
+            MessageType worker_command_c;
             do {
                 synchronized (server_input_stream) {
-                    worker_command_c = WorkerCommandType.values()[server_input_stream.readInt()];
-                    final WorkerCommandType worker_command_fc = worker_command_c;
+                    worker_command_c = MessageType.values()[server_input_stream.readInt()];
+                    final MessageType worker_command_fc = worker_command_c;
                     final long request_id = server_input_stream.readLong();
                     final int worker_id = server_input_stream.readInt();
                     final Message message = (Message) server_input_stream.readObject();
+
 
                     System.out.println("Got " + worker_command_fc);
                     System.out.println("With arguments: " + message);
@@ -399,7 +401,7 @@ public class WorkerClient extends Thread {
                     }).start();
                 }
 
-            }while(worker_command_c != WorkerCommandType.QUIT);
+            }while(worker_command_c != MessageType.QUIT);
 
         } catch (IOException | ClassNotFoundException e) {
             throw new RuntimeException(e);

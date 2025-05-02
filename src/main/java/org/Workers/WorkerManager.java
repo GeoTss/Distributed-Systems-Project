@@ -1,5 +1,6 @@
 package org.Workers;
 
+import org.MessagePKG.MessageType;
 import org.ServerSide.MasterServer;
 
 import java.io.IOException;
@@ -40,15 +41,15 @@ public class WorkerManager {
             server_input = new ObjectInputStream(worker_initializer.getInputStream());
 
             int command_type = server_input.readInt();
-            WorkerManagerCommandType command = WorkerManagerCommandType.values()[command_type];
+            MessageType command = MessageType.values()[command_type];
 
-            while (command != WorkerManagerCommandType.END_OF_INITIALIZATION){
+            while (command != MessageType.END_OF_INITIALIZATION){
                 System.out.println("Received " + command);
                 WorkerClient new_worker_client = new WorkerClient();
                 new_worker_client.start();
 
                 command_type = server_input.readInt();
-                command = WorkerManagerCommandType.values()[command_type];
+                command = MessageType.values()[command_type];
             }
         }catch (IOException e){
             if(worker_initializer != null) {

@@ -11,6 +11,7 @@ import java.util.Iterator;
 import org.Domain.Shop;
 import org.Domain.Utils;
 import org.ManagerSide.ManagerRequestHandler;
+import org.MessagePKG.MessageType;
 import org.ReducerSide.ReducerPreparationType;
 import org.ServerSide.ActiveReplication.ReplicationHandler;
 import org.ClientSide.ClientRequestHandler;
@@ -128,7 +129,7 @@ public class MasterServer {
         worker_shop_map.forEach((worker_id, shop_list) -> {
 
             try {
-                worker_manager_writer.writeInt(WorkerManagerCommandType.INITIAZE_WORKER.ordinal());
+                worker_manager_writer.writeInt(MessageType.INITIAZE_WORKER.ordinal());
                 worker_manager_writer.flush();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -169,7 +170,7 @@ public class MasterServer {
         reducer_writer.writeInt(ReducerPreparationType.REDUCER_END_OF_WORKERS.ordinal());
         reducer_writer.flush();
 
-        worker_manager_writer.writeInt(WorkerManagerCommandType.END_OF_INITIALIZATION.ordinal());
+        worker_manager_writer.writeInt(MessageType.END_OF_INITIALIZATION.ordinal());
         worker_manager_writer.flush();
 
         worker_shop_map.forEach((worker_id, shop_list) -> {
@@ -188,7 +189,7 @@ public class MasterServer {
 
                     ObjectOutputStream fallback_out = worker_out_streams.get(fallback_index);
 
-                    fallback_out.writeInt(WorkerCommandType.ADD_BACKUP.ordinal());
+                    fallback_out.writeInt(MessageType.ADD_BACKUP.ordinal());
                     fallback_out.writeInt(worker_id);
                     fallback_out.writeObject(shop_list);
                     fallback_out.flush();
@@ -204,7 +205,7 @@ public class MasterServer {
 
         worker_out_streams.values().forEach(worker_writer -> {
             try {
-                worker_writer.writeInt(WorkerCommandType.END_BACKUP_LIST.ordinal());
+                worker_writer.writeInt(MessageType.END_BACKUP_LIST.ordinal());
                 worker_writer.flush();
             } catch (IOException e) {
                 throw new RuntimeException(e);

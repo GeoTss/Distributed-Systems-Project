@@ -44,16 +44,40 @@ public class ManageFilteredShopsState extends ClientStates {
             Thread.currentThread().interrupt();
         }
 
-
         int choice = ClientHandler.sc_input.nextInt();
 
         if(choice == 0){
+
             synchronized (handler_info.transition_queue){
                 handler_info.transition_queue.add(new StateTransition(State.INITIAL.getCorresponding_state(), null));
                 handler_info.transition_queue.notify();
             }
         } else if (choice == 1) {
-            System.out.print("Enter shop id: ");
+
+            LockStatus _lock = new LockStatus();
+
+            synchronized (handler_info.output_queue) {
+                Runnable task = () -> {
+                    System.out.println("Enter shop ID: ");
+                };
+
+                Utils.Pair<Runnable, Utils.Pair<Boolean, LockStatus>> output_entry = new Utils.Pair<>(
+                        task,
+                        new Utils.Pair<>(true, _lock)
+                );
+                handler_info.output_queue.add(output_entry);
+                handler_info.output_queue.notify();
+            }
+            try {
+                while(_lock.input_status[0] != 1){
+                    synchronized (_lock.input_lock) {
+                        _lock.input_lock.wait();
+                    }
+                }
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+
             int shop_id = ClientHandler.sc_input.nextInt();
 
             ChoseShopArgs choseShopArgs = new ChoseShopArgs();
@@ -67,10 +91,6 @@ public class ManageFilteredShopsState extends ClientStates {
             return null;
         }
 
-        synchronized (handler_info.transition_queue){
-            handler_info.transition_queue.add(new StateTransition(State.INITIAL.getCorresponding_state(), null));
-            handler_info.transition_queue.notify();
-        }
         return null;
     }
 

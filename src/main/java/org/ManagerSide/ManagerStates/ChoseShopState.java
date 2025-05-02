@@ -4,6 +4,7 @@ import org.Domain.Utils;
 import org.ManagerSide.ManagerHandler;
 import org.Domain.Shop;
 import org.ManagerSide.ManagerStates.ManagerStateArgs.ChoseShopArgs;
+import org.MessagePKG.MessageType;
 import org.ServerSide.Command;
 import org.StatePattern.HandlerInfo;
 import org.StatePattern.LockStatus;
@@ -57,7 +58,7 @@ public class ChoseShopState extends ManagerState {
         ManagerHandler.sc_input.nextLine();
 
         synchronized (handler_info.outputStream) {
-            handler_info.outputStream.writeInt(Command.CommandTypeManager.CHOSE_SHOP.ordinal());
+            handler_info.outputStream.writeInt(MessageType.CHOSE_SHOP.ordinal());
             handler_info.outputStream.writeInt(shop_id);
             handler_info.outputStream.flush();
         }
@@ -119,7 +120,7 @@ public class ChoseShopState extends ManagerState {
     }
 
     private void handleAddProduct(HandlerInfo handler_info) throws IOException, ClassNotFoundException {
-        handler_info.outputStream.writeInt(Command.CommandTypeManager.ADD_PRODUCT.ordinal());
+        handler_info.outputStream.writeInt(MessageType.ADD_PRODUCT_TO_SHOP.ordinal());
         handler_info.outputStream.flush();
 
         System.out.println("Give product name: ");
@@ -179,7 +180,7 @@ public class ChoseShopState extends ManagerState {
             boolean successfully_removed = false;
             try {
                 synchronized (handler_info.outputStream) {
-                    handler_info.outputStream.writeInt(Command.CommandTypeManager.REMOVE_PRODUCT.ordinal());
+                    handler_info.outputStream.writeInt(MessageType.REMOVE_PRODUCT_FROM_SHOP.ordinal());
                     handler_info.outputStream.writeInt(product_id);
                     handler_info.outputStream.flush();
                     successfully_removed = handler_info.inputStream.readBoolean();
@@ -220,7 +221,7 @@ public class ChoseShopState extends ManagerState {
             boolean successfully_added = false;
             try {
                 synchronized (handler_info.outputStream) {
-                    handler_info.outputStream.writeInt(Command.CommandTypeManager.ADD_AVAILABLE_PRODUCT.ordinal());
+                    handler_info.outputStream.writeInt(MessageType.ADD_PRODUCT_STOCK.ordinal());
                     handler_info.outputStream.writeInt(product_id);
                     handler_info.outputStream.writeInt(quantity);
                     handler_info.outputStream.flush();
@@ -262,7 +263,7 @@ public class ChoseShopState extends ManagerState {
             boolean successfully_removed = false;
             try {
                 synchronized (handler_info.outputStream) {
-                    handler_info.outputStream.writeInt(Command.CommandTypeManager.REMOVE_AVAILABLE_PRODUCT.ordinal());
+                    handler_info.outputStream.writeInt(MessageType.REMOVE_PRODUCT_STOCK.ordinal());
                     handler_info.outputStream.writeInt(product_id);
                     handler_info.outputStream.writeInt(quantity);
                     handler_info.outputStream.flush();

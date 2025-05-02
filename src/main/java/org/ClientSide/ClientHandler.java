@@ -3,6 +3,7 @@ package org.ClientSide;
 import org.ClientSide.ClientStates.ClientStates;
 import org.Domain.Utils.Pair;
 import org.ManagerSide.ManagerStates.ManagerState;
+import org.MessagePKG.MessageType;
 import org.StatePattern.HandlerInfo;
 import org.StatePattern.LockStatus;
 import org.StatePattern.StateArguments;
@@ -66,7 +67,12 @@ public class ClientHandler {
             boolean should_notify = output.second.first;
             LockStatus lock = output.second.second;
 
-            task.run();
+            synchronized (System.in) {
+                if(task != null)
+                    task.run();
+                else
+                    continue;
+            }
 //            System.out.println("[OutputDispatcher] Ran successfully: " + task);
 //            System.out.println("Trying to enter the lock if... " + lock);
             if (lock != null) {
@@ -129,7 +135,7 @@ public class ClientHandler {
                 if (transition == null) break;
             }
 
-            outputStream.writeInt(Command.CommandTypeClient.QUIT.ordinal());
+            outputStream.writeInt(MessageType.QUIT.ordinal());
             outputStream.flush();
 
         } catch (IOException | ClassNotFoundException | InterruptedException e) {

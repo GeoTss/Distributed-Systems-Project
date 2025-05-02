@@ -6,6 +6,7 @@ import org.Domain.Location;
 import org.Domain.Shop;
 import org.Filters.Filter;
 import org.Filters.PriceCategoryEnum;
+import org.MessagePKG.MessageType;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -38,7 +39,7 @@ public class ClientCommunicate extends Thread {
             out.writeObject(cl);
             out.flush();
 
-            out.writeInt(Command.CommandTypeClient.FILTER.ordinal());
+            out.writeInt(MessageType.FILTER.ordinal());
 
             out.writeInt(Filter.Types.FILTER_CATEGORY.ordinal());
             Set<String> categories = new TreeSet<>();
@@ -64,14 +65,14 @@ public class ClientCommunicate extends Thread {
                 System.out.println(shop + "\n");
             }
 
-            out.writeInt(Command.CommandTypeClient.CHOSE_SHOP.ordinal());
+            out.writeInt(MessageType.CHOSE_SHOP.ordinal());
             out.writeInt(filtered_shops.getFirst().getId());
             out.flush();
 
             Shop resulting_shop = (Shop) in.readObject();
             System.out.println("Got shop: " + resulting_shop);
 
-            out.writeInt(Command.CommandTypeClient.ADD_TO_CART.ordinal());
+            out.writeInt(MessageType.ADD_TO_CART.ordinal());
             Integer product_id = (Integer) filtered_shops.getFirst().getProducts().keySet().toArray()[0];
             System.out.println("Trying to add product with id " + product_id);
             out.writeInt(product_id);
@@ -85,13 +86,13 @@ public class ClientCommunicate extends Thread {
                 System.out.println("Product wasn't added to cart successfully.");
 
             {
-                out.writeInt(Command.CommandTypeClient.GET_CART.ordinal());
+                out.writeInt(MessageType.GET_CART.ordinal());
                 out.flush();
                 ServerCart tempServerCart = (ServerCart) in.readObject();
 
                 tempServerCart.getProducts().forEach((key, value) -> System.out.println("{\n" + key.toString() + "\nQuantity: " + value + "}"));
             }
-            out.writeInt(Command.CommandTypeClient.REMOVE_FROM_CART.ordinal());
+            out.writeInt(MessageType.REMOVE_FROM_CART.ordinal());
             out.writeInt(product_id);
             out.writeInt(10);
             out.flush();
@@ -102,17 +103,17 @@ public class ClientCommunicate extends Thread {
             }
 
             {
-                out.writeInt(Command.CommandTypeClient.GET_CART.ordinal());
+                out.writeInt(MessageType.GET_CART.ordinal());
                 out.flush();
                 ServerCart serverCart = (ServerCart) in.readObject();
 
                 serverCart.getProducts().forEach((key, value) -> System.out.println("{\n" + key.toString() + "\nQuantity: " + value + "}"));
             }
             System.out.println("Sending checkout command...");
-            out.writeInt(Command.CommandTypeClient.CHECKOUT.ordinal());
+            out.writeInt(MessageType.CHECKOUT.ordinal());
             out.flush();
 
-            out.writeInt(Command.CommandTypeClient.QUIT.ordinal());
+            out.writeInt(MessageType.QUIT.ordinal());
             out.flush();
 
         } catch (IOException | ClassNotFoundException e) {

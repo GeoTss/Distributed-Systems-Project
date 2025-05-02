@@ -3,7 +3,7 @@ package org.ManagerSide.ManagerStates;
 import org.Domain.Shop;
 import org.ManagerSide.ManagerHandler;
 import org.ManagerSide.ManagerStates.ManagerStateArgs.ChoseShopArgs;
-import org.ServerSide.Command;
+import org.MessagePKG.MessageType;
 import org.StatePattern.HandlerInfo;
 import org.StatePattern.LockStatus;
 import org.StatePattern.StateArguments;
@@ -73,7 +73,10 @@ public class InitialState extends ManagerState {
                 }
                 return null;
             }
-            case 1 -> handleAddShop(handler_info);
+            case 1 -> {
+                handleAddShop(handler_info);
+                break;
+            }
             case 2 -> {
                 ChoseShopArgs shop_args = new ChoseShopArgs();
 
@@ -81,7 +84,7 @@ public class InitialState extends ManagerState {
                     ArrayList<Shop> shops;
                     try {
                         synchronized (handler_info.outputStream) {
-                            handler_info.outputStream.writeInt(Command.CommandTypeManager.GET_SHOPS.ordinal());
+                            handler_info.outputStream.writeInt(MessageType.GET_SHOPS.ordinal());
                             handler_info.outputStream.flush();
                         }
 
@@ -128,9 +131,6 @@ public class InitialState extends ManagerState {
     }
 
     public void handleAddShop(HandlerInfo handler_info) throws IOException {
-        synchronized (handler_info.outputStream) {
-            handler_info.outputStream.writeInt(Command.CommandTypeManager.ADD_SHOP.ordinal());
-        }
 
         String name = promptInput("Enter shop name: ", handler_info);
         double latitude = Double.parseDouble(promptInput("Enter latitude: ", handler_info));
@@ -142,7 +142,9 @@ public class InitialState extends ManagerState {
 
         new Thread(() -> {
             try {
+                boolean shop_added_successfully = false;
                 synchronized (handler_info.outputStream) {
+                    handler_info.outputStream.writeInt(MessageType.ADD_SHOP.ordinal());
                     handler_info.outputStream.writeUTF(name);
                     handler_info.outputStream.writeDouble(latitude);
                     handler_info.outputStream.writeDouble(longitude);
@@ -151,9 +153,9 @@ public class InitialState extends ManagerState {
                     handler_info.outputStream.writeInt(initial_votes);
                     handler_info.outputStream.writeUTF(logo_path);
                     handler_info.outputStream.flush();
+                    shop_added_successfully = handler_info.inputStream.readBoolean();
                 }
 
-                boolean shop_added_successfully = handler_info.inputStream.readBoolean();
                 String message = shop_added_successfully
                         ? "Shop added successfully."
                         : "Failure in adding shop, aborting.";

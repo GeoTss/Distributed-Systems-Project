@@ -2,6 +2,7 @@ package org.ManagerSide.ManagerStates;
 
 import org.Domain.Utils;
 import org.ManagerSide.ManagerHandler;
+import org.MessagePKG.MessageType;
 import org.ServerSide.Command;
 import org.StatePattern.HandlerInfo;
 import org.StatePattern.LockStatus;
@@ -92,7 +93,7 @@ public class DisplayTotalSalesState extends ManagerState {
             Utils.Pair<ArrayList<Utils.Pair<String, Integer>>, Integer> resulting_shops_stats;
             try {
                 synchronized (handler_info.outputStream) {
-                    handler_info.outputStream.writeInt(Command.CommandTypeManager.GET_SHOP_CATEGORY_SALES.ordinal());
+                    handler_info.outputStream.writeInt(MessageType.GET_SHOP_CATEGORY_SALES.ordinal());
                     handler_info.outputStream.writeUTF(category);
                     handler_info.outputStream.flush();
                 }
@@ -127,7 +128,7 @@ public class DisplayTotalSalesState extends ManagerState {
             Utils.Pair<ArrayList<Utils.Pair<String, Integer>>, Integer> resulting_stats;
             try {
                 synchronized (handler_info.outputStream) {
-                    handler_info.outputStream.writeInt(Command.CommandTypeManager.GET_PRODUCT_CATEGORY_SALES.ordinal());
+                    handler_info.outputStream.writeInt(MessageType.GET_PRODUCT_CATEGORY_SALES.ordinal());
                     handler_info.outputStream.writeUTF(category);
                     handler_info.outputStream.flush();
                 }

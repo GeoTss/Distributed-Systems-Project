@@ -1,6 +1,7 @@
 package org.ManagerSide;
 
 import org.Domain.Utils;
+import org.MessagePKG.MessageType;
 import org.StatePattern.HandlerInfo;
 import org.StatePattern.LockStatus;
 import org.StatePattern.StateTransition;
@@ -109,7 +110,7 @@ public class ManagerHandler {
                     break;
             }
 
-            outputStream.writeInt(Command.CommandTypeClient.QUIT.ordinal());
+            outputStream.writeInt(MessageType.QUIT.ordinal());
             outputStream.flush();
         } catch (IOException | ClassNotFoundException | InterruptedException e) {
             throw new RuntimeException(e);

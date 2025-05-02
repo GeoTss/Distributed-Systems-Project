@@ -3,6 +3,7 @@ package org.ClientSide.ClientStates;
 import org.ClientSide.ClientHandler;
 import org.ClientSide.ClientStates.ClientStateArgs.ChoseShopArgs;
 import org.Domain.Utils;
+import org.MessagePKG.MessageType;
 import org.StatePattern.HandlerInfo;
 import org.StatePattern.LockStatus;
 import org.StatePattern.StateArguments;
@@ -33,11 +34,12 @@ public class ChoseShopState extends ClientStates {
         ChoseShopArgs args = (ChoseShopArgs) arguments;
 
         Shop resulting_shop;
-        handler_info.outputStream.writeInt(Command.CommandTypeClient.CHOSE_SHOP.ordinal());
-        handler_info.outputStream.writeInt(args.shop_id);
-        handler_info.outputStream.flush();
 
         try {
+            handler_info.outputStream.writeInt(MessageType.CHOSE_SHOP.ordinal());
+            handler_info.outputStream.writeInt(args.shop_id);
+            handler_info.outputStream.flush();
+
             resulting_shop = (Shop) handler_info.inputStream.readObject();
         } catch (ClassNotFoundException | InterruptedIOException e) {
             throw new RuntimeException(e);
@@ -50,7 +52,7 @@ public class ChoseShopState extends ClientStates {
             Runnable task = () -> {
                 resulting_shop.showProducts();
                 printChoices();
-                System.out.println("Enter choice:");
+                System.out.println("Enter choice: ");
             };
 
             synchronized (handler_info.output_queue){
@@ -72,13 +74,13 @@ public class ChoseShopState extends ClientStates {
                 Thread.currentThread().interrupt();
             }
 
-
             choice = ClientHandler.sc_input.nextInt();
+            ClientHandler.sc_input.nextLine();
 
             switch (choice) {
                 case 1 -> {
                     synchronized (handler_info.outputStream) {
-                        handler_info.outputStream.writeInt(Command.CommandTypeClient.CLEAR_CART.ordinal());
+                        handler_info.outputStream.writeInt(MessageType.CLEAR_CART.ordinal());
                         handler_info.outputStream.flush();
                     }
 
@@ -97,7 +99,7 @@ public class ChoseShopState extends ClientStates {
         }while (choice != 0);
 
         synchronized (handler_info.outputStream) {
-            handler_info.outputStream.writeInt(Command.CommandTypeClient.CLEAR_CART.ordinal());
+            handler_info.outputStream.writeInt(MessageType.CLEAR_CART.ordinal());
             handler_info.outputStream.flush();
         }
         synchronized (handler_info.transition_queue){
@@ -112,7 +114,7 @@ public class ChoseShopState extends ClientStates {
             CheckoutResultWrapper checkout_result;
             try {
                 synchronized (handler_info.outputStream) {
-                    handler_info.outputStream.writeInt(Command.CommandTypeClient.CHECKOUT.ordinal());
+                    handler_info.outputStream.writeInt(MessageType.CHECKOUT.ordinal());
                     handler_info.outputStream.flush();
                     checkout_result = (CheckoutResultWrapper) handler_info.inputStream.readObject();
                 }
@@ -152,7 +154,7 @@ public class ChoseShopState extends ClientStates {
 
             try {
                 synchronized (handler_info.outputStream) {
-                    handler_info.outputStream.writeInt(Command.CommandTypeClient.ADD_TO_CART.ordinal());
+                    handler_info.outputStream.writeInt(MessageType.ADD_TO_CART.ordinal());
                     handler_info.outputStream.writeInt(product_id);
                     handler_info.outputStream.writeInt(quantity);
                     handler_info.outputStream.flush();
@@ -191,7 +193,7 @@ public class ChoseShopState extends ClientStates {
             boolean removed;
             try {
                 synchronized (handler_info.outputStream) {
-                    handler_info.outputStream.writeInt(Command.CommandTypeClient.REMOVE_FROM_CART.ordinal());
+                    handler_info.outputStream.writeInt(MessageType.REMOVE_FROM_CART.ordinal());
                     handler_info.outputStream.writeInt(product_id);
                     handler_info.outputStream.writeInt(quantity);
                     handler_info.outputStream.flush();
@@ -223,7 +225,7 @@ public class ChoseShopState extends ClientStates {
             ReadableCart readableCart;
             try {
                 synchronized (handler_info.outputStream) {
-                    handler_info.outputStream.writeInt(Command.CommandTypeClient.GET_CART.ordinal());
+                    handler_info.outputStream.writeInt(MessageType.GET_CART.ordinal());
                     handler_info.outputStream.flush();
                     readableCart = (ReadableCart) handler_info.inputStream.readObject();
                 }

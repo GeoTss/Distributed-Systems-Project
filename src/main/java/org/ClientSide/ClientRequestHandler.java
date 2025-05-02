@@ -6,6 +6,7 @@ import org.Domain.Cart.ReadableCart;
 import org.Domain.Cart.ServerCart;
 import org.Domain.Utils.Pair;
 import org.Filters.*;
+import org.MessagePKG.MessageType;
 import org.ReducerSide.ReducerPreparationType;
 import org.ServerSide.ActiveReplication.ReplicationHandler;
 import org.ServerSide.Command;
@@ -45,8 +46,9 @@ public class ClientRequestHandler extends Thread {
     int sendToWorkerWithReplicas(ReplicationHandler replicatedWorker, ThrowingConsumer<ObjectOutputStream> write_logic, RequestMonitor monitor, long request_id, int worker_id) {
         ReplicationListener handler = null;
         synchronized (replicatedWorker) {
-            int main_id = replicatedWorker.getMainId();
+            int main_id = replicatedWorker.getId();
             try {
+//                throw new IOException();
                 handler = worker_listeners.get(main_id);
                 monitor = handler.registerMonitor(request_id, worker_id, monitor);
 
@@ -72,7 +74,7 @@ public class ClientRequestHandler extends Thread {
 
                         replicatedWorker.promoteToMain(replica_id);
 
-                        return replica_id;
+                        return main_id;
                     } catch (IOException ex) {
 
                         handler.unregisterMonitor(request_id, worker_id);
@@ -88,6 +90,7 @@ public class ClientRequestHandler extends Thread {
 
         synchronized (replicatedWorker) {
             try {
+//                throw new IOException();
                 ObjectOutputStream main_worker_writer = replicatedWorker.getMain();
 
                 write_logic.accept(main_worker_writer);
@@ -127,7 +130,7 @@ public class ClientRequestHandler extends Thread {
         }
     }
 
-    public void handleCommand(Command.CommandTypeClient _client_command) throws IOException, ClassNotFoundException, InterruptedException {
+    public void handleCommand(MessageType _client_command) throws IOException, ClassNotFoundException, InterruptedException {
         long requestId = threadId();
 
         switch (_client_command) {
@@ -153,7 +156,7 @@ public class ClientRequestHandler extends Thread {
 
         ThrowingConsumer<ObjectOutputStream> get_cart_writer = (out) -> {
             out.reset();
-            out.writeInt(WorkerCommandType.GET_CART.ordinal());
+            out.writeInt(MessageType.GET_CART.ordinal());
             out.writeLong(requestId);
             out.writeInt(replicated_worker.getId());
             out.writeObject(message);
@@ -205,7 +208,7 @@ public class ClientRequestHandler extends Thread {
 
             ThrowingConsumer<ObjectOutputStream> filter_writer = (out) -> {
                 out.reset();
-                out.writeInt(WorkerCommandType.FILTER.ordinal());
+                out.writeInt(MessageType.FILTER.ordinal());
                 out.writeLong(requestId);
                 out.writeInt(replicated_worker.getId());
                 out.writeObject(message);
@@ -244,8 +247,9 @@ public class ClientRequestHandler extends Thread {
     }
 
     private void handleChoseShop(long requestId) throws IOException, InterruptedException {
-
+        System.out.println("ClientRequestHandler.handleChoseShop");
         int chosen_shop_id = in.readInt();
+        System.out.println("shop id: " + chosen_shop_id);
 
         ReplicationHandler replicated_worker = getWorkerForShop(chosen_shop_id);
 
@@ -253,7 +257,7 @@ public class ClientRequestHandler extends Thread {
         message.addArgument("shop_id", new Pair<>(MessageArgCast.INT_ARG, chosen_shop_id));
 
         ThrowingConsumer<ObjectOutputStream> chose_shop_writer = (out) -> {
-            out.writeInt(WorkerCommandType.CHOSE_SHOP.ordinal());
+            out.writeInt(MessageType.CHOSE_SHOP.ordinal());
             out.writeLong(requestId);
             out.writeInt(replicated_worker.getId());
             out.writeObject(message);
@@ -273,7 +277,9 @@ public class ClientRequestHandler extends Thread {
     }
 
     private void handleAddToCart(long requestId) throws IOException, InterruptedException {
+        System.out.println("ClientRequestHandler.handleAddToCart");
         int product_id = in.readInt();
+        System.out.println("shop id: " + product_id);
         int quantity = in.readInt();
 
         ReplicationHandler replicated_worker = getWorkerForShop(current_shop_id);
@@ -286,7 +292,7 @@ public class ClientRequestHandler extends Thread {
         message.addArgument("quantity", new Pair<>(MessageArgCast.INT_ARG, quantity));
 
         ThrowingConsumer<ObjectOutputStream> add_to_cart_writer = (out) -> {
-            out.writeInt(WorkerCommandType.ADD_TO_CART.ordinal());
+            out.writeInt(MessageType.ADD_TO_CART.ordinal());
             out.writeLong(requestId);
             out.writeInt(replicated_worker.getId());
             out.writeObject(message);
@@ -337,7 +343,7 @@ public class ClientRequestHandler extends Thread {
         message.addArgument("balance", new Pair<>(MessageArgCast.FLOAT_ARG, client.getBalance()));
 
         ThrowingConsumer<ObjectOutputStream> checkout_writer = (out) -> {
-            out.writeInt(WorkerCommandType.CHECKOUT_CART.ordinal());
+            out.writeInt(MessageType.CHECKOUT_CART.ordinal());
             out.writeLong(requestId);
             out.writeInt(replicated_worker.getId());
             out.writeObject(message);
@@ -364,7 +370,7 @@ public class ClientRequestHandler extends Thread {
         sync_message.addArgument("cart", new Pair<>(MessageArgCast.SERVER_CART_ARG, client_Server_cart));
 
         ThrowingConsumer<ObjectOutputStream> sync_checkout_writer = (out) -> {
-            out.writeInt(WorkerCommandType.SYNC_CHECKOUT_CART.ordinal());
+            out.writeInt(MessageType.SYNC_CHECKOUT_CART.ordinal());
             out.writeLong(requestId);
             out.writeInt(replicated_worker.getId());
             out.writeObject(sync_message);
@@ -384,11 +390,11 @@ public class ClientRequestHandler extends Thread {
 
             client_Server_cart = new ServerCart();
 
-            Command.CommandTypeClient client_command = Command.CommandTypeClient.DEFAULT;
+            MessageType client_command = MessageType.DEFAULT;
 
-            while (client_command != Command.CommandTypeClient.QUIT) {
+            while (client_command != MessageType.QUIT) {
                 int client_cmd_ord = in.readInt();
-                client_command = Command.CommandTypeClient.values()[client_cmd_ord];
+                client_command = MessageType.values()[client_cmd_ord];
 
                 System.out.println("Received: " + client_command.toString());
                 handleCommand(client_command);
@@ -400,7 +406,7 @@ public class ClientRequestHandler extends Thread {
         } finally {
             System.out.println("Closing connection safely and clearing remaining items in cart if needed...");
             try {
-                handleCommand(Command.CommandTypeClient.CLEAR_CART);
+                handleCommand(MessageType.CLEAR_CART);
 
                 out.close();
                 in.close();

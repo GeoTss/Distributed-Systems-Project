@@ -2,13 +2,12 @@ package org.ManagerSide;
 
 import org.Domain.*;
 import org.Filters.Filter;
+import org.MessagePKG.MessageType;
 import org.ReducerSide.ReducerPreparationType;
 import org.ServerSide.ActiveReplication.ReplicationHandler;
 import org.ServerSide.ThrowingConsumer;
-import org.ServerSide.Command;
 import org.ServerSide.RequestMonitor;
 import org.Workers.Listeners.ReplicationListener;
-import org.Workers.WorkerCommandType;
 import org.Domain.Utils.Pair;
 import org.MessagePKG.Message;
 import org.MessagePKG.MessageArgCast;
@@ -19,7 +18,15 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 
-import static org.ServerSide.MasterServer.*;
+import static org.ServerSide.MasterServer.worker_listeners;
+import static org.ServerSide.MasterServer.replicated_worker_handlers;
+import static org.ServerSide.MasterServer.REDUCER_ID;
+import static org.ServerSide.MasterServer.reducer_listener;
+import static org.ServerSide.MasterServer.reducer_writer;
+import static org.ServerSide.MasterServer.getWorkerForShop;
+import static org.ServerSide.MasterServer.addHashShop;
+import static org.ServerSide.MasterServer.has_manager_connected;
+
 
 public class ManagerRequestHandler extends Thread {
 
@@ -41,7 +48,7 @@ public class ManagerRequestHandler extends Thread {
     private int sendToWorkerWithReplicas(ReplicationHandler replicatedWorker, ThrowingConsumer<ObjectOutputStream> write_logic, RequestMonitor monitor, long request_id, int worker_id) {
         ReplicationListener handler = null;
         synchronized (replicatedWorker) {
-            int main_id = replicatedWorker.getMainId();
+            int main_id = replicatedWorker.getId();
             try {
                 handler = worker_listeners.get(main_id);
                 monitor = handler.registerMonitor(request_id, worker_id, monitor);
@@ -68,7 +75,7 @@ public class ManagerRequestHandler extends Thread {
 
                         replicatedWorker.promoteToMain(replica_id);
 
-                        return replica_id;
+                        return main_id;
                     } catch (IOException ex) {
 
                         handler.unregisterMonitor(request_id, worker_id);
@@ -156,18 +163,18 @@ public class ManagerRequestHandler extends Thread {
         }
     }
 
-    public void handleCommand(Command.CommandTypeManager cmd)
+    public void handleCommand(MessageType cmd)
             throws IOException, ClassNotFoundException, InterruptedException {
         long requestId = threadId();
         switch (cmd) {
-            case QUIT, DEFAULT, END -> { /* no‐ops for now */ }
+            case QUIT, DEFAULT, END -> {}
             case GET_SHOPS -> handleGetShops(requestId);
             case CHOSE_SHOP -> handleChooseShop(requestId);
             case ADD_SHOP -> handleAddShop(requestId);
-            case ADD_PRODUCT -> handleAddProduct(requestId);
-            case REMOVE_PRODUCT -> handleRemoveProduct(requestId);
-            case ADD_AVAILABLE_PRODUCT -> handleAddAvailableProduct(requestId);
-            case REMOVE_AVAILABLE_PRODUCT -> handleRemoveAvailableProduct(requestId);
+            case ADD_PRODUCT_TO_SHOP -> handleAddProduct(requestId);
+            case REMOVE_PRODUCT_FROM_SHOP -> handleRemoveProduct(requestId);
+            case ADD_PRODUCT_STOCK -> handleAddAvailableProduct(requestId);
+            case REMOVE_PRODUCT_STOCK -> handleRemoveAvailableProduct(requestId);
             case GET_SHOP_CATEGORY_SALES -> handleGetShopCategorySales(requestId);
             case GET_PRODUCT_CATEGORY_SALES -> handleGetProductCategorySales(requestId);
         }
@@ -183,7 +190,7 @@ public class ManagerRequestHandler extends Thread {
 
         ThrowingConsumer<ObjectOutputStream> chose_shop_writer = (out) -> {
             out.reset();
-            out.writeInt(WorkerCommandType.CHOSE_SHOP.ordinal());
+            out.writeInt(MessageType.CHOSE_SHOP.ordinal());
             out.writeLong(requestId);
             out.writeInt(replicated_worker.getId());
             out.writeObject(message);
@@ -215,7 +222,7 @@ public class ManagerRequestHandler extends Thread {
 
             ThrowingConsumer<ObjectOutputStream> empty_filter_writer = (out) -> {
                 out.reset();
-                out.writeInt(WorkerCommandType.FILTER.ordinal());
+                out.writeInt(MessageType.FILTER.ordinal());
                 out.writeLong(requestId);
                 out.writeInt(handler.getId());
                 out.writeObject(message);
@@ -226,8 +233,6 @@ public class ManagerRequestHandler extends Thread {
             workers_sent_to.add(worker_sent_to);
         }
         System.out.println(workers_sent_to);
-
-
 
         RequestMonitor reducer_monitor = new RequestMonitor();
         synchronized (reducer_listener){
@@ -274,9 +279,10 @@ public class ManagerRequestHandler extends Thread {
         assert responsible_worker != null;
 
         ThrowingConsumer<ObjectOutputStream> writer = (wout) -> {
-            wout.writeInt(Command.CommandTypeManager.ADD_SHOP.ordinal());
+            wout.writeInt(MessageType.ADD_SHOP.ordinal());
             wout.writeLong(requestId);
             wout.writeInt(responsible_worker.getId());
+            wout.reset();
             wout.writeObject(message);
         };
 
@@ -289,7 +295,7 @@ public class ManagerRequestHandler extends Thread {
             success = true;
 
             ThrowingConsumer<ObjectOutputStream> shop_sync_writer = (wout) -> {
-                wout.writeInt(WorkerCommandType.SYNC_ADD_SHOP.ordinal());
+                wout.writeInt(MessageType.SYNC_ADD_SHOP.ordinal());
                 wout.writeLong(requestId);
                 wout.writeInt(responsible_worker.getId());
                 wout.reset();
@@ -323,7 +329,7 @@ public class ManagerRequestHandler extends Thread {
 
         ThrowingConsumer<ObjectOutputStream> productWriter = (wout) -> {
             wout.reset();
-            wout.writeInt(Command.CommandTypeManager.ADD_PRODUCT.ordinal());
+            wout.writeInt(MessageType.ADD_PRODUCT_TO_SHOP.ordinal());
             wout.writeLong(requestId);
             wout.writeInt(responsible_worker.getId());
             wout.writeObject(message);
@@ -341,7 +347,7 @@ public class ManagerRequestHandler extends Thread {
 
             ThrowingConsumer<ObjectOutputStream> product_sync_writer = (wout) -> {
                 wout.reset();
-                wout.writeInt(WorkerCommandType.SYNC_ADD_PRODUCT_TO_SHOP.ordinal());
+                wout.writeInt(MessageType.SYNC_ADD_PRODUCT_TO_SHOP.ordinal());
                 wout.writeLong(requestId);
                 wout.writeInt(responsible_worker.getId());
                 wout.writeObject(message);
@@ -370,7 +376,7 @@ public class ManagerRequestHandler extends Thread {
 
         ThrowingConsumer<ObjectOutputStream> writer = (wout) -> {
             wout.reset();
-            wout.writeInt(WorkerCommandType.REMOVE_PRODUCT_FROM_SHOP.ordinal());
+            wout.writeInt(MessageType.REMOVE_PRODUCT_FROM_SHOP.ordinal());
             wout.writeLong(requestId);
             wout.writeInt(handler.getId());
             wout.writeObject(message);
@@ -385,7 +391,7 @@ public class ManagerRequestHandler extends Thread {
 
             writer = (wout) -> {
                 wout.reset();
-                wout.writeInt(WorkerCommandType.SYNC_REMOVE_PRODUCT_FROM_SHOP.ordinal());
+                wout.writeInt(MessageType.SYNC_REMOVE_PRODUCT_FROM_SHOP.ordinal());
                 wout.writeLong(requestId);
                 wout.writeInt(handler.getId());
                 wout.writeObject(message);
@@ -415,7 +421,7 @@ public class ManagerRequestHandler extends Thread {
 
         ThrowingConsumer<ObjectOutputStream> writer = (wout) -> {
             wout.reset();
-            wout.writeInt(WorkerCommandType.ADD_PRODUCT_STOCK.ordinal());
+            wout.writeInt(MessageType.ADD_PRODUCT_STOCK.ordinal());
             wout.writeLong(requestId);
             wout.writeInt(handler.getId());
             wout.writeObject(message);
@@ -430,7 +436,7 @@ public class ManagerRequestHandler extends Thread {
 
             writer = (wout) -> {
                 wout.reset();
-                wout.writeInt(WorkerCommandType.SYNC_ADD_PRODUCT_STOCK.ordinal());
+                wout.writeInt(MessageType.SYNC_ADD_PRODUCT_STOCK.ordinal());
                 wout.writeLong(requestId);
                 wout.writeInt(handler.getId());
                 wout.writeObject(message);
@@ -459,7 +465,7 @@ public class ManagerRequestHandler extends Thread {
         assert handler != null;
         ThrowingConsumer<ObjectOutputStream> writer = (wout) -> {
             wout.reset();
-            wout.writeInt(WorkerCommandType.REMOVE_PRODUCT_STOCK.ordinal());
+            wout.writeInt(MessageType.REMOVE_PRODUCT_STOCK.ordinal());
             wout.writeLong(requestId);
             wout.writeInt(handler.getId());
             wout.writeObject(message);
@@ -474,7 +480,7 @@ public class ManagerRequestHandler extends Thread {
 
             writer = (wout) -> {
                 wout.reset();
-                wout.writeInt(WorkerCommandType.SYNC_REMOVE_PRODUCT_STOCK.ordinal());
+                wout.writeInt(MessageType.SYNC_REMOVE_PRODUCT_STOCK.ordinal());
                 wout.writeLong(requestId);
                 wout.writeInt(handler.getId());
                 wout.writeObject(message);
@@ -491,7 +497,7 @@ public class ManagerRequestHandler extends Thread {
         out.flush();
     }
 
-    public void handleCategoryQuery(long requestId, WorkerCommandType query, ReducerPreparationType query_prep_type) throws IOException, InterruptedException {
+    public void handleCategoryQuery(long requestId, MessageType query, ReducerPreparationType query_prep_type) throws IOException, InterruptedException {
         String category = in.readUTF();
         System.out.println("Received category: " + category);
 
@@ -537,11 +543,11 @@ public class ManagerRequestHandler extends Thread {
     }
 
     public void handleGetShopCategorySales(long requestId) throws IOException, InterruptedException {
-        handleCategoryQuery(requestId, WorkerCommandType.GET_SHOP_CATEGORY_SALES, ReducerPreparationType.REDUCER_PREPARE_SHOP_CATEGORY_SALES);
+        handleCategoryQuery(requestId, MessageType.GET_SHOP_CATEGORY_SALES, ReducerPreparationType.REDUCER_PREPARE_SHOP_CATEGORY_SALES);
     }
 
     public void handleGetProductCategorySales(long requestId) throws IOException, InterruptedException {
-        handleCategoryQuery(requestId, WorkerCommandType.GET_PRODUCT_CATEGORY_SALES, ReducerPreparationType.REDUCER_PREPARE_PRODUCT_CATEGORY_SALES);
+        handleCategoryQuery(requestId, MessageType.GET_PRODUCT_CATEGORY_SALES, ReducerPreparationType.REDUCER_PREPARE_PRODUCT_CATEGORY_SALES);
     }
 
     @Override
@@ -550,10 +556,10 @@ public class ManagerRequestHandler extends Thread {
         try {
             System.out.println("Manager connected: " + connection.getInetAddress());
 
-            Command.CommandTypeManager cmd = Command.CommandTypeManager.DEFAULT;
-            while (cmd != Command.CommandTypeManager.QUIT) {
+            MessageType cmd = MessageType.DEFAULT;
+            while (cmd != MessageType.QUIT) {
                 int ord = in.readInt();
-                cmd = Command.CommandTypeManager.values()[ord];
+                cmd = MessageType.values()[ord];
                 System.out.println("Manager cmd: " + cmd);
                 handleCommand(cmd);
             }

@@ -2,6 +2,7 @@ package org.ClientSide.ClientStates;
 
 import org.ClientSide.ClientStates.ClientStateArgs.ApplyFiltersArgs;
 import org.Domain.Utils;
+import org.MessagePKG.MessageType;
 import org.ServerSide.MasterServer;
 import org.StatePattern.HandlerInfo;
 import org.StatePattern.LockStatus;
@@ -31,7 +32,7 @@ public class ApplyFiltersState extends ClientStates {
             filters = (ApplyFiltersArgs) arguments;
 
         handler_info.outputStream.reset();
-        handler_info.outputStream.writeInt(Command.CommandTypeClient.FILTER.ordinal());
+        handler_info.outputStream.writeInt(MessageType.FILTER.ordinal());
 
         for(Filter.Types filter_type: filters.filter_types){
             switch (filter_type){
@@ -56,11 +57,10 @@ public class ApplyFiltersState extends ClientStates {
                     Double max_radius = (Double) filters.additional_filter_args.get(filter_type);
                     handler_info.outputStream.writeDouble(max_radius);
                 }
-                case END -> {
-                    handler_info.outputStream.writeInt(Filter.Types.END.ordinal());
-                }
             }
         }
+        handler_info.outputStream.writeInt(Filter.Types.END.ordinal());
+        filters.filter_types.clear();
 
         new Thread(() -> {
             try {
