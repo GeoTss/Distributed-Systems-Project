@@ -30,12 +30,14 @@ public class WorkerManager {
         InetAddress wifiAddress = getWifiInetAddress();
 
         Socket worker_initializer = null;
+        ObjectOutputStream server_writer = null;
+        ObjectInputStream server_input = null;
         try {
             worker_initializer = new Socket(wifiAddress, MasterServer.SERVER_CLIENT_PORT);
             System.out.println("Worker manager connected with server at: " + wifiAddress);
 
-            ObjectOutputStream server_writer = new ObjectOutputStream(worker_initializer.getOutputStream());
-            ObjectInputStream server_input = new ObjectInputStream(worker_initializer.getInputStream());
+            server_writer = new ObjectOutputStream(worker_initializer.getOutputStream());
+            server_input = new ObjectInputStream(worker_initializer.getInputStream());
 
             int command_type = server_input.readInt();
             WorkerManagerCommandType command = WorkerManagerCommandType.values()[command_type];
@@ -49,11 +51,16 @@ public class WorkerManager {
                 command = WorkerManagerCommandType.values()[command_type];
             }
         }catch (IOException e){
-            if(worker_initializer != null)
+            if(worker_initializer != null) {
+                assert server_writer != null && server_input != null;
+
+                server_writer.close();
+                server_input.close();
                 worker_initializer.close();
+            }
             e.printStackTrace();
         }finally {
-            System.out.println("Closing worker manager");
+            System.out.println("[Closing worker manager!]");
         }
     }
 

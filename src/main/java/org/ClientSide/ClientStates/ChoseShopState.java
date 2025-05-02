@@ -2,7 +2,9 @@ package org.ClientSide.ClientStates;
 
 import org.ClientSide.ClientHandler;
 import org.ClientSide.ClientStates.ClientStateArgs.ChoseShopArgs;
+import org.Domain.Utils;
 import org.StatePattern.HandlerInfo;
+import org.StatePattern.LockStatus;
 import org.StatePattern.StateArguments;
 import org.Domain.Cart.CartStatus;
 import org.Domain.Cart.ReadableCart;
@@ -12,10 +14,11 @@ import org.ServerSide.Command;
 import org.StatePattern.StateTransition;
 
 import java.io.IOException;
+import java.io.InterruptedIOException;
 
 public class ChoseShopState extends ClientStates {
 
-    private static void printChoices(){
+    private static void printChoices() {
         System.out.println("0. Go back to home screen.");
         System.out.println("1. Go back to previously viewed shops.");
         System.out.println("2. Checkout.");
@@ -29,31 +32,61 @@ public class ChoseShopState extends ClientStates {
         System.out.println("ChoseShopState.handleState");
         ChoseShopArgs args = (ChoseShopArgs) arguments;
 
+        Shop resulting_shop;
         handler_info.outputStream.writeInt(Command.CommandTypeClient.CHOSE_SHOP.ordinal());
         handler_info.outputStream.writeInt(args.shop_id);
         handler_info.outputStream.flush();
 
-        Shop resulting_shop;
         try {
             resulting_shop = (Shop) handler_info.inputStream.readObject();
-        } catch (ClassNotFoundException e) {
+        } catch (ClassNotFoundException | InterruptedIOException e) {
             throw new RuntimeException(e);
         }
-        resulting_shop.showProducts();
 
-        printChoices();
-        System.out.print("Enter choice: ");
+        int choice = 0;
+        do {
+            LockStatus lock = new LockStatus();
 
-        int choice = ClientHandler.sc_input.nextInt();
+            Runnable task = () -> {
+                resulting_shop.showProducts();
+                printChoices();
+                System.out.println("Enter choice:");
+            };
 
-        while(choice != 0){
+            synchronized (handler_info.output_queue){
+                Utils.Pair<Runnable, Utils.Pair<Boolean, LockStatus>> output_entry = new Utils.Pair<>(
+                        task,
+                        new Utils.Pair<>(true, lock)
+                );
+                handler_info.output_queue.add(output_entry);
+                handler_info.output_queue.notify();
+            }
 
-            switch (choice){
+            try {
+                while (lock.input_status[0] != 1) {
+                    synchronized (lock.input_lock) {
+                        lock.input_lock.wait();
+                    }
+                }
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+
+
+            choice = ClientHandler.sc_input.nextInt();
+
+            switch (choice) {
                 case 1 -> {
-                    handler_info.outputStream.writeInt(Command.CommandTypeClient.CLEAR_CART.ordinal());
-                    handler_info.outputStream.flush();
+                    synchronized (handler_info.outputStream) {
+                        handler_info.outputStream.writeInt(Command.CommandTypeClient.CLEAR_CART.ordinal());
+                        handler_info.outputStream.flush();
+                    }
 
-                    return new StateTransition(State.APPLY_FILTERS.getCorresponding_state(), null);
+                    synchronized (handler_info.transition_queue) {
+                        handler_info.transition_queue.add(new StateTransition(State.APPLY_FILTERS.getCorresponding_state(), null));
+                        handler_info.transition_queue.notify();
+                    }
+                    return null;
                 }
                 case 2 -> handleCheckout(handler_info);
                 case 3 -> handleAddToCart(handler_info);
@@ -61,78 +94,154 @@ public class ChoseShopState extends ClientStates {
                 case 5 -> handleShowCart(handler_info);
             }
 
-            printChoices();
-            System.out.println("Enter choice:");
-            choice = ClientHandler.sc_input.nextInt();
+        }while (choice != 0);
+
+        synchronized (handler_info.outputStream) {
+            handler_info.outputStream.writeInt(Command.CommandTypeClient.CLEAR_CART.ordinal());
+            handler_info.outputStream.flush();
         }
-
-        handler_info.outputStream.writeInt(Command.CommandTypeClient.CLEAR_CART.ordinal());
-        handler_info.outputStream.flush();
-
-        return new StateTransition(State.INITIAL.getCorresponding_state(), null);
+        synchronized (handler_info.transition_queue){
+            handler_info.transition_queue.add(new StateTransition(State.INITIAL.getCorresponding_state(), null));
+            handler_info.transition_queue.notify();
+        }
+        return null;
     }
 
-    private void handleCheckout(HandlerInfo handler_info) throws IOException, ClassNotFoundException {
-        handler_info.outputStream.writeInt(Command.CommandTypeClient.CHECKOUT.ordinal());
-        handler_info.outputStream.flush();
+    private void handleCheckout(HandlerInfo handler_info) {
+        new Thread(() -> {
+            CheckoutResultWrapper checkout_result;
+            try {
+                synchronized (handler_info.outputStream) {
+                    handler_info.outputStream.writeInt(Command.CommandTypeClient.CHECKOUT.ordinal());
+                    handler_info.outputStream.flush();
+                    checkout_result = (CheckoutResultWrapper) handler_info.inputStream.readObject();
+                }
+            } catch (IOException | ClassNotFoundException e) {
+                throw new RuntimeException(e);
+            }
 
-        CheckoutResultWrapper checkout_result = (CheckoutResultWrapper) handler_info.inputStream.readObject();
-        if (checkout_result.in_sync_status == CartStatus.OUT_OF_SYNC)
-            System.out.println("Couldn't checkout. Cart out of sync.");
-        else if(!checkout_result.checked_out)
-            System.out.println("Couldn't checkout. Insufficient funds");
-        else
-            System.out.println("Checked out successfully.");
+            final CheckoutResultWrapper checkout_result_f = checkout_result;
+            Runnable task = () -> {
+                if (checkout_result_f.in_sync_status == CartStatus.OUT_OF_SYNC)
+                    System.out.println("Couldn't checkout. Cart out of sync.");
+                else if (!checkout_result_f.checked_out)
+                    System.out.println("Couldn't checkout. Insufficient funds");
+                else
+                    System.out.println("Checked out successfully.");
+            };
+
+            synchronized (handler_info.output_queue) {
+                handler_info.output_queue.add(
+                        new Utils.Pair<>(task, new Utils.Pair<>(false, null))
+                );
+                handler_info.output_queue.notify();
+            }
+
+        }).start();
     }
 
     private void handleAddToCart(HandlerInfo handler_info) throws IOException {
-        handler_info.outputStream.writeInt(Command.CommandTypeClient.ADD_TO_CART.ordinal());
         System.out.print("Enter the product ID of the product you want to add: ");
         int product_id = ClientHandler.sc_input.nextInt();
 
         System.out.print("Enter how many you want to be added: ");
         int quantity = ClientHandler.sc_input.nextInt();
 
-        handler_info.outputStream.writeInt(product_id);
-        handler_info.outputStream.writeInt(quantity);
-        handler_info.outputStream.flush();
+        new Thread(() -> {
+            boolean added_to_cart;
 
-        boolean added_to_cart = handler_info.inputStream.readBoolean();
-        if(added_to_cart)
-            System.out.println("Added product to cart successfully");
-        else
-            System.out.println("Product wasn't added to cart successfully.");
+            try {
+                synchronized (handler_info.outputStream) {
+                    handler_info.outputStream.writeInt(Command.CommandTypeClient.ADD_TO_CART.ordinal());
+                    handler_info.outputStream.writeInt(product_id);
+                    handler_info.outputStream.writeInt(quantity);
+                    handler_info.outputStream.flush();
+                    added_to_cart = handler_info.inputStream.readBoolean();
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+            boolean finalAdded_to_cart = added_to_cart;
+            Runnable task = () -> {
+                if (finalAdded_to_cart)
+                    System.out.println("Added product to cart successfully");
+                else
+                    System.out.println("Product wasn't added to cart successfully.");
+            };
+
+            synchronized (handler_info.output_queue) {
+                handler_info.output_queue.add(
+                        new Utils.Pair<>(task, new Utils.Pair<>(false, null))
+                );
+                handler_info.output_queue.notify();
+            }
+
+        }).start();
     }
 
     private void handleRemoveFromCart(HandlerInfo handler_info) throws IOException {
-        handler_info.outputStream.writeInt(Command.CommandTypeClient.REMOVE_FROM_CART.ordinal());
         System.out.print("Enter product ID of the product you want to remove: ");
         int product_id = ClientHandler.sc_input.nextInt();
 
         System.out.print("Enter how many you want to be removed: ");
         int quantity = ClientHandler.sc_input.nextInt();
 
-        handler_info.outputStream.writeInt(product_id);
-        handler_info.outputStream.writeInt(quantity);
-        handler_info.outputStream.flush();
+        new Thread(() -> {
+            boolean removed;
+            try {
+                synchronized (handler_info.outputStream) {
+                    handler_info.outputStream.writeInt(Command.CommandTypeClient.REMOVE_FROM_CART.ordinal());
+                    handler_info.outputStream.writeInt(product_id);
+                    handler_info.outputStream.writeInt(quantity);
+                    handler_info.outputStream.flush();
+                    removed = handler_info.inputStream.readBoolean();
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
 
-        boolean removed = handler_info.inputStream.readBoolean();
-        if(removed)
-            System.out.println("Removal was successful.");
+            boolean finalRemoved = removed;
+            Runnable task = () -> {
+                if (finalRemoved)
+                    System.out.println("Removal was successful.");
+                else
+                    System.out.println("Removal failed.");
+            };
+
+            synchronized (handler_info.output_queue) {
+                handler_info.output_queue.add(
+                        new Utils.Pair<>(task, new Utils.Pair<>(false, null))
+                );
+                handler_info.output_queue.notify();
+            }
+        }).start();
     }
 
-    private void handleShowCart(HandlerInfo handler_info) throws IOException {
-        handler_info.outputStream.writeInt(Command.CommandTypeClient.GET_CART.ordinal());
-        handler_info.outputStream.flush();
-        System.out.println("My Cart:");
+    private void handleShowCart(HandlerInfo handler_info) {
+        new Thread(() -> {
+            ReadableCart readableCart;
+            try {
+                synchronized (handler_info.outputStream) {
+                    handler_info.outputStream.writeInt(Command.CommandTypeClient.GET_CART.ordinal());
+                    handler_info.outputStream.flush();
+                    readableCart = (ReadableCart) handler_info.inputStream.readObject();
+                }
+            } catch (IOException | ClassNotFoundException e) {
+                throw new RuntimeException(e);
+            }
 
-        ReadableCart readableCart;
-        try {
-            readableCart = (ReadableCart) handler_info.inputStream.readObject();
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
+            Runnable task = () -> {
+                System.out.println("My Cart:");
+                System.out.println(readableCart);
+            };
 
-        System.out.println(readableCart);
+            synchronized (handler_info.output_queue){
+                handler_info.output_queue.add(
+                        new Utils.Pair<>(task, new Utils.Pair<>(false, null))
+                );
+                handler_info.output_queue.notify();
+            }
+        }).start();
     }
 }

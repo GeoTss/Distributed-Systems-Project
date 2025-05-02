@@ -4,5 +4,5 @@ import java.io.IOException;
 
 public interface StateInterface {
 
-    StateTransition handleState(HandlerInfo handler_info, StateArguments arguments) throws IOException, ClassNotFoundException;
+    StateTransition handleState(HandlerInfo info, StateArguments arguments) throws IOException, ClassNotFoundException;
 }

@@ -4,13 +4,14 @@ import org.Domain.*;
 import org.Filters.Filter;
 import org.ReducerSide.ReducerPreparationType;
 import org.ServerSide.ActiveReplication.ReplicationHandler;
-import org.ServerSide.MasterServer;
 import org.ServerSide.ThrowingConsumer;
 import org.ServerSide.Command;
 import org.ServerSide.RequestMonitor;
 import org.Workers.Listeners.ReplicationListener;
 import org.Workers.WorkerCommandType;
 import org.Domain.Utils.Pair;
+import org.MessagePKG.Message;
+import org.MessagePKG.MessageArgCast;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -39,50 +40,40 @@ public class ManagerRequestHandler extends Thread {
 
     private int sendToWorkerWithReplicas(ReplicationHandler replicatedWorker, ThrowingConsumer<ObjectOutputStream> write_logic, RequestMonitor monitor, long request_id, int worker_id) {
         ReplicationListener handler = null;
-        int main_id = replicatedWorker.getMainId();
-        try {
-            handler = worker_listeners.get(main_id);
-            synchronized (handler){
+        synchronized (replicatedWorker) {
+            int main_id = replicatedWorker.getMainId();
+            try {
+                handler = worker_listeners.get(main_id);
                 monitor = handler.registerMonitor(request_id, worker_id, monitor);
-            }
 
-            ObjectOutputStream main_worker_writer = replicatedWorker.getMain();
-            synchronized (main_worker_writer) {
+                ObjectOutputStream main_worker_writer = replicatedWorker.getMain();
                 write_logic.accept(main_worker_writer);
                 main_worker_writer.flush();
-            }
-            return main_id;
-        } catch (IOException e) {
-            if(handler != null) {
-                synchronized (handler) {
+
+                return main_id;
+            } catch (IOException e) {
+                if (handler != null)
                     handler.unregisterMonitor(request_id, worker_id);
-                }
-            }
-            System.err.println("Main worker failed. Going for replicas... " + e.getMessage());
 
-            for (Integer replica_id : replicatedWorker.getReplicaIds()) {
-                try {
-                    handler = worker_listeners.get(replica_id);
-                    synchronized (handler){
+                System.err.println("Main worker failed. Going for replicas... " + e.getMessage());
+
+                for (Integer replica_id : replicatedWorker.getReplicaIds()) {
+                    try {
+                        handler = worker_listeners.get(replica_id);
                         monitor = handler.registerMonitor(request_id, worker_id, monitor);
-                    }
 
-                    ObjectOutputStream replica_writer = replicatedWorker.getReplicaOutput(replica_id);
-                    synchronized (replica_writer) {
+                        ObjectOutputStream replica_writer = replicatedWorker.getReplicaOutput(replica_id);
                         write_logic.accept(replica_writer);
                         replica_writer.flush();
-                    }
 
-                    synchronized (replicatedWorker){
                         replicatedWorker.promoteToMain(replica_id);
-                    }
 
-                    return replica_id;
-                } catch (IOException ex) {
-                    synchronized (handler){
+                        return replica_id;
+                    } catch (IOException ex) {
+
                         handler.unregisterMonitor(request_id, worker_id);
+                        System.err.println("Replica failed. Trying another one...");
                     }
-                    System.err.println("Replica failed. Trying another one...");
                 }
             }
         }
@@ -126,33 +117,32 @@ public class ManagerRequestHandler extends Thread {
     }
 
     private Pair<Integer, Integer> sendToWorkerWithReplicas(ReplicationHandler replicatedWorker, ThrowingConsumer<ObjectOutputStream> write_logic) {
-
-        try {
-            ObjectOutputStream main_worker_writer = replicatedWorker.getMain();
-            synchronized (main_worker_writer) {
+        int main_id = replicatedWorker.getMainId();
+        synchronized (replicatedWorker) {
+            try {
+                ObjectOutputStream main_worker_writer = replicatedWorker.getMain();
                 write_logic.accept(main_worker_writer);
                 main_worker_writer.flush();
-            }
-            return new Pair<>(replicatedWorker.getId(), replicatedWorker.getMainId());
-        } catch (IOException e) {
-            System.err.println("Main worker failed. Going for replicas... " + e.getMessage());
 
-            for (Integer replica_id : replicatedWorker.getReplicaIds()) {
-                try {
-                    ObjectOutputStream replica_writer = replicatedWorker.getReplicaOutput(replica_id);
-                    synchronized (replica_writer) {
+                return new Pair<>(replicatedWorker.getId(), replicatedWorker.getId());
+            } catch (IOException e) {
+
+                System.err.println("Main worker failed. Going for replicas... " + e.getMessage());
+
+                for (Integer replica_id : replicatedWorker.getReplicaIds()) {
+                    try {
+
+                        ObjectOutputStream replica_writer = replicatedWorker.getReplicaOutput(replica_id);
                         write_logic.accept(replica_writer);
                         replica_writer.flush();
-                    }
-                    int prev_main_id;
-                    synchronized (replicatedWorker){
-                        prev_main_id = replicatedWorker.getId();
-                        replicatedWorker.promoteToMain(replica_id);
-                    }
 
-                    return new Pair<>(prev_main_id, replica_id);
-                } catch (IOException ex) {
-                    System.err.println("Replica failed. Trying another one...");
+                        int prev_main_id = replicatedWorker.getId();
+                        replicatedWorker.promoteToMain(replica_id);
+
+                        return new Pair<>(prev_main_id, replica_id);
+                    } catch (IOException ex) {
+                        System.err.println("Replica failed. Trying another one...");
+                    }
                 }
             }
         }
@@ -188,11 +178,15 @@ public class ManagerRequestHandler extends Thread {
 
         ReplicationHandler replicated_worker = getWorkerForShop(shop_id);
 
+        Message message = new Message();
+        message.addArgument("shop_id", new Pair<>(MessageArgCast.INT_ARG, shop_id));
+
         ThrowingConsumer<ObjectOutputStream> chose_shop_writer = (out) -> {
+            out.reset();
             out.writeInt(WorkerCommandType.CHOSE_SHOP.ordinal());
             out.writeLong(requestId);
             out.writeInt(replicated_worker.getId());
-            out.writeInt(shop_id);
+            out.writeObject(message);
         };
 
         RequestMonitor monitor = new RequestMonitor();
@@ -212,19 +206,28 @@ public class ManagerRequestHandler extends Thread {
         ArrayList<Pair<Integer, Integer>> workers_sent_to = new ArrayList<>();
 
         ArrayList<Filter> empty_arr = new ArrayList<>();
+
+        Message message = new Message();
+        message.addArgument("filter_list", new Pair<>(MessageArgCast.ARRAY_LIST_ARG, empty_arr));
+//        message.addArgument("ack", new Pair<>(MessageArgCast.STRING_CAST, new String("acknowledged")));
+
         for(ReplicationHandler handler: replicated_worker_handlers.values()) {
 
             ThrowingConsumer<ObjectOutputStream> empty_filter_writer = (out) -> {
+                out.reset();
                 out.writeInt(WorkerCommandType.FILTER.ordinal());
                 out.writeLong(requestId);
                 out.writeInt(handler.getId());
-                out.writeObject(empty_arr);
+                out.writeObject(message);
             };
 
             Pair<Integer, Integer> worker_sent_to = sendToWorkerWithReplicas(handler, empty_filter_writer);
+
             workers_sent_to.add(worker_sent_to);
         }
         System.out.println(workers_sent_to);
+
+
 
         RequestMonitor reducer_monitor = new RequestMonitor();
         synchronized (reducer_listener){
@@ -232,6 +235,7 @@ public class ManagerRequestHandler extends Thread {
         }
 
         synchronized (reducer_writer){
+            reducer_writer.reset();
             reducer_writer.writeLong(requestId);
             reducer_writer.writeInt(ReducerPreparationType.REDUCER_PREPARE_FILTER.ordinal());
             reducer_writer.writeObject(workers_sent_to);
@@ -259,6 +263,12 @@ public class ManagerRequestHandler extends Thread {
 
         Shop new_shop = new Shop(name, latitude, longitude, foodCategory, initialStars, initialVotes, logoPath);
         int shop_id = new_shop.getId();
+
+        addHashShop(new_shop);
+
+        Message message = new Message();
+        message.addArgument("new_shop", new Pair<>(MessageArgCast.SHOP_ARG, new_shop));
+
         ReplicationHandler responsible_worker = getWorkerForShop(shop_id);
 
         assert responsible_worker != null;
@@ -267,7 +277,7 @@ public class ManagerRequestHandler extends Thread {
             wout.writeInt(Command.CommandTypeManager.ADD_SHOP.ordinal());
             wout.writeLong(requestId);
             wout.writeInt(responsible_worker.getId());
-            wout.writeObject(new_shop);
+            wout.writeObject(message);
         };
 
         System.out.println("New shop ID: " + shop_id);
@@ -278,15 +288,16 @@ public class ManagerRequestHandler extends Thread {
         if(sent_to != -1){
             success = true;
 
-            ThrowingConsumer<ObjectOutputStream> product_sync_writer = (wout) -> {
+            ThrowingConsumer<ObjectOutputStream> shop_sync_writer = (wout) -> {
                 wout.writeInt(WorkerCommandType.SYNC_ADD_SHOP.ordinal());
                 wout.writeLong(requestId);
                 wout.writeInt(responsible_worker.getId());
-                wout.writeObject(new_shop);
+                wout.reset();
+                wout.writeObject(message);
             };
 
             System.out.println("Syncing replicas...");
-            syncReplicas(responsible_worker, product_sync_writer);
+            syncReplicas(responsible_worker, shop_sync_writer);
             System.out.println("Replicas synced");
         }
 
@@ -294,11 +305,8 @@ public class ManagerRequestHandler extends Thread {
         out.flush();
     }
 
-
     private void handleAddProduct(long requestId)
             throws IOException {
-
-        int shop_id = in.readInt();
 
         String name = in.readUTF();
         String type = in.readUTF();
@@ -307,14 +315,18 @@ public class ManagerRequestHandler extends Thread {
 
         Product new_product = new Product(name, type, availableAmount, price);
 
-        ReplicationHandler responsible_worker = getWorkerForShop(shop_id);
+        Message message = new Message();
+        message.addArgument("shop_id", new Pair<>(MessageArgCast.INT_ARG, current_shop_id));
+        message.addArgument("new_product", new Pair<>(MessageArgCast.PRODUCT_ARG, new_product));
+
+        ReplicationHandler responsible_worker = getWorkerForShop(current_shop_id);
 
         ThrowingConsumer<ObjectOutputStream> productWriter = (wout) -> {
+            wout.reset();
             wout.writeInt(Command.CommandTypeManager.ADD_PRODUCT.ordinal());
             wout.writeLong(requestId);
             wout.writeInt(responsible_worker.getId());
-            wout.writeInt(shop_id);
-            wout.writeObject(new_product);
+            wout.writeObject(message);
         };
 
         int sent_to = sendToWorkerWithReplicas(responsible_worker, productWriter, requestId, responsible_worker.getId());
@@ -328,11 +340,11 @@ public class ManagerRequestHandler extends Thread {
                 System.out.println("Added new product " + new_product + " to worker " + sent_to);
 
             ThrowingConsumer<ObjectOutputStream> product_sync_writer = (wout) -> {
+                wout.reset();
                 wout.writeInt(WorkerCommandType.SYNC_ADD_PRODUCT_TO_SHOP.ordinal());
                 wout.writeLong(requestId);
                 wout.writeInt(responsible_worker.getId());
-                wout.writeInt(shop_id);
-                wout.writeObject(new_product);
+                wout.writeObject(message);
             };
 
             System.out.println("Syncing replicas...");
@@ -348,15 +360,20 @@ public class ManagerRequestHandler extends Thread {
 
         int productId = in.readInt();
 
+        Message message = new Message();
+        message.addArgument("shop_id", new Pair<>(MessageArgCast.INT_ARG, current_shop_id));
+        message.addArgument("product_id", new Pair<>(MessageArgCast.INT_ARG, productId));
+
         ReplicationHandler handler = getWorkerForShop(current_shop_id);
         assert handler != null;
         RequestMonitor monitor = new RequestMonitor();
+
         ThrowingConsumer<ObjectOutputStream> writer = (wout) -> {
+            wout.reset();
             wout.writeInt(WorkerCommandType.REMOVE_PRODUCT_FROM_SHOP.ordinal());
             wout.writeLong(requestId);
             wout.writeInt(handler.getId());
-            wout.writeInt(current_shop_id);
-            wout.writeInt(productId);
+            wout.writeObject(message);
         };
 
         int sent_to = sendToWorkerWithReplicas(handler, writer, requestId, handler.getId());
@@ -367,11 +384,11 @@ public class ManagerRequestHandler extends Thread {
             System.out.println("Product was added successfully");
 
             writer = (wout) -> {
+                wout.reset();
                 wout.writeInt(WorkerCommandType.SYNC_REMOVE_PRODUCT_FROM_SHOP.ordinal());
                 wout.writeLong(requestId);
                 wout.writeInt(handler.getId());
-                wout.writeInt(current_shop_id);
-                wout.writeInt(productId);
+                wout.writeObject(message);
             };
 
             System.out.println("Syncing replicas...");
@@ -388,16 +405,20 @@ public class ManagerRequestHandler extends Thread {
         int productId = in.readInt();
         int quantity = in.readInt();
 
+        Message message = new Message();
+        message.addArgument("shop_id", new Pair<>(MessageArgCast.INT_ARG, current_shop_id));
+        message.addArgument("product_id", new Pair<>(MessageArgCast.INT_ARG, productId));
+        message.addArgument("quantity", new Pair<>(MessageArgCast.INT_ARG, quantity));
+
         ReplicationHandler handler = getWorkerForShop(current_shop_id);
         assert handler != null;
 
         ThrowingConsumer<ObjectOutputStream> writer = (wout) -> {
+            wout.reset();
             wout.writeInt(WorkerCommandType.ADD_PRODUCT_STOCK.ordinal());
             wout.writeLong(requestId);
             wout.writeInt(handler.getId());
-            wout.writeInt(current_shop_id);
-            wout.writeInt(productId);
-            wout.writeInt(quantity);
+            wout.writeObject(message);
         };
 
         int sent_to = sendToWorkerWithReplicas(handler, writer, requestId, handler.getId());
@@ -408,12 +429,11 @@ public class ManagerRequestHandler extends Thread {
             System.out.println("Product was added successfully");
 
             writer = (wout) -> {
+                wout.reset();
                 wout.writeInt(WorkerCommandType.SYNC_ADD_PRODUCT_STOCK.ordinal());
                 wout.writeLong(requestId);
                 wout.writeInt(handler.getId());
-                wout.writeInt(current_shop_id);
-                wout.writeInt(productId);
-                wout.writeInt(quantity);
+                wout.writeObject(message);
             };
 
             System.out.println("Syncing replicas...");
@@ -430,15 +450,19 @@ public class ManagerRequestHandler extends Thread {
         int productId = in.readInt();
         int quantity = in.readInt();
 
+        Message message = new Message();
+        message.addArgument("shop_id", new Pair<>(MessageArgCast.INT_ARG, current_shop_id));
+        message.addArgument("product_id", new Pair<>(MessageArgCast.INT_ARG, productId));
+        message.addArgument("quantity", new Pair<>(MessageArgCast.INT_ARG, quantity));
+
         ReplicationHandler handler = getWorkerForShop(current_shop_id);
         assert handler != null;
         ThrowingConsumer<ObjectOutputStream> writer = (wout) -> {
+            wout.reset();
             wout.writeInt(WorkerCommandType.REMOVE_PRODUCT_STOCK.ordinal());
             wout.writeLong(requestId);
             wout.writeInt(handler.getId());
-            wout.writeInt(current_shop_id);
-            wout.writeInt(productId);
-            wout.writeInt(quantity);
+            wout.writeObject(message);
         };
 
         int sent_to = sendToWorkerWithReplicas(handler, writer, requestId, handler.getId());
@@ -449,12 +473,14 @@ public class ManagerRequestHandler extends Thread {
             System.out.println("Product was added successfully");
 
             writer = (wout) -> {
+                wout.reset();
                 wout.writeInt(WorkerCommandType.SYNC_REMOVE_PRODUCT_STOCK.ordinal());
                 wout.writeLong(requestId);
                 wout.writeInt(handler.getId());
-                wout.writeInt(current_shop_id);
-                wout.writeInt(productId);
-                wout.writeInt(quantity);
+                wout.writeObject(message);
+//                wout.writeInt(current_shop_id);
+//                wout.writeInt(productId);
+//                wout.writeInt(quantity);
             };
 
             System.out.println("Syncing replicas...");
@@ -467,15 +493,20 @@ public class ManagerRequestHandler extends Thread {
 
     public void handleCategoryQuery(long requestId, WorkerCommandType query, ReducerPreparationType query_prep_type) throws IOException, InterruptedException {
         String category = in.readUTF();
+        System.out.println("Received category: " + category);
 
         ArrayList<Pair<Integer, Integer>> workers_sent_to = new ArrayList<>();
 
+        Message message = new Message();
+        message.addArgument("category", new Pair<>(MessageArgCast.STRING_CAST, category));
+
         for(ReplicationHandler handler: replicated_worker_handlers.values()) {
             ThrowingConsumer<ObjectOutputStream> writer = (wout) -> {
+                wout.reset();
                 wout.writeInt(query.ordinal());
                 wout.writeLong(requestId);
                 wout.writeInt(handler.getId());
-                wout.writeUTF(category);
+                wout.writeObject(message);
             };
 
             Pair<Integer, Integer> worker_sent_to = sendToWorkerWithReplicas(handler, writer);
@@ -489,6 +520,7 @@ public class ManagerRequestHandler extends Thread {
         }
 
         synchronized (reducer_writer){
+            reducer_writer.reset();
             reducer_writer.writeLong(requestId);
             reducer_writer.writeInt(query_prep_type.ordinal());
             reducer_writer.writeObject(workers_sent_to);
@@ -498,7 +530,7 @@ public class ManagerRequestHandler extends Thread {
         System.out.println("Waiting for filtered shops from reducer for " + requestId + "...");
         @SuppressWarnings("unchecked")
         Pair<ArrayList<Pair<String, Integer>>, Integer> resulting_shops = (Pair<ArrayList<Pair<String, Integer>>, Integer>) reducer_monitor.getResult();
-        System.out.println("Received filtered shops for " + requestId);
+        System.out.println("Handled query: " + query);
 
         out.writeObject(resulting_shops);
         out.flush();

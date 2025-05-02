@@ -16,6 +16,7 @@ import org.Domain.Product;
 import org.Domain.Shop;
 import org.Domain.Utils.Pair;
 import org.Filters.Filter;
+import org.MessagePKG.Message;
 import org.ReducerSide.Reducer;
 import org.ServerSide.MasterServer;
 
@@ -34,12 +35,10 @@ public class WorkerClient extends Thread {
 
     private HashMap<Integer, ArrayList<Shop>> managed_shops = new HashMap<>();
 
-    public ArrayList<Shop> applyFilters(int worker_id) throws IOException, ClassNotFoundException {
+    public ArrayList<Shop> applyFilters(int worker_id, ArrayList<Filter> received_filters) throws IOException, ClassNotFoundException {
 
         ArrayList<Shop> shops_to_work_on = getShopListFromId(worker_id);
 
-        @SuppressWarnings("unchecked")
-        ArrayList<Filter> received_filters = (ArrayList<Filter>) server_input_stream.readObject();
         if(received_filters.isEmpty())
             return shops_to_work_on;
 
@@ -48,14 +47,13 @@ public class WorkerClient extends Thread {
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
-    public Integer addToCart(Shop shop) throws IOException {
-
-        Integer product_id = server_input_stream.readInt();
-        int quantity = server_input_stream.readInt();
+    public Integer addToCart(Shop shop, int product_id, int quantity) throws IOException {
 
         Product product = shop.getProductById(product_id);
-        if (product.getAvailableAmount() >= quantity) {
-            return product.getId();
+        synchronized (product) {
+            if (!product.is_removed() && product.getAvailableAmount() >= quantity) {
+                return product.getId();
+            }
         }
 
         return -1;
@@ -71,41 +69,32 @@ public class WorkerClient extends Thread {
         }
     }
 
-    public CheckoutResultWrapper checkout(Shop shop, ServerCart serverCart) throws IOException {
+    public CheckoutResultWrapper checkout(Shop shop, ServerCart serverCart, float balance) throws IOException {
 
-        float balance = server_input_stream.readFloat();
+        synchronized (shop) {
+            ReadableCart in_sync_cart = getActualCart(shop, serverCart);
+            CheckoutResultWrapper result = new CheckoutResultWrapper();
 
-        ReadableCart in_sync_cart = getActualCart(shop, serverCart);
-        CheckoutResultWrapper result = new CheckoutResultWrapper();
+            if (in_sync_cart.getServer_sync_status() == CartStatus.OUT_OF_SYNC) {
+                System.out.println("Cart was out of sync.");
+                result.checked_out = false;
+                result.in_sync_status = CartStatus.OUT_OF_SYNC;
+                return result;
+            }
 
-        result.in_sync_status = in_sync_cart.getServer_sync_status();
+            float total_cost = getCartCost(in_sync_cart);
+            System.out.println("total_cost = " + total_cost);
+            if (total_cost <= balance) {
+                checkout_cart(shop, serverCart);
 
-        if (in_sync_cart.getServer_sync_status() == CartStatus.OUT_OF_SYNC) {
-            System.out.println("Cart was out of sync.");
-            result.checked_out = false;
+                System.out.println("Transaction was successful.");
+                result.checked_out = true;
+            } else {
+                System.out.println("Transaction was not successful. Insufficient funds.");
+                result.checked_out = false;
+            }
             return result;
         }
-
-        float total_cost = getCartCost(in_sync_cart);
-        System.out.println("total_cost = " + total_cost);
-        if (total_cost <= balance) {
-            System.out.println("Transaction was successful.");
-            checkout_cart(shop, serverCart);
-            result.checked_out = true;
-        } else {
-            System.out.println("Transaction was not successful. Insufficient funds.");
-            result.checked_out = false;
-        }
-        return result;
-    }
-
-    private float getCartCost(Shop shop, ServerCart serverCart) {
-        float cost = 0;
-        for (Map.Entry<Integer, Integer> entry : serverCart.getProducts().entrySet()) {
-            Product cart_product = shop.getProductById(entry.getKey());
-            cost += cart_product.getPrice() * entry.getValue();
-        }
-        return cost;
     }
 
     private float getCartCost(ReadableCart cart) {
@@ -119,15 +108,17 @@ public class WorkerClient extends Thread {
     private ReadableCart getActualCart(Shop correspondingShop, ServerCart cart) {
         ReadableCart resulting_cart = new ReadableCart();
 
-        resulting_cart.setServer_sync_status(CartStatus.IN_SYNC);
-        cart.getProducts().forEach((product_id, quantity) -> {
-                    Product product = correspondingShop.getProductById(product_id);
-                    if (product.getAvailableAmount() >= quantity && !product.is_removed())
-                        resulting_cart.getProduct_quantity_map().put(product, quantity);
-                    else
-                        resulting_cart.setServer_sync_status(CartStatus.OUT_OF_SYNC);
-                }
-        );
+        synchronized (correspondingShop) {
+            resulting_cart.setServer_sync_status(CartStatus.IN_SYNC);
+            cart.getProducts().forEach((product_id, quantity) -> {
+                        Product product = correspondingShop.getProductById(product_id);
+                        if (product.getAvailableAmount() >= quantity && !product.is_removed())
+                            resulting_cart.getProduct_quantity_map().put(product, quantity);
+                        else
+                            resulting_cart.setServer_sync_status(CartStatus.OUT_OF_SYNC);
+                    }
+            );
+        }
         return resulting_cart;
     }
 
@@ -141,34 +132,37 @@ public class WorkerClient extends Thread {
         return shop_list.stream().filter(shop -> shop_id == shop.getId()).findFirst().orElse(null);
     }
 
-    private synchronized void send(ObjectOutputStream out, long request_id, int worker_id, Object result) throws IOException {
-        out.writeInt(worker_id);
-        out.writeLong(request_id);
-        out.writeObject(result);
-        out.flush();
+    private void send(ObjectOutputStream out, long request_id, int worker_id, Object result) throws IOException {
+        synchronized (out) {
+            out.reset();
+            out.writeInt(worker_id);
+            out.writeLong(request_id);
+            out.writeObject(result);
+            out.flush();
+        }
     }
 
-    private void handleCommand(long request_id, int worker_id, WorkerCommandType command) throws IOException, ClassNotFoundException {
+    private void handleCommand(long request_id, int worker_id, WorkerCommandType command, Message message) throws IOException, ClassNotFoundException {
         switch (command) {
 
             case ADD_SHOP, SYNC_ADD_SHOP -> {
-                Shop new_shop = (Shop) server_input_stream.readObject();
+                Shop new_shop = message.getArgument("new_shop");
 
                 ArrayList<Shop> shop_list = getShopListFromId(worker_id);
                 shop_list.add(new_shop);
             }
 
             case ADD_PRODUCT_TO_SHOP, SYNC_ADD_PRODUCT_TO_SHOP -> {
-                int shop_id = server_input_stream.readInt();
-                Product new_product = (Product) server_input_stream.readObject();
+                int shop_id = message.getArgument("shop_id");
+                Product new_product = message.getArgument("new_product");
 
                 Shop shop = getShopFromId(worker_id, shop_id);
                 shop.addProduct(new_product);
             }
 
             case REMOVE_PRODUCT_FROM_SHOP, SYNC_REMOVE_PRODUCT_FROM_SHOP -> {
-                int shop_id = server_input_stream.readInt();
-                int product_id = server_input_stream.readInt();
+                int shop_id = message.getArgument("shop_id");
+                int product_id = message.getArgument("product_id");
 
                 Shop shop = getShopFromId(worker_id, shop_id);
                 Product product = shop.getProductById(product_id);
@@ -177,24 +171,26 @@ public class WorkerClient extends Thread {
             }
 
             case ADD_PRODUCT_STOCK, SYNC_ADD_PRODUCT_STOCK -> {
-                int shop_id = server_input_stream.readInt();
-                int product_id = server_input_stream.readInt();
-                int quantity = server_input_stream.readInt();
+                int shop_id = message.getArgument("shop_id");
+                int product_id = message.getArgument("product_id");
+                int quantity = message.getArgument("quantity");
 
                 Shop shop = getShopFromId(worker_id, shop_id);
                 Product product = shop.getProductById(product_id);
 
                 System.out.println("Product: " + product);
 
-                System.out.println("Previous: " + product);
-                product.addAvailableAmount(quantity);
-                System.out.println("Updated: " + product);
+                synchronized (shop) {
+                    System.out.println("Previous: " + product);
+                    product.addAvailableAmount(quantity);
+                    System.out.println("Updated: " + product);
+                }
             }
 
             case REMOVE_PRODUCT_STOCK, SYNC_REMOVE_PRODUCT_STOCK -> {
-                int shop_id = server_input_stream.readInt();
-                int product_id = server_input_stream.readInt();
-                int quantity = server_input_stream.readInt();
+                int shop_id = message.getArgument("shop_id");
+                int product_id = message.getArgument("product_id");
+                int quantity = message.getArgument("quantity");
 
                 Shop shop = getShopFromId(worker_id, shop_id);
                 Product product = shop.getProductById(product_id);
@@ -209,55 +205,65 @@ public class WorkerClient extends Thread {
             }
 
             case GET_SHOP_CATEGORY_SALES -> {
-                String category = server_input_stream.readUTF();
+                String category = message.getArgument("category");
 
                 ArrayList<Shop> shops = getShopListFromId(worker_id);
+                ArrayList<Pair<String, Integer>> shop_sales;
 
-                ArrayList<Pair<String, Integer>> shop_sales = shops.stream()
-                        .filter(shop -> shop.getCategory().equals(category))
-                        .map(shop -> new Pair<>(shop.getName(), shop.getTotalSales()))
-                        .collect(Collectors.toCollection(ArrayList::new));
+                synchronized (shops) {
+                    shop_sales = getShopCategorySales(shops, category);
+                }
+
+                if(id == 0)
+                    System.out.println("Total sales for worker " + id + ": " + shop_sales);
+
+
 
                 send(reducer_output_stream, request_id, worker_id, shop_sales);
             }
 
             case GET_PRODUCT_CATEGORY_SALES -> {
-                String category = server_input_stream.readUTF();
+                String category = message.getArgument("category");
 
                 ArrayList<Shop> shops = getShopListFromId(worker_id);
+                ArrayList<Pair<String, Integer>> shop_product_sales;
 
-                ArrayList<Pair<String, Integer>> shop_product_sales = shops.stream()
-                        .filter(shop -> shop.getCategory().equals(category))
-                        .map(shop -> new Pair<>(shop.getName(), shop.getTotalSalesForProductType(category)))
-                        .collect(Collectors.toCollection(ArrayList::new));
+                synchronized (shops) {
+                    shop_product_sales = getProductCategorySales(shops, category);
+                }
 
                 send(reducer_output_stream, request_id, worker_id, shop_product_sales);
             }
 
             case FILTER -> {
-                ArrayList<Shop> shops = applyFilters(worker_id);
 
-                server_output_stream.reset();
+                ArrayList<Filter> filters = message.getArgument("filter_list");
+
+                ArrayList<Shop> shops = applyFilters(worker_id, filters);
+
                 send(reducer_output_stream, request_id, worker_id, shops);
             }
             case CHOSE_SHOP -> {
-                int chosen_shop_id = server_input_stream.readInt();
+                int chosen_shop_id = message.getArgument("shop_id");
                 Shop corresponding_shop = getShopFromId(worker_id, chosen_shop_id);
 
                 System.out.println("Sending shop back " + corresponding_shop);
-                server_output_stream.reset();
+
                 send(server_output_stream, request_id, worker_id, corresponding_shop);
             }
             case ADD_TO_CART -> {
-                int chosen_shop_id = server_input_stream.readInt();
+                int chosen_shop_id = message.getArgument("shop_id");
+                int product_id = message.getArgument("product_id");
+                int quantity = message.getArgument("quantity");
+
                 Shop corresponding_shop = getShopFromId(worker_id, chosen_shop_id);
 
-                Integer added_to_cart = addToCart(corresponding_shop);
+                Integer added_to_cart = addToCart(corresponding_shop, product_id, quantity);
                 send(server_output_stream, request_id, worker_id, added_to_cart);
             }
             case GET_CART -> {
-                int chosen_shop_id = server_input_stream.readInt();
-                ServerCart cart = (ServerCart) server_input_stream.readObject();
+                int chosen_shop_id = message.getArgument("shop_id");
+                ServerCart cart = message.getArgument("cart");
                 Shop corresponding_shop = getShopFromId(worker_id, chosen_shop_id);
 
                 ReadableCart result_cart = getActualCart(corresponding_shop, cart);
@@ -265,29 +271,47 @@ public class WorkerClient extends Thread {
                 Float total_cost = getCartCost(result_cart);
                 result_cart.setTotal_cost(total_cost);
 
-                server_output_stream.reset();
                 send(server_output_stream, request_id, worker_id, result_cart);
             }
             case CHECKOUT_CART -> {
-                int chosen_shop_id = server_input_stream.readInt();
+                int chosen_shop_id = message.getArgument("shop_id");
                 Shop corresponding_shop = getShopFromId(worker_id, chosen_shop_id);
 
-                ServerCart serverCart = (ServerCart) server_input_stream.readObject();
-                CheckoutResultWrapper checked_out = checkout(corresponding_shop, serverCart);
+                ServerCart serverCart = message.getArgument("cart");
+                float balance = message.getArgument("balance");
+                CheckoutResultWrapper checked_out = checkout(corresponding_shop, serverCart, balance);
 
                 send(server_output_stream, request_id, worker_id, checked_out);
             }
             case SYNC_CHECKOUT_CART -> {
-                int chosen_shop_id = server_input_stream.readInt();
+                int chosen_shop_id = message.getArgument("shop_id");
                 Shop corresponding_shop = getShopFromId(worker_id, chosen_shop_id);
 
-                ServerCart serverCart = (ServerCart) server_input_stream.readObject();
+                ServerCart serverCart = message.getArgument("cart");
 
                 checkout_cart(corresponding_shop, serverCart);
             }
             default -> {
                 System.out.println("Command not implemented yet: " + command);
             }
+        }
+    }
+
+    private ArrayList<Pair<String, Integer>> getProductCategorySales(ArrayList<Shop> shops, String category) {
+        synchronized (shops) {
+            return shops.stream()
+                    .filter(shop -> shop.getCategory().equals(category))
+                    .map(shop -> new Pair<>(shop.getName(), shop.getTotalSalesForProductType(category)))
+                    .collect(Collectors.toCollection(ArrayList::new));
+        }
+    }
+
+    private ArrayList<Pair<String, Integer>> getShopCategorySales(ArrayList<Shop> shops, String category) {
+        synchronized (shops) {
+            return shops.stream()
+                    .filter(shop -> shop.getCategory().equals(category))
+                    .map(shop -> new Pair<>(shop.getName(), shop.getTotalSales()))
+                    .collect(Collectors.toCollection(ArrayList::new));
         }
     }
 
@@ -354,22 +378,29 @@ public class WorkerClient extends Thread {
                 worker_command = WorkerCommandType.values()[worker_command_ord];
             }
 
+            WorkerCommandType worker_command_c;
             do {
-                worker_command = WorkerCommandType.values()[server_input_stream.readInt()];
-                long request_id = server_input_stream.readLong();
-                int worker_id = server_input_stream.readInt();
+                synchronized (server_input_stream) {
+                    worker_command_c = WorkerCommandType.values()[server_input_stream.readInt()];
+                    final WorkerCommandType worker_command_fc = worker_command_c;
+                    final long request_id = server_input_stream.readLong();
+                    final int worker_id = server_input_stream.readInt();
+                    final Message message = (Message) server_input_stream.readObject();
 
-                handleCommand(request_id, worker_id, worker_command);
-            }while(worker_command != WorkerCommandType.QUIT);
+                    System.out.println("Got " + worker_command_fc);
+                    System.out.println("With arguments: " + message);
 
-//            while (worker_command != WorkerCommandType.QUIT) {
-//
-//                long request_id = server_input_stream.readLong();
-//                int worker_id = server_input_stream.readInt();
-//
-//                handleCommand(request_id, worker_id, worker_command);
-//                worker_command = WorkerCommandType.values()[server_input_stream.readInt()];
-//            }
+                    new Thread(() -> {
+                        try {
+                            handleCommand(request_id, worker_id, worker_command_fc, message);
+                        } catch (IOException | ClassNotFoundException e) {
+                            e.printStackTrace();
+                        }
+                    }).start();
+                }
+
+            }while(worker_command_c != WorkerCommandType.QUIT);
+
         } catch (IOException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }

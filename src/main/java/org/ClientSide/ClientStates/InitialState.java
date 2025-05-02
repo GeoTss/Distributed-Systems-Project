@@ -6,7 +6,6 @@ import org.StatePattern.HandlerInfo;
 import org.StatePattern.StateArguments;
 import org.Filters.Filter;
 import org.Filters.PriceCategoryEnum;
-import org.StatePattern.StateInterface;
 import org.StatePattern.StateTransition;
 
 import java.io.IOException;
@@ -25,7 +24,18 @@ public class InitialState extends ClientStates {
             System.out.print("Enter command: ");
             command = ClientHandler.sc_input.nextInt();
 
-            if(command == 1) {
+            if(command == 0){
+                synchronized (handler_info.transition_queue) {
+                    handler_info.transition_queue.add(null);
+                    handler_info.transition_queue.notify();
+                }
+                synchronized (handler_info.output_queue) {
+                    handler_info.output_queue.add(null);
+                    handler_info.output_queue.notify();
+                }
+                return null;
+            }
+            else if(command == 1) {
                 ApplyFiltersArgs filter_arguments = new ApplyFiltersArgs();
 
                 Filter.Types corresponding_type = null;
@@ -78,14 +88,20 @@ public class InitialState extends ClientStates {
                             filter_arguments.filter_types.add(Filter.Types.FILTER_RADIUS);
                             filter_arguments.additional_filter_args.put(Filter.Types.FILTER_RADIUS, radius);
                         }
+                        case END -> filter_arguments.filter_types.add(Filter.Types.END);
                     }
 
                 }while(corresponding_type != Filter.Types.END);
 
                 filter_arguments.filter_types.add(Filter.Types.END);
 
-                return new StateTransition(State.APPLY_FILTERS.getCorresponding_state(), filter_arguments);
+                synchronized (handler_info.transition_queue) {
+                    handler_info.transition_queue.add(new StateTransition(State.APPLY_FILTERS.getCorresponding_state(), filter_arguments));
+                    handler_info.transition_queue.notify();
+                    return null;
+                }
             }
+
 
         }while(command != 0);
 

@@ -1,11 +1,12 @@
 package org.ManagerSide.ManagerStates;
 
+import org.Domain.Utils;
 import org.ManagerSide.ManagerHandler;
 import org.Domain.Shop;
 import org.ManagerSide.ManagerStates.ManagerStateArgs.ChoseShopArgs;
-import org.ManagerSide.ManagerStates.ManagerStateArgs.ManagerStateArgument;
 import org.ServerSide.Command;
 import org.StatePattern.HandlerInfo;
+import org.StatePattern.LockStatus;
 import org.StatePattern.StateArguments;
 import org.StatePattern.StateTransition;
 
@@ -24,12 +25,42 @@ public class ChoseShopState extends ManagerState {
     @Override
     public StateTransition handleState(HandlerInfo handler_info, StateArguments arguments) throws IOException, ClassNotFoundException {
         System.out.println("ChoseShopState.handleState");
-        ChoseShopArgs args = (ChoseShopArgs) arguments;
 
-        handler_info.outputStream.writeInt(Command.CommandTypeManager.CHOSE_SHOP.ordinal());
-        handler_info.outputStream.flush();
-        handler_info.outputStream.writeInt(args.shop_id);
-        handler_info.outputStream.flush();
+        LockStatus lock = new LockStatus();
+
+        synchronized (handler_info.output_queue) {
+
+            Runnable task = () -> {
+                System.out.println("Enter the id of the shop you would like to manage: ");
+            };
+
+            Utils.Pair<Runnable, Utils.Pair<Boolean, LockStatus>> output_entry = new Utils.Pair<>(
+                    task,
+                    new Utils.Pair<>(true, lock)
+            );
+            handler_info.output_queue.add(output_entry);
+            handler_info.output_queue.notify();
+        }
+
+        try {
+            while(lock.input_status[0] != 1) {
+                synchronized (lock.input_lock) {
+                    lock.input_lock.wait();
+                }
+            }
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+
+
+        int shop_id = ManagerHandler.sc_input.nextInt();
+        ManagerHandler.sc_input.nextLine();
+
+        synchronized (handler_info.outputStream) {
+            handler_info.outputStream.writeInt(Command.CommandTypeManager.CHOSE_SHOP.ordinal());
+            handler_info.outputStream.writeInt(shop_id);
+            handler_info.outputStream.flush();
+        }
 
         Shop resulting_shop;
         try {
@@ -37,14 +68,39 @@ public class ChoseShopState extends ManagerState {
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
-        resulting_shop.showProducts();
 
-        printChoices();
-        System.out.print("Enter choice: ");
+        int choice = 0;
 
-        int choice = ManagerHandler.sc_input.nextInt();
+        do{
 
-        while(choice != 0){
+            LockStatus input_lock_in = new LockStatus();
+            synchronized (handler_info.output_queue) {
+
+                Runnable task = () -> {
+                    resulting_shop.showProducts();
+                    printChoices();
+                    System.out.println("Enter choice:");
+                };
+
+                Utils.Pair<Runnable, Utils.Pair<Boolean, LockStatus>> output_entry = new Utils.Pair<>(
+                        task,
+                        new Utils.Pair<>(true, input_lock_in)
+                );
+                handler_info.output_queue.add(output_entry);
+                handler_info.output_queue.notify();
+            }
+
+            try {
+                while(input_lock_in.input_status[0] != 1) {
+                    synchronized (input_lock_in.input_lock) {
+                        input_lock_in.input_lock.wait();
+                    }
+                }
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+
+            choice = ManagerHandler.sc_input.nextInt();
 
             switch (choice){
                 case 1 -> handleAddProduct(handler_info);
@@ -53,16 +109,18 @@ public class ChoseShopState extends ManagerState {
                 case 4 -> handleRemoveAvailableProduct(handler_info);
             }
 
-            printChoices();
-            System.out.println("Enter choice:");
-            choice = ManagerHandler.sc_input.nextInt();
-        }
+        }while (choice != 0);
 
-        return new StateTransition(State.INITIAL.getCorresponding_state(), null);
+        synchronized (handler_info.transition_queue){
+            handler_info.transition_queue.add(new StateTransition(State.INITIAL.getCorresponding_state(), null));
+            handler_info.transition_queue.notify();
+        }
+        return null;
     }
 
     private void handleAddProduct(HandlerInfo handler_info) throws IOException, ClassNotFoundException {
         handler_info.outputStream.writeInt(Command.CommandTypeManager.ADD_PRODUCT.ordinal());
+        handler_info.outputStream.flush();
 
         System.out.println("Give product name: ");
         String name = ManagerHandler.sc_input.next();
@@ -76,56 +134,120 @@ public class ChoseShopState extends ManagerState {
         System.out.println("Give product price: ");
         float price = ManagerHandler.sc_input.nextFloat();
 
-        handler_info.outputStream.writeUTF(name);
-        handler_info.outputStream.writeUTF(type);
-        handler_info.outputStream.writeInt(available_amount);
-        handler_info.outputStream.writeFloat(price);
-        handler_info.outputStream.flush();
+        new Thread(() -> {
+            boolean successfully_added = false;
+            try {
+                synchronized (handler_info.outputStream) {
+                    handler_info.outputStream.writeUTF(name);
+                    handler_info.outputStream.writeUTF(type);
+                    handler_info.outputStream.writeInt(available_amount);
+                    handler_info.outputStream.writeFloat(price);
+                    handler_info.outputStream.flush();
 
-        boolean successfully_added = handler_info.inputStream.readBoolean();
-        if (successfully_added) {
-            System.out.println("Product was successfully added.");
-        } else {
-            System.out.println("Failure on adding the product, aborting.");
-        }
+                    successfully_added = handler_info.inputStream.readBoolean();
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+            synchronized (handler_info.output_queue){
+                boolean finalSuccessfully_added = successfully_added;
+                // Inside handleAddProduct thread
+                Runnable task = () -> {
+                    if (finalSuccessfully_added)
+                        System.out.println("Product was successfully added.");
+                    else
+                        System.out.println("Failure on adding the product, aborting.");
+                };
+
+                Utils.Pair<Runnable, Utils.Pair<Boolean, LockStatus>> output_entry = new Utils.Pair<>(
+                        task,
+                        new Utils.Pair<>(false, null)
+                );
+                handler_info.output_queue.add(output_entry);
+                handler_info.output_queue.notify();
+            }
+        }).start();
 
     }
 
     private void handleRemoveProduct(HandlerInfo handler_info) throws IOException, ClassNotFoundException {
-        handler_info.outputStream.writeInt(Command.CommandTypeManager.REMOVE_PRODUCT.ordinal());
-        handler_info.outputStream.flush();
-
         System.out.print("Enter the product ID of the product you want to remove: ");
         int product_id = ManagerHandler.sc_input.nextInt();
 
-        handler_info.outputStream.writeInt(product_id);
-        handler_info.outputStream.flush();
+        new Thread(() -> {
+            boolean successfully_removed = false;
+            try {
+                synchronized (handler_info.outputStream) {
+                    handler_info.outputStream.writeInt(Command.CommandTypeManager.REMOVE_PRODUCT.ordinal());
+                    handler_info.outputStream.writeInt(product_id);
+                    handler_info.outputStream.flush();
+                    successfully_removed = handler_info.inputStream.readBoolean();
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
 
-        boolean successfully_removed = handler_info.inputStream.readBoolean();
-        if (successfully_removed) {
-            System.out.println("Product was successfully removed.");
-        } else {
-            System.out.println("Failure in removing the product, aborting.");
-        }
+            synchronized (handler_info.output_queue){
+                boolean finalSuccessfully_removed = successfully_removed;
+                // Inside handleAddProduct thread
+                Runnable task = () -> {
+                    if (finalSuccessfully_removed)
+                        System.out.println("Product was successfully added.");
+                    else
+                        System.out.println("Failure on adding the product, aborting.");
+                };
+
+                Utils.Pair<Runnable, Utils.Pair<Boolean, LockStatus>> output_entry = new Utils.Pair<>(
+                        task,
+                        new Utils.Pair<>(false, null)
+                );
+                handler_info.output_queue.add(output_entry);
+                handler_info.output_queue.notify();
+
+            }
+        }).start();
     }
 
     private void handleAddAvailableProduct(HandlerInfo handler_info) throws IOException {
-        handler_info.outputStream.writeInt(Command.CommandTypeManager.ADD_AVAILABLE_PRODUCT.ordinal());
         System.out.print("Enter the product ID of the product you want to add: ");
         int product_id = ManagerHandler.sc_input.nextInt();
 
         System.out.print("Enter the quantity to be added. ");
         int quantity = ManagerHandler.sc_input.nextInt();
 
-        handler_info.outputStream.writeInt(product_id);
-        handler_info.outputStream.writeInt(quantity);
-        handler_info.outputStream.flush();
+        new Thread(() -> {
+            boolean successfully_added = false;
+            try {
+                synchronized (handler_info.outputStream) {
+                    handler_info.outputStream.writeInt(Command.CommandTypeManager.ADD_AVAILABLE_PRODUCT.ordinal());
+                    handler_info.outputStream.writeInt(product_id);
+                    handler_info.outputStream.writeInt(quantity);
+                    handler_info.outputStream.flush();
+                    successfully_added = handler_info.inputStream.readBoolean();
+                }
+            }catch (IOException e){
+                throw new RuntimeException(e);
+            }
 
-        boolean successfully_added = handler_info.inputStream.readBoolean();
-        if(successfully_added)
-            System.out.println("Added the requested quantity to the product, successfully.");
-        else
-            System.out.println("Failed in adding the amount requested, aborting.");
+            synchronized (handler_info.output_queue){
+                boolean finalSuccessfully_added = successfully_added;
+                // Inside handleAddProduct thread
+                Runnable task = () -> {
+                    if (finalSuccessfully_added)
+                        System.out.println("Product was successfully added.");
+                    else
+                        System.out.println("Failure on adding the product, aborting.");
+                };
+
+                Utils.Pair<Runnable, Utils.Pair<Boolean, LockStatus>> output_entry = new Utils.Pair<>(
+                        task,
+                        new Utils.Pair<>(false, null)
+                );
+                handler_info.output_queue.add(output_entry);
+                handler_info.output_queue.notify();
+            }
+        }).start();
     }
 
     private void handleRemoveAvailableProduct(HandlerInfo handler_info) throws IOException, ClassNotFoundException {
@@ -136,17 +258,38 @@ public class ChoseShopState extends ManagerState {
         System.out.println("Enter the quantity to be removed.");
         int quantity = ManagerHandler.sc_input.nextInt();
 
-        handler_info.outputStream.writeInt(Command.CommandTypeManager.REMOVE_AVAILABLE_PRODUCT.ordinal());
-        handler_info.outputStream.writeInt(product_id);
-        handler_info.outputStream.writeInt(quantity);
-        handler_info.outputStream.flush();
+        new Thread(() -> {
+            boolean successfully_removed = false;
+            try {
+                synchronized (handler_info.outputStream) {
+                    handler_info.outputStream.writeInt(Command.CommandTypeManager.REMOVE_AVAILABLE_PRODUCT.ordinal());
+                    handler_info.outputStream.writeInt(product_id);
+                    handler_info.outputStream.writeInt(quantity);
+                    handler_info.outputStream.flush();
+                    successfully_removed = handler_info.inputStream.readBoolean();
+                }
+            }catch (IOException e){
+                throw new RuntimeException(e);
+            }
 
-        boolean successfully_removed = handler_info.inputStream.readBoolean();
-        if (successfully_removed) {
-            System.out.println("Product was successfully removed.");
-        } else {
-            System.out.println("Failure in removing the amount requested, aborting.");
-        }
+            synchronized (handler_info.output_queue){
+                boolean finalSuccessfully_removed = successfully_removed;
+                Runnable task = () -> {
+                    if (finalSuccessfully_removed)
+                        System.out.println("Product was successfully added.");
+                    else
+                        System.out.println("Failure on adding the product, aborting.");
+                };
+
+                Utils.Pair<Runnable, Utils.Pair<Boolean, LockStatus>> output_entry = new Utils.Pair<>(
+                        task,
+                        new Utils.Pair<>(false, null)
+                );
+                handler_info.output_queue.add(output_entry);
+                handler_info.output_queue.notify();
+
+            }
+
+        }).start();
     }
-
 }

@@ -53,6 +53,12 @@ public class MasterServer {
         return shop_id_hash.get(chosen_shop_id);
     }
 
+    public static void addHashShop(Shop shop){
+        int hashed = hashStore(shop);
+        int worker_id = hashed % config_info.getWorker_count();
+        shop_id_hash.put(shop.getId(), worker_id);
+    }
+
     public static ReplicationHandler getWorkerForShop(int chosen_shop_id) {
         Integer worker_id = shop_id_hash.get(chosen_shop_id);
         System.out.println("[LOOKUP] shop " + chosen_shop_id + " → worker_id " + worker_id);

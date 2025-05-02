@@ -76,11 +76,14 @@ public class Reducer{
         }
     }
 
-    private synchronized void sendToServer(long request_id, Object result) throws IOException {
-        server_output_stream.writeInt(id);
-        server_output_stream.writeLong(request_id);
-        server_output_stream.writeObject(result);
-        server_output_stream.flush();
+    private void sendToServer(long request_id, Object result) throws IOException {
+        synchronized (server_output_stream) {
+            server_output_stream.reset();
+            server_output_stream.writeInt(id);
+            server_output_stream.writeLong(request_id);
+            server_output_stream.writeObject(result);
+            server_output_stream.flush();
+        }
     }
 
     private ArrayList<RequestMonitor> prepareListeners(long request_id, Object extra_args){
@@ -94,7 +97,7 @@ public class Reducer{
 
             synchronized (System.out) {
                 System.out.println("Handling " + worker_sent_to);
-                System.out.println("Registering monitor in listener " + worker_sent_to.second + " for worker " + worker_sent_to.first);
+                System.out.println("Request: " + request_id + "Registering monitor in listener " + worker_sent_to.second + " for worker " + worker_sent_to.first);
             }
 
             RequestMonitor monitor = new RequestMonitor();
@@ -143,7 +146,7 @@ public class Reducer{
                                 .map(Pair::getSecond)
                                 .reduce(0, Integer::sum);
 
-                sendToServer(request_id, result_monitors);
+                sendToServer(request_id, result);
             }
         }
     }
@@ -171,14 +174,21 @@ public class Reducer{
                     request_id = server_input_stream.readLong();
                     preparation_ord = server_input_stream.readInt();
                     extra_args = server_input_stream.readObject();
+
+                    ReducerPreparationType preparation = ReducerPreparationType.values()[preparation_ord];
+                    System.out.println("Got " + preparation);
+
+                    new Thread(() -> {
+                        try {
+                            handlePreparation(request_id, preparation, extra_args);
+                        }catch (IOException | InterruptedException e){
+                            e.printStackTrace();
+                        }
+                    }).start();
                 }
 
-                ReducerPreparationType preparation = ReducerPreparationType.values()[preparation_ord];
-                System.out.println("Got " + preparation);
-
-                handlePreparation(request_id, preparation, extra_args);
             }
-        }catch (IOException | InterruptedException e){
+        }catch (IOException e){
             e.printStackTrace();
             System.out.println("Trying to close the listening input stream...");
         } catch (ClassNotFoundException e) {

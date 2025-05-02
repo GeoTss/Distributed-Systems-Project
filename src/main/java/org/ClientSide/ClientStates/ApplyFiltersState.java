@@ -1,7 +1,10 @@
 package org.ClientSide.ClientStates;
 
 import org.ClientSide.ClientStates.ClientStateArgs.ApplyFiltersArgs;
+import org.Domain.Utils;
+import org.ServerSide.MasterServer;
 import org.StatePattern.HandlerInfo;
+import org.StatePattern.LockStatus;
 import org.StatePattern.StateArguments;
 import org.ClientSide.ClientStates.ClientStateArgs.ManageFilteredShopsArgs;
 import org.Domain.Shop;
@@ -11,6 +14,9 @@ import org.ServerSide.Command;
 import org.StatePattern.StateTransition;
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.TreeSet;
 
@@ -21,9 +27,10 @@ public class ApplyFiltersState extends ClientStates {
     @Override
     public StateTransition handleState(HandlerInfo handler_info, StateArguments arguments) throws IOException {
         System.out.println("ApplyFiltersState.handleState");
-        if(arguments != null) {
+        if(arguments != null)
             filters = (ApplyFiltersArgs) arguments;
-        }
+
+        handler_info.outputStream.reset();
         handler_info.outputStream.writeInt(Command.CommandTypeClient.FILTER.ordinal());
 
         for(Filter.Types filter_type: filters.filter_types){
@@ -54,21 +61,41 @@ public class ApplyFiltersState extends ClientStates {
                 }
             }
         }
-        handler_info.outputStream.flush();
 
-        try {
-            System.out.println("Waiting for filtering to finish...");
-            @SuppressWarnings("unchecked")
-            ArrayList<Shop> filtered_shops = (ArrayList<Shop>) handler_info.inputStream.readObject();
-            System.out.println("Received filtered shops!");
+        new Thread(() -> {
+            try {
 
-            ManageFilteredShopsArgs args = new ManageFilteredShopsArgs();
-            args.filtered_shops = filtered_shops;
+                ArrayList<Shop> filtered_shops;
+                synchronized (handler_info.outputStream) {
+                    handler_info.outputStream.flush();
+                    filtered_shops = (ArrayList<Shop>) handler_info.inputStream.readObject();
+                }
 
-            return new StateTransition(State.MANAGE_SHOPS.getCorresponding_state(), args);
-        }catch (ClassNotFoundException exception){
-            exception.printStackTrace();
-        }
+                synchronized (handler_info.output_queue){
+                    Runnable task = () -> {
+                        System.out.println("Received filtered shops!");
+                        filtered_shops.forEach(System.out::println);
+                    };
+
+                    Utils.Pair<Runnable, Utils.Pair<Boolean, LockStatus>> output_entry = new Utils.Pair<>(
+                            task,
+                            new Utils.Pair<>(false, null)
+                    );
+                    handler_info.output_queue.add(output_entry);
+                    handler_info.output_queue.notify();
+                }
+
+                ManageFilteredShopsArgs args = new ManageFilteredShopsArgs();
+                args.filtered_shops = filtered_shops;
+
+                synchronized (handler_info.transition_queue) {
+                    handler_info.transition_queue.add(new StateTransition(State.MANAGE_SHOPS.getCorresponding_state(), args));
+                    handler_info.transition_queue.notify();
+                }
+            }catch (ClassNotFoundException | IOException exception){
+                exception.printStackTrace();
+            }
+        }).start();
         return null;
     }
 

@@ -1,12 +1,6 @@
 package org.ManagerSide.ManagerStates;
 
-import org.ManagerSide.ManagerStates.ManagerStateArgs.ManagerStateArgument;
-import org.StatePattern.HandlerInfo;
-import org.StatePattern.StateArguments;
 import org.StatePattern.StateInterface;
-import org.StatePattern.StateTransition;
-
-import java.io.IOException;
 
 public abstract class ManagerState implements StateInterface {
 
