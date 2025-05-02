@@ -21,7 +21,6 @@ import org.MessagePKG.MessageType;
 import org.ReducerSide.Reducer;
 import org.ServerSide.MasterServer;
 
-import static org.ServerSide.MasterServer.getWifiInetAddress;
 
 public class WorkerClient extends Thread {
 
@@ -29,7 +28,6 @@ public class WorkerClient extends Thread {
     private Socket socket;
     private ObjectInputStream server_input_stream;
     private ObjectOutputStream server_output_stream;
-    InetAddress wifiAddress;
 
     private ObjectInputStream reducer_input_stream;
     private ObjectOutputStream reducer_output_stream;
@@ -64,8 +62,10 @@ public class WorkerClient extends Thread {
         synchronized (shop) {
             serverCart.getProducts().forEach((product_id, quantity) -> {
                 Product cart_product = shop.getProductById(product_id);
-                cart_product.removeAvailableAmount(quantity);
-                cart_product.sellProduct(quantity);
+                synchronized (cart_product) {
+                    cart_product.removeAvailableAmount(quantity);
+                    cart_product.sellProduct(quantity);
+                }
             });
         }
     }
@@ -151,6 +151,16 @@ public class WorkerClient extends Thread {
 
                 ArrayList<Shop> shop_list = getShopListFromId(worker_id);
                 shop_list.add(new_shop);
+            }
+
+            case ADD_OLD_PRODUCT_TO_SHOP, SYNC_ADD_OLD_PRODUCT_TO_SHOP -> {
+                int shop_id = message.getArgument("shop_id");
+                int product_id = message.getArgument("product_id");
+
+                Shop shop = getShopFromId(worker_id, shop_id);
+                Product product = shop.getProductById(product_id);
+
+                product.set_removed_status(false);
             }
 
             case ADD_PRODUCT_TO_SHOP, SYNC_ADD_PRODUCT_TO_SHOP -> {
@@ -301,7 +311,6 @@ public class WorkerClient extends Thread {
     private ArrayList<Pair<String, Integer>> getProductCategorySales(ArrayList<Shop> shops, String category) {
         synchronized (shops) {
             return shops.stream()
-                    .filter(shop -> shop.getCategory().equals(category))
                     .map(shop -> new Pair<>(shop.getName(), shop.getTotalSalesForProductType(category)))
                     .collect(Collectors.toCollection(ArrayList::new));
         }
@@ -319,7 +328,7 @@ public class WorkerClient extends Thread {
     void connectToServer() {
         try {
 
-            socket = new Socket(wifiAddress, MasterServer.SERVER_CLIENT_PORT);
+            socket = new Socket("127.0.0.1", MasterServer.SERVER_CLIENT_PORT);
             server_output_stream = new ObjectOutputStream(socket.getOutputStream());
             server_input_stream = new ObjectInputStream(socket.getInputStream());
 
@@ -333,7 +342,7 @@ public class WorkerClient extends Thread {
     void connectToReducer(){
         try {
 
-            socket = new Socket(wifiAddress, Reducer.REDUCER_WORKER_PORT);
+            socket = new Socket("127.0.0.1", Reducer.REDUCER_WORKER_PORT);
 
             reducer_output_stream = new ObjectOutputStream(socket.getOutputStream());
             reducer_input_stream = new ObjectInputStream(socket.getInputStream());
@@ -351,7 +360,7 @@ public class WorkerClient extends Thread {
     @Override
     public void run() {
         try {
-            wifiAddress = getWifiInetAddress();
+
             connectToServer();
 
             id = server_input_stream.readInt();

@@ -22,7 +22,6 @@ public class Reducer{
     private int managing_workers_count = 0;
     public static final int REDUCER_WORKER_PORT = 7555;
     public static final String REDUCER_HOST = "127.0.0.1";
-    private InetAddress wifiAddress;
 
     HashMap<Integer, ReplicationListener> worker_listeners = new HashMap<>();
 
@@ -31,7 +30,7 @@ public class Reducer{
 
     private void connectToServer() {
         try {
-            Socket request_socket = new Socket(wifiAddress, MasterServer.SERVER_CLIENT_PORT);
+            Socket request_socket = new Socket("127.0.0.1", MasterServer.SERVER_CLIENT_PORT);
 
             server_output_stream = new ObjectOutputStream(request_socket.getOutputStream());
             server_input_stream = new ObjectInputStream(request_socket.getInputStream());
@@ -47,7 +46,7 @@ public class Reducer{
     }
 
     private void connectWithWorkers() throws IOException {
-        ServerSocket red_server_socket = new ServerSocket(REDUCER_WORKER_PORT, 0, wifiAddress);
+        ServerSocket red_server_socket = new ServerSocket(REDUCER_WORKER_PORT);
 
         int worker_count = 0;
         int command_ord = server_input_stream.readInt();
@@ -157,8 +156,6 @@ public class Reducer{
     }
 
     public void openReducer() throws SocketException {
-        wifiAddress = MasterServer.getWifiInetAddress();
-        System.out.println("Inet Address: " + wifiAddress);
 
         connectToServer();
 

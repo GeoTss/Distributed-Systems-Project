@@ -3,7 +3,6 @@ package org.ClientSide.ClientStates;
 import org.ClientSide.ClientStates.ClientStateArgs.ApplyFiltersArgs;
 import org.Domain.Utils;
 import org.MessagePKG.MessageType;
-import org.ServerSide.MasterServer;
 import org.StatePattern.HandlerInfo;
 import org.StatePattern.LockStatus;
 import org.StatePattern.StateArguments;
@@ -11,13 +10,9 @@ import org.ClientSide.ClientStates.ClientStateArgs.ManageFilteredShopsArgs;
 import org.Domain.Shop;
 import org.Filters.Filter;
 import org.Filters.PriceCategoryEnum;
-import org.ServerSide.Command;
 import org.StatePattern.StateTransition;
 
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.net.Socket;
 import java.util.ArrayList;
 import java.util.TreeSet;
 
@@ -60,7 +55,6 @@ public class ApplyFiltersState extends ClientStates {
             }
         }
         handler_info.outputStream.writeInt(Filter.Types.END.ordinal());
-        filters.filter_types.clear();
 
         new Thread(() -> {
             try {
@@ -68,6 +62,7 @@ public class ApplyFiltersState extends ClientStates {
                 ArrayList<Shop> filtered_shops;
                 synchronized (handler_info.outputStream) {
                     handler_info.outputStream.flush();
+
                     filtered_shops = (ArrayList<Shop>) handler_info.inputStream.readObject();
                 }
 

@@ -6,7 +6,6 @@ import org.StatePattern.HandlerInfo;
 import org.StatePattern.LockStatus;
 import org.StatePattern.StateTransition;
 import org.ManagerSide.ManagerStates.ManagerState;
-import org.ServerSide.Command;
 import org.ServerSide.ConnectionType;
 import org.ServerSide.MasterServer;
 import org.StatePattern.StateArguments;
@@ -39,9 +38,8 @@ public class ManagerHandler {
     }
 
     public void startingPoint() throws IOException {
-        InetAddress wifiAddress = MasterServer.getWifiInetAddress();
-        System.out.println("Inet Address: " + wifiAddress);
-        Socket request_socket = new Socket(wifiAddress, MasterServer.SERVER_CLIENT_PORT);
+
+        Socket request_socket = new Socket("127.0.0.1", MasterServer.SERVER_CLIENT_PORT);
 
         outputStream = new ObjectOutputStream(request_socket.getOutputStream());
         inputStream = new ObjectInputStream(request_socket.getInputStream());
@@ -97,7 +95,7 @@ public class ManagerHandler {
             while (true) {
                 current_state = (ManagerState) transition.nextState;
                 current_args = transition.nextArgs;
-                transition = current_state.handleState(handler_info, current_args);
+                current_state.handleState(handler_info, current_args);
 
                 synchronized (handler_info.transition_queue) {
                     while (handler_info.transition_queue.isEmpty()) {

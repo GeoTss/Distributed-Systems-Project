@@ -2,20 +2,16 @@ package org.ClientSide;
 
 import org.ClientSide.ClientStates.ClientStates;
 import org.Domain.Utils.Pair;
-import org.ManagerSide.ManagerStates.ManagerState;
 import org.MessagePKG.MessageType;
 import org.StatePattern.HandlerInfo;
 import org.StatePattern.LockStatus;
 import org.StatePattern.StateArguments;
 import org.StatePattern.StateTransition;
 import org.Domain.Client;
-import org.ServerSide.Command;
 import org.ServerSide.ConnectionType;
 import org.ServerSide.MasterServer;
-import sun.misc.Signal;
 
 import java.io.*;
-import java.net.InetAddress;
 import java.net.Socket;
 import java.util.Scanner;
 
@@ -25,7 +21,6 @@ public class ClientHandler {
 
     private Client client_info;
 
-    private InetAddress wifiAddress;
     private ObjectOutputStream outputStream;
     private ObjectInputStream inputStream;
 
@@ -52,7 +47,6 @@ public class ClientHandler {
             synchronized (handler_info.output_queue) {
                 while (handler_info.output_queue.isEmpty()) {
                     handler_info.output_queue.wait();
-                    System.out.println("[OutputDispatcher] Started.");
                 }
                 output = handler_info.output_queue.poll();
             }
@@ -61,8 +55,6 @@ public class ClientHandler {
                 break;
 
             Runnable task = output.first;
-
-            System.out.println("[OutputDispatcher] Got task: " + task);
 
             boolean should_notify = output.second.first;
             LockStatus lock = output.second.second;
@@ -73,25 +65,19 @@ public class ClientHandler {
                 else
                     continue;
             }
-//            System.out.println("[OutputDispatcher] Ran successfully: " + task);
-//            System.out.println("Trying to enter the lock if... " + lock);
+
             if (lock != null) {
                 lock.input_status[0] = 1;
-//                System.out.println("[OutputDispatcher] Trying to notify...: " + lock);
                 synchronized (lock.input_lock) {
                     lock.input_lock.notify();
-//                    System.out.println("[OutputDispatcher] Notifying: " + task);
                 }
             }
-//            System.out.println("Exiting output pool");
         }
     }
 
     public void startingPoint() throws IOException {
 
-        InetAddress wifiAddress = MasterServer.getWifiInetAddress();
-        System.out.println("Inet Address: " + wifiAddress);
-        Socket request_socket = new Socket(wifiAddress, MasterServer.SERVER_CLIENT_PORT);
+        Socket request_socket = new Socket("127.0.0.1", MasterServer.SERVER_CLIENT_PORT);
 
         outputStream = new ObjectOutputStream(request_socket.getOutputStream());
         inputStream = new ObjectInputStream(request_socket.getInputStream());

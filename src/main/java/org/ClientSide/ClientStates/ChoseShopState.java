@@ -11,7 +11,6 @@ import org.Domain.Cart.CartStatus;
 import org.Domain.Cart.ReadableCart;
 import org.Domain.CheckoutResultWrapper;
 import org.Domain.Shop;
-import org.ServerSide.Command;
 import org.StatePattern.StateTransition;
 
 import java.io.IOException;
@@ -26,6 +25,7 @@ public class ChoseShopState extends ClientStates {
         System.out.println("3. Add to cart.");
         System.out.println("4. Remove from cart.");
         System.out.println("5. Show cart.");
+        System.out.println("6. Refresh shop");
     }
 
     @Override
@@ -36,26 +36,34 @@ public class ChoseShopState extends ClientStates {
         Shop resulting_shop;
 
         try {
-            handler_info.outputStream.writeInt(MessageType.CHOSE_SHOP.ordinal());
-            handler_info.outputStream.writeInt(args.shop_id);
-            handler_info.outputStream.flush();
+            synchronized (handler_info.outputStream) {
+                handler_info.outputStream.writeInt(MessageType.CHOSE_SHOP.ordinal());
+                handler_info.outputStream.writeInt(args.shop_id);
+                handler_info.outputStream.flush();
 
-            resulting_shop = (Shop) handler_info.inputStream.readObject();
+                synchronized (handler_info.inputStream) {
+                    resulting_shop = (Shop) handler_info.inputStream.readObject();
+                }
+            }
+
         } catch (ClassNotFoundException | InterruptedIOException e) {
             throw new RuntimeException(e);
         }
 
         int choice = 0;
         do {
+
             LockStatus lock = new LockStatus();
 
-            Runnable task = () -> {
-                resulting_shop.showProducts();
-                printChoices();
-                System.out.println("Enter choice: ");
-            };
+            Shop finalResulting_shop = resulting_shop;
 
             synchronized (handler_info.output_queue){
+                Runnable task = () -> {
+                    finalResulting_shop.showProducts();
+                    printChoices();
+                    System.out.println("Enter choice: ");
+                };
+
                 Utils.Pair<Runnable, Utils.Pair<Boolean, LockStatus>> output_entry = new Utils.Pair<>(
                         task,
                         new Utils.Pair<>(true, lock)
@@ -94,6 +102,22 @@ public class ChoseShopState extends ClientStates {
                 case 3 -> handleAddToCart(handler_info);
                 case 4 -> handleRemoveFromCart(handler_info);
                 case 5 -> handleShowCart(handler_info);
+                case 6 -> {
+                    try {
+                        synchronized (handler_info.outputStream) {
+                            handler_info.outputStream.writeInt(MessageType.CHOSE_SHOP.ordinal());
+                            handler_info.outputStream.writeInt(args.shop_id);
+                            handler_info.outputStream.flush();
+
+                            synchronized (handler_info.inputStream) {
+                                resulting_shop = (Shop) handler_info.inputStream.readObject();
+                            }
+                        }
+
+                    } catch (ClassNotFoundException | InterruptedIOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
             }
 
         }while (choice != 0);
@@ -116,7 +140,10 @@ public class ChoseShopState extends ClientStates {
                 synchronized (handler_info.outputStream) {
                     handler_info.outputStream.writeInt(MessageType.CHECKOUT.ordinal());
                     handler_info.outputStream.flush();
-                    checkout_result = (CheckoutResultWrapper) handler_info.inputStream.readObject();
+
+                    synchronized (handler_info.inputStream) {
+                        checkout_result = (CheckoutResultWrapper) handler_info.inputStream.readObject();
+                    }
                 }
             } catch (IOException | ClassNotFoundException e) {
                 throw new RuntimeException(e);
@@ -158,7 +185,10 @@ public class ChoseShopState extends ClientStates {
                     handler_info.outputStream.writeInt(product_id);
                     handler_info.outputStream.writeInt(quantity);
                     handler_info.outputStream.flush();
-                    added_to_cart = handler_info.inputStream.readBoolean();
+
+                    synchronized (handler_info.inputStream) {
+                        added_to_cart = handler_info.inputStream.readBoolean();
+                    }
                 }
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -197,7 +227,10 @@ public class ChoseShopState extends ClientStates {
                     handler_info.outputStream.writeInt(product_id);
                     handler_info.outputStream.writeInt(quantity);
                     handler_info.outputStream.flush();
-                    removed = handler_info.inputStream.readBoolean();
+
+                    synchronized (handler_info.inputStream) {
+                        removed = handler_info.inputStream.readBoolean();
+                    }
                 }
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -227,7 +260,10 @@ public class ChoseShopState extends ClientStates {
                 synchronized (handler_info.outputStream) {
                     handler_info.outputStream.writeInt(MessageType.GET_CART.ordinal());
                     handler_info.outputStream.flush();
-                    readableCart = (ReadableCart) handler_info.inputStream.readObject();
+
+                    synchronized (handler_info) {
+                        readableCart = (ReadableCart) handler_info.inputStream.readObject();
+                    }
                 }
             } catch (IOException | ClassNotFoundException e) {
                 throw new RuntimeException(e);

@@ -3,9 +3,7 @@ package org.ManagerSide.ManagerStates;
 import org.Domain.Utils;
 import org.ManagerSide.ManagerHandler;
 import org.Domain.Shop;
-import org.ManagerSide.ManagerStates.ManagerStateArgs.ChoseShopArgs;
 import org.MessagePKG.MessageType;
-import org.ServerSide.Command;
 import org.StatePattern.HandlerInfo;
 import org.StatePattern.LockStatus;
 import org.StatePattern.StateArguments;
@@ -18,9 +16,11 @@ public class ChoseShopState extends ManagerState {
     private static void printChoices(){
         System.out.println("0. Go Back.");
         System.out.println("1. Add Product.");
-        System.out.println("2. Remove Product.");
-        System.out.println("3. Add Available Product.");
-        System.out.println("4. Remove Available Product.");
+        System.out.println("2. Add old product.");
+        System.out.println("3. Remove Product.");
+        System.out.println("4. Add Available Product.");
+        System.out.println("5. Remove Available Product.");
+        System.out.println("6. Refresh shop");
     }
 
     @Override
@@ -57,28 +57,30 @@ public class ChoseShopState extends ManagerState {
         int shop_id = ManagerHandler.sc_input.nextInt();
         ManagerHandler.sc_input.nextLine();
 
+
+        int choice = 0;
+
+
+
+        Shop resulting_shop;
         synchronized (handler_info.outputStream) {
             handler_info.outputStream.writeInt(MessageType.CHOSE_SHOP.ordinal());
             handler_info.outputStream.writeInt(shop_id);
             handler_info.outputStream.flush();
-        }
 
-        Shop resulting_shop;
-        try {
+        }
+        synchronized (handler_info.inputStream) {
             resulting_shop = (Shop) handler_info.inputStream.readObject();
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
         }
-
-        int choice = 0;
 
         do{
 
             LockStatus input_lock_in = new LockStatus();
             synchronized (handler_info.output_queue) {
 
+                Shop finalResulting_shop = resulting_shop;
                 Runnable task = () -> {
-                    resulting_shop.showProducts();
+                    finalResulting_shop.showManagerProducts();
                     printChoices();
                     System.out.println("Enter choice:");
                 };
@@ -105,9 +107,21 @@ public class ChoseShopState extends ManagerState {
 
             switch (choice){
                 case 1 -> handleAddProduct(handler_info);
-                case 2 -> handleRemoveProduct(handler_info);
-                case 3 -> handleAddAvailableProduct(handler_info);
-                case 4 -> handleRemoveAvailableProduct(handler_info);
+                case 2 -> handleAddOldProduct(handler_info);
+                case 3 -> handleRemoveProduct(handler_info);
+                case 4 -> handleAddAvailableProduct(handler_info);
+                case 5 -> handleRemoveAvailableProduct(handler_info);
+                case 6 -> {
+                    synchronized (handler_info.outputStream) {
+                        handler_info.outputStream.writeInt(MessageType.CHOSE_SHOP.ordinal());
+                        handler_info.outputStream.writeInt(shop_id);
+                        handler_info.outputStream.flush();
+
+                        synchronized (handler_info.inputStream) {
+                            resulting_shop = (Shop) handler_info.inputStream.readObject();
+                        }
+                    }
+                }
             }
 
         }while (choice != 0);
@@ -117,6 +131,46 @@ public class ChoseShopState extends ManagerState {
             handler_info.transition_queue.notify();
         }
         return null;
+    }
+
+    private void handleAddOldProduct(HandlerInfo handler_info) {
+        System.out.print("Enter the product ID of the product you want to add back: ");
+        int product_id = ManagerHandler.sc_input.nextInt();
+
+        new Thread(() -> {
+            boolean successfully_removed = false;
+            try {
+                synchronized (handler_info.outputStream) {
+                    handler_info.outputStream.writeInt(MessageType.REMOVE_PRODUCT_FROM_SHOP.ordinal());
+                    handler_info.outputStream.writeInt(product_id);
+                    handler_info.outputStream.flush();
+                }
+                synchronized (handler_info.inputStream) {
+                    successfully_removed = handler_info.inputStream.readBoolean();
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+            synchronized (handler_info.output_queue){
+                boolean finalSuccessfully_removed = successfully_removed;
+
+                Runnable task = () -> {
+                    if (finalSuccessfully_removed)
+                        System.out.println("Product was successfully addded back.");
+                    else
+                        System.out.println("Failure on adding back the product.");
+                };
+
+                Utils.Pair<Runnable, Utils.Pair<Boolean, LockStatus>> output_entry = new Utils.Pair<>(
+                        task,
+                        new Utils.Pair<>(false, null)
+                );
+                handler_info.output_queue.add(output_entry);
+                handler_info.output_queue.notify();
+
+            }
+        }).start();
     }
 
     private void handleAddProduct(HandlerInfo handler_info) throws IOException, ClassNotFoundException {
@@ -145,6 +199,8 @@ public class ChoseShopState extends ManagerState {
                     handler_info.outputStream.writeFloat(price);
                     handler_info.outputStream.flush();
 
+                }
+                synchronized (handler_info.inputStream) {
                     successfully_added = handler_info.inputStream.readBoolean();
                 }
             } catch (IOException e) {
@@ -153,12 +209,12 @@ public class ChoseShopState extends ManagerState {
 
             synchronized (handler_info.output_queue){
                 boolean finalSuccessfully_added = successfully_added;
-                // Inside handleAddProduct thread
+
                 Runnable task = () -> {
                     if (finalSuccessfully_added)
                         System.out.println("Product was successfully added.");
                     else
-                        System.out.println("Failure on adding the product, aborting.");
+                        System.out.println("Failure on adding the product.");
                 };
 
                 Utils.Pair<Runnable, Utils.Pair<Boolean, LockStatus>> output_entry = new Utils.Pair<>(
@@ -183,6 +239,8 @@ public class ChoseShopState extends ManagerState {
                     handler_info.outputStream.writeInt(MessageType.REMOVE_PRODUCT_FROM_SHOP.ordinal());
                     handler_info.outputStream.writeInt(product_id);
                     handler_info.outputStream.flush();
+                }
+                synchronized (handler_info.inputStream) {
                     successfully_removed = handler_info.inputStream.readBoolean();
                 }
             } catch (IOException e) {
@@ -191,12 +249,12 @@ public class ChoseShopState extends ManagerState {
 
             synchronized (handler_info.output_queue){
                 boolean finalSuccessfully_removed = successfully_removed;
-                // Inside handleAddProduct thread
+
                 Runnable task = () -> {
                     if (finalSuccessfully_removed)
-                        System.out.println("Product was successfully added.");
+                        System.out.println("Product was successfully removed.");
                     else
-                        System.out.println("Failure on adding the product, aborting.");
+                        System.out.println("Failure on removing the product.");
                 };
 
                 Utils.Pair<Runnable, Utils.Pair<Boolean, LockStatus>> output_entry = new Utils.Pair<>(
@@ -225,20 +283,22 @@ public class ChoseShopState extends ManagerState {
                     handler_info.outputStream.writeInt(product_id);
                     handler_info.outputStream.writeInt(quantity);
                     handler_info.outputStream.flush();
-                    successfully_added = handler_info.inputStream.readBoolean();
                 }
+
+                successfully_added = handler_info.inputStream.readBoolean();
+
             }catch (IOException e){
                 throw new RuntimeException(e);
             }
 
             synchronized (handler_info.output_queue){
                 boolean finalSuccessfully_added = successfully_added;
-                // Inside handleAddProduct thread
+
                 Runnable task = () -> {
                     if (finalSuccessfully_added)
                         System.out.println("Product was successfully added.");
                     else
-                        System.out.println("Failure on adding the product, aborting.");
+                        System.out.println("Failure on adding the product.");
                 };
 
                 Utils.Pair<Runnable, Utils.Pair<Boolean, LockStatus>> output_entry = new Utils.Pair<>(
@@ -267,6 +327,9 @@ public class ChoseShopState extends ManagerState {
                     handler_info.outputStream.writeInt(product_id);
                     handler_info.outputStream.writeInt(quantity);
                     handler_info.outputStream.flush();
+
+                }
+                synchronized (handler_info.inputStream) {
                     successfully_removed = handler_info.inputStream.readBoolean();
                 }
             }catch (IOException e){
@@ -277,9 +340,9 @@ public class ChoseShopState extends ManagerState {
                 boolean finalSuccessfully_removed = successfully_removed;
                 Runnable task = () -> {
                     if (finalSuccessfully_removed)
-                        System.out.println("Product was successfully added.");
+                        System.out.println("Product stock was successfully removed.");
                     else
-                        System.out.println("Failure on adding the product, aborting.");
+                        System.out.println("Failure on removing product stock.");
                 };
 
                 Utils.Pair<Runnable, Utils.Pair<Boolean, LockStatus>> output_entry = new Utils.Pair<>(

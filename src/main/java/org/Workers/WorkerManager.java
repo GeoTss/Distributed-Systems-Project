@@ -7,35 +7,16 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.*;
-import java.util.Collections;
-import java.util.Iterator;
 
 public class WorkerManager {
 
-    public static InetAddress getWifiInetAddress() throws SocketException {
-        for (Iterator<NetworkInterface> it = NetworkInterface.getNetworkInterfaces().asIterator(); it.hasNext(); ) {
-            NetworkInterface netIf = it.next();
-            if (netIf.isUp() && !netIf.isLoopback() && !netIf.isVirtual()) {
-                for (InetAddress addr : Collections.list(netIf.getInetAddresses())) {
-                    if (addr instanceof Inet4Address && !addr.isLoopbackAddress()) {
-                        return addr;
-                    }
-                }
-            }
-        }
-        return null;
-    }
-
     public static void main(String[] args) throws IOException {
-
-        InetAddress wifiAddress = getWifiInetAddress();
 
         Socket worker_initializer = null;
         ObjectOutputStream server_writer = null;
         ObjectInputStream server_input = null;
         try {
-            worker_initializer = new Socket(wifiAddress, MasterServer.SERVER_CLIENT_PORT);
-            System.out.println("Worker manager connected with server at: " + wifiAddress);
+            worker_initializer = new Socket("127.0.0.1", MasterServer.SERVER_CLIENT_PORT);
 
             server_writer = new ObjectOutputStream(worker_initializer.getOutputStream());
             server_input = new ObjectInputStream(worker_initializer.getInputStream());

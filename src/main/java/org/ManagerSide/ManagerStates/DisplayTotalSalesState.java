@@ -3,7 +3,6 @@ package org.ManagerSide.ManagerStates;
 import org.Domain.Utils;
 import org.ManagerSide.ManagerHandler;
 import org.MessagePKG.MessageType;
-import org.ServerSide.Command;
 import org.StatePattern.HandlerInfo;
 import org.StatePattern.LockStatus;
 import org.StatePattern.StateArguments;

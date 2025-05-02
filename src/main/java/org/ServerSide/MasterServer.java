@@ -16,9 +16,7 @@ import org.ReducerSide.ReducerPreparationType;
 import org.ServerSide.ActiveReplication.ReplicationHandler;
 import org.ClientSide.ClientRequestHandler;
 import org.Workers.WorkerClient;
-import org.Workers.WorkerCommandType;
 import org.Workers.Listeners.ReplicationListener;
-import org.Workers.WorkerManagerCommandType;
 
 public class MasterServer {
     public static final int SERVER_CLIENT_PORT = 7777;
@@ -219,25 +217,10 @@ public class MasterServer {
         System.out.println("All workers connected!");
     }
 
-    public static InetAddress getWifiInetAddress() throws SocketException {
-        for (Iterator<NetworkInterface> it = NetworkInterface.getNetworkInterfaces().asIterator(); it.hasNext(); ) {
-            NetworkInterface netIf = it.next();
-            if (netIf.isUp() && !netIf.isLoopback() && !netIf.isVirtual()) {
-                for (InetAddress addr : java.util.Collections.list(netIf.getInetAddresses())) {
-                    if (addr instanceof Inet4Address && !addr.isLoopbackAddress()) {
-                        return addr;
-                    }
-                }
-            }
-        }
-        return null;
-    }
-
     void openServer() {
         try {
-            InetAddress wifiAddress = getWifiInetAddress();
-            System.out.println("Inet Address: " + wifiAddress);
-            connection = new ServerSocket(SERVER_CLIENT_PORT, 0, wifiAddress);
+
+            connection = new ServerSocket(SERVER_CLIENT_PORT);
 
             connectReducer();
             System.out.println("Reducer Connected!");

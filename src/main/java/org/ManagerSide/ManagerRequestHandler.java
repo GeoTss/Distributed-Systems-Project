@@ -50,14 +50,15 @@ public class ManagerRequestHandler extends Thread {
         synchronized (replicatedWorker) {
             int main_id = replicatedWorker.getId();
             try {
-                handler = worker_listeners.get(main_id);
-                monitor = handler.registerMonitor(request_id, worker_id, monitor);
-
-                ObjectOutputStream main_worker_writer = replicatedWorker.getMain();
-                write_logic.accept(main_worker_writer);
-                main_worker_writer.flush();
-
-                return main_id;
+                throw new IOException();
+//                handler = worker_listeners.get(main_id);
+//                monitor = handler.registerMonitor(request_id, worker_id, monitor);
+//
+//                ObjectOutputStream main_worker_writer = replicatedWorker.getMain();
+//                write_logic.accept(main_worker_writer);
+//                main_worker_writer.flush();
+//
+//                return main_id;
             } catch (IOException e) {
                 if (handler != null)
                     handler.unregisterMonitor(request_id, worker_id);
@@ -91,13 +92,13 @@ public class ManagerRequestHandler extends Thread {
 
         int main_id = replicatedWorker.getMainId();
         try {
-
-            ObjectOutputStream main_worker_writer = replicatedWorker.getMain();
-            synchronized (main_worker_writer) {
-                write_logic.accept(main_worker_writer);
-                main_worker_writer.flush();
-            }
-            return main_id;
+            throw new IOException();
+//            ObjectOutputStream main_worker_writer = replicatedWorker.getMain();
+//            synchronized (main_worker_writer) {
+//                write_logic.accept(main_worker_writer);
+//                main_worker_writer.flush();
+//            }
+//            return main_id;
         } catch (IOException e) {
 
             System.err.println("Main worker failed. Going for replicas... " + e.getMessage());
@@ -127,11 +128,12 @@ public class ManagerRequestHandler extends Thread {
         int main_id = replicatedWorker.getMainId();
         synchronized (replicatedWorker) {
             try {
-                ObjectOutputStream main_worker_writer = replicatedWorker.getMain();
-                write_logic.accept(main_worker_writer);
-                main_worker_writer.flush();
-
-                return new Pair<>(replicatedWorker.getId(), replicatedWorker.getId());
+                throw new IOException();
+//                ObjectOutputStream main_worker_writer = replicatedWorker.getMain();
+//                write_logic.accept(main_worker_writer);
+//                main_worker_writer.flush();
+//
+//                return new Pair<>(replicatedWorker.getId(), replicatedWorker.getId());
             } catch (IOException e) {
 
                 System.err.println("Main worker failed. Going for replicas... " + e.getMessage());
@@ -171,6 +173,7 @@ public class ManagerRequestHandler extends Thread {
             case GET_SHOPS -> handleGetShops(requestId);
             case CHOSE_SHOP -> handleChooseShop(requestId);
             case ADD_SHOP -> handleAddShop(requestId);
+            case ADD_OLD_PRODUCT_TO_SHOP -> handleAddOldProduct(requestId);
             case ADD_PRODUCT_TO_SHOP -> handleAddProduct(requestId);
             case REMOVE_PRODUCT_FROM_SHOP -> handleRemoveProduct(requestId);
             case ADD_PRODUCT_STOCK -> handleAddAvailableProduct(requestId);
@@ -178,6 +181,46 @@ public class ManagerRequestHandler extends Thread {
             case GET_SHOP_CATEGORY_SALES -> handleGetShopCategorySales(requestId);
             case GET_PRODUCT_CATEGORY_SALES -> handleGetProductCategorySales(requestId);
         }
+    }
+
+    private void handleAddOldProduct(long requestId) throws IOException {
+
+        int product_id = in.readInt();
+
+        ReplicationHandler replicated_worker = getWorkerForShop(current_shop_id);
+
+        Message message = new Message();
+        message.addArgument("shop_id", new Pair<>(MessageArgCast.INT_ARG, current_shop_id));
+        message.addArgument("product_id", new Pair<>(MessageArgCast.INT_ARG, product_id));
+
+        ThrowingConsumer<ObjectOutputStream> writer = (out) -> {
+            out.reset();
+            out.writeInt(MessageType.ADD_OLD_PRODUCT_TO_SHOP.ordinal());
+            out.writeLong(requestId);
+            out.writeInt(replicated_worker.getId());
+            out.writeObject(message);
+        };
+
+        int sent_to = sendToWorkerWithReplicas(replicated_worker, writer, requestId, replicated_worker.getId());
+        boolean success = false;
+
+        if(sent_to != -1){
+            success = true;
+
+            ThrowingConsumer<ObjectOutputStream> sync_writer = (out) -> {
+                out.reset();
+                out.writeInt(MessageType.SYNC_ADD_OLD_PRODUCT_TO_SHOP.ordinal());
+                out.writeLong(requestId);
+                out.writeInt(replicated_worker.getId());
+                out.writeObject(message);
+            };
+
+            System.out.println("Syncing replicas...");
+            syncReplicas(replicated_worker, sync_writer);
+            System.out.println("Replicas synced");
+        }
+        out.writeBoolean(success);
+        out.flush();
     }
 
     private void handleChooseShop(long requestId) throws IOException, InterruptedException {
@@ -216,7 +259,6 @@ public class ManagerRequestHandler extends Thread {
 
         Message message = new Message();
         message.addArgument("filter_list", new Pair<>(MessageArgCast.ARRAY_LIST_ARG, empty_arr));
-//        message.addArgument("ack", new Pair<>(MessageArgCast.STRING_CAST, new String("acknowledged")));
 
         for(ReplicationHandler handler: replicated_worker_handlers.values()) {
 
@@ -387,7 +429,7 @@ public class ManagerRequestHandler extends Thread {
         boolean success = false;
         if(sent_to != -1){
             success = true;
-            System.out.println("Product was added successfully");
+            System.out.println("Product was removed successfully");
 
             writer = (wout) -> {
                 wout.reset();

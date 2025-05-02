@@ -134,6 +134,15 @@ public class Shop implements Rateable, Categorisable, PriceCategory, Locatable, 
         System.out.println(builder);
     }
 
+    public void showManagerProducts(){
+        StringBuilder builder = new StringBuilder();
+        builder.append("Products:\n");
+        for (Product product : products.values()) {
+            builder.append(product).append("\tStatus: ").append(((product.is_removed()) ? "Removed\n": "Not removed\n"));
+        }
+        System.out.println(builder);
+    }
+
     public String toString() {
         StringBuilder builder = new StringBuilder();
         builder.append("Shop: ").append(name).append("\n");

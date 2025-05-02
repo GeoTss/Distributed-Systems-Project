@@ -2,6 +2,7 @@ package org.ClientSide.ClientStates;
 
 import org.ClientSide.ClientHandler;
 import org.ClientSide.ClientStates.ClientStateArgs.ChoseShopArgs;
+import org.Domain.Shop;
 import org.Domain.Utils;
 import org.StatePattern.HandlerInfo;
 import org.StatePattern.LockStatus;
@@ -10,8 +11,17 @@ import org.ClientSide.ClientStates.ClientStateArgs.ManageFilteredShopsArgs;
 import org.StatePattern.StateTransition;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class ManageFilteredShopsState extends ClientStates {
+
+    private boolean inShopList(ArrayList<Shop> shops, int shop_id){
+        for(Shop shop: shops){
+            if(shop.getId() == shop_id)
+                return true;
+        }
+        return false;
+    }
 
     @Override
     public StateTransition handleState(HandlerInfo handler_info, StateArguments arguments) throws IOException {
@@ -58,7 +68,7 @@ public class ManageFilteredShopsState extends ClientStates {
 
             synchronized (handler_info.output_queue) {
                 Runnable task = () -> {
-                    System.out.println("Enter shop ID: ");
+                    System.out.print("Enter shop ID: ");
                 };
 
                 Utils.Pair<Runnable, Utils.Pair<Boolean, LockStatus>> output_entry = new Utils.Pair<>(
@@ -79,6 +89,10 @@ public class ManageFilteredShopsState extends ClientStates {
             }
 
             int shop_id = ClientHandler.sc_input.nextInt();
+            while(!inShopList(shop_args.filtered_shops, shop_id)){
+                System.out.print("The ID you entered isn't in the filtered shop list. Please enter it again: ");
+                shop_id = ClientHandler.sc_input.nextInt();
+            }
 
             ChoseShopArgs choseShopArgs = new ChoseShopArgs();
             choseShopArgs.shop_id = shop_id;

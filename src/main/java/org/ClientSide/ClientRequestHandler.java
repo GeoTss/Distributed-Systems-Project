@@ -9,10 +9,8 @@ import org.Filters.*;
 import org.MessagePKG.MessageType;
 import org.ReducerSide.ReducerPreparationType;
 import org.ServerSide.ActiveReplication.ReplicationHandler;
-import org.ServerSide.Command;
 import org.ServerSide.RequestMonitor;
 import org.ServerSide.ThrowingConsumer;
-import org.Workers.WorkerCommandType;
 import org.Workers.Listeners.ReplicationListener;
 import org.MessagePKG.Message;
 import org.MessagePKG.MessageArgCast;
@@ -48,15 +46,15 @@ public class ClientRequestHandler extends Thread {
         synchronized (replicatedWorker) {
             int main_id = replicatedWorker.getId();
             try {
-//                throw new IOException();
-                handler = worker_listeners.get(main_id);
-                monitor = handler.registerMonitor(request_id, worker_id, monitor);
-
-                ObjectOutputStream main_worker_writer = replicatedWorker.getMain();
-                write_logic.accept(main_worker_writer);
-                main_worker_writer.flush();
-
-                return main_id;
+                throw new IOException();
+//                handler = worker_listeners.get(main_id);
+//                monitor = handler.registerMonitor(request_id, worker_id, monitor);
+//
+//                ObjectOutputStream main_worker_writer = replicatedWorker.getMain();
+//                write_logic.accept(main_worker_writer);
+//                main_worker_writer.flush();
+//
+//                return main_id;
             } catch (IOException e) {
                 if (handler != null)
                     handler.unregisterMonitor(request_id, worker_id);
@@ -90,13 +88,13 @@ public class ClientRequestHandler extends Thread {
 
         synchronized (replicatedWorker) {
             try {
-//                throw new IOException();
-                ObjectOutputStream main_worker_writer = replicatedWorker.getMain();
-
-                write_logic.accept(main_worker_writer);
-                main_worker_writer.flush();
-
-                return new Pair<>(replicatedWorker.getId(), replicatedWorker.getMainId());
+                throw new IOException();
+//                ObjectOutputStream main_worker_writer = replicatedWorker.getMain();
+//
+//                write_logic.accept(main_worker_writer);
+//                main_worker_writer.flush();
+//
+//                return new Pair<>(replicatedWorker.getId(), replicatedWorker.getMainId());
             } catch (IOException e) {
                 System.err.println("Main worker failed. Going for replicas... " + e.getMessage());
 

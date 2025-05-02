@@ -9,7 +9,6 @@ import java.util.HashMap;
 public class Message implements Serializable {
 
     private HashMap<String, Pair<MessageArgCast, Object>> argument_list = new HashMap<>();
-    private int arg_index = 0;
 
     public <T> T getArgument(String tag){
         Pair<MessageArgCast, Object> arg_pair = argument_list.get(tag);
