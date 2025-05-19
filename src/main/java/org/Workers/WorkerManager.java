@@ -16,7 +16,7 @@ public class WorkerManager {
         ObjectOutputStream server_writer = null;
         ObjectInputStream server_input = null;
         try {
-            worker_initializer = new Socket("127.0.0.1", MasterServer.SERVER_CLIENT_PORT);
+            worker_initializer = new Socket(MasterServer.SERVER_HOST, MasterServer.SERVER_CLIENT_PORT);
 
             server_writer = new ObjectOutputStream(worker_initializer.getOutputStream());
             server_input = new ObjectInputStream(worker_initializer.getInputStream());

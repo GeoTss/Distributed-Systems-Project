@@ -22,7 +22,19 @@ public class Message implements Serializable {
     @Override
     public String toString(){
         StringBuilder str = new StringBuilder();
-        argument_list.forEach((tag, raw_arg) -> str.append("[" + tag + "] -> " + raw_arg.first.getCastedArg(raw_arg.second)));
+        str.append("{\n");
+        argument_list.forEach((tag, raw_arg) -> {
+            if(raw_arg.first == MessageArgCast.ARRAY_LIST_ARG)
+                str
+                    .append("[" + tag + "] -> " + ((ArrayList<?>) raw_arg.first.getCastedArg(raw_arg.second)).size())
+                    .append('\n');
+            else
+                str
+                    .append("[" + tag + "] -> " + raw_arg.first.getCastedArg(raw_arg.second))
+                    .append('\n');
+        }
+        );
+        str.append("}");
         return str.toString();
     }
 }

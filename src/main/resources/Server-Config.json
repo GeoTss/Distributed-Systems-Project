@@ -1,4 +1,19 @@
 {
-  "WorkerCount": 5,
-  "NumberOfReplicas": 2
+  "WorkerCount": 3,
+  "NumberOfReplicas": 2,
+
+  "WorkerInfo": [
+    {
+      "Host": "127.0.0.1",
+      "Port": 7556
+    },
+    {
+      "Host": "127.0.0.1",
+      "Port": 7557
+    },
+    {
+      "Host": "127.0.0.1",
+      "Port": 7558
+    }
+  ]
 }

@@ -77,7 +77,7 @@ public class ClientHandler {
 
     public void startingPoint() throws IOException {
 
-        Socket request_socket = new Socket("127.0.0.1", MasterServer.SERVER_CLIENT_PORT);
+        Socket request_socket = new Socket(MasterServer.SERVER_HOST, MasterServer.SERVER_CLIENT_PORT);
 
         outputStream = new ObjectOutputStream(request_socket.getOutputStream());
         inputStream = new ObjectInputStream(request_socket.getInputStream());

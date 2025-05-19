@@ -30,7 +30,8 @@ public enum MessageType {
     REMOVE_FROM_CART,
     CLEAR_CART,
     CHECKOUT,
+    GET_SHOPS,
     INITIAZE_WORKER,
     END_OF_INITIALIZATION,
-    GET_SHOPS
+    IS_WORKER_ALIVE
 }

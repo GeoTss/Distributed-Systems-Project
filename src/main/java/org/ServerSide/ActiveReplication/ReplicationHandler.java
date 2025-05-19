@@ -1,42 +1,55 @@
 package org.ServerSide.ActiveReplication;
 
+import org.Domain.Utils;
+import org.ServerSide.MasterServer;
+
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class ReplicationHandler {
     private int id;
 
     private int main_id;
-    private ObjectOutputStream main;
 
-    private HashMap<Integer, ObjectOutputStream> replicas = new HashMap<>();
+    private ArrayList<Integer> replicas = new ArrayList<>();
 
-    public void add_replica(int rep_id, ObjectOutputStream rep){
-        replicas.put(rep_id, rep);
+    public void add_replica(int rep_id){
+        replicas.add(rep_id);
     }
 
     public ObjectOutputStream getMain(){
-        return main;
+        Utils.Pair<ObjectOutputStream, ObjectInputStream> streams = MasterServer.worker_streams.get(main_id);
+        if(streams == null)
+            return null;
+        return streams.first;
     }
 
-    public Set<Integer> getReplicaIds(){
-        return replicas.keySet();
+    public ArrayList<Integer> getReplicaIds(){
+        return replicas;
     }
 
-    public List<ObjectOutputStream> getReplicasOutputs(){
-        return replicas.values().stream().toList();
+    public ArrayList<ObjectOutputStream> getReplicasOutputs(){
+        return replicas.stream()
+                .filter(rep_id -> MasterServer.worker_streams.get(rep_id) != null)
+                .map(rep_id -> MasterServer.worker_streams.get(rep_id).first)
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
     public ObjectOutputStream getReplicaOutput(int id){
-        return replicas.get(id);
+        Utils.Pair<ObjectOutputStream, ObjectInputStream> streams = MasterServer.worker_streams.get(id);
+        if(streams == null)
+            return null;
+        return streams.first;
     }
 
-    public void setMain(ObjectOutputStream main) {
-        this.main = main;
-    }
+//    public void setMain(ObjectOutputStream main) {
+//        this.main = main;
+//    }
 
     @Override
     public String toString(){
@@ -52,14 +65,8 @@ public class ReplicationHandler {
     }
 
     public void promoteToMain(int replica_id) {
-
-        if (main != null) {
-            replicas.put(main_id, main);
-        }
-
+        replicas.add(main_id);
         main_id = replica_id;
-        main = replicas.get(replica_id);
-
         replicas.remove(replica_id);
     }
 

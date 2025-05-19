@@ -1,5 +1,7 @@
 package org.ServerSide;
 
+import java.util.concurrent.TimeoutException;
+
 public class RequestMonitor {
 
     private Object result = null;
@@ -15,6 +17,16 @@ public class RequestMonitor {
     public synchronized Object getResult() throws InterruptedException {
         while (result == null){
             wait();
+        }
+        return result;
+    }
+
+    public synchronized Object getResult(long timeoutMillis) throws TimeoutException, InterruptedException {
+        long deadline = System.currentTimeMillis() + timeoutMillis;
+        while (result == null) {
+            long toWait = deadline - System.currentTimeMillis();
+            if (toWait <= 0) throw new TimeoutException("worker timeout");
+            wait(toWait);
         }
         return result;
     }

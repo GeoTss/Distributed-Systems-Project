@@ -50,15 +50,15 @@ public class ManagerRequestHandler extends Thread {
         synchronized (replicatedWorker) {
             int main_id = replicatedWorker.getId();
             try {
-                throw new IOException();
-//                handler = worker_listeners.get(main_id);
-//                monitor = handler.registerMonitor(request_id, worker_id, monitor);
-//
-//                ObjectOutputStream main_worker_writer = replicatedWorker.getMain();
-//                write_logic.accept(main_worker_writer);
-//                main_worker_writer.flush();
-//
-//                return main_id;
+//                throw new IOException();
+                handler = worker_listeners.get(main_id);
+                monitor = handler.registerMonitor(request_id, worker_id, monitor);
+
+                ObjectOutputStream main_worker_writer = replicatedWorker.getMain();
+                write_logic.accept(main_worker_writer);
+                main_worker_writer.flush();
+
+                return main_id;
             } catch (IOException e) {
                 if (handler != null)
                     handler.unregisterMonitor(request_id, worker_id);
@@ -92,13 +92,13 @@ public class ManagerRequestHandler extends Thread {
 
         int main_id = replicatedWorker.getMainId();
         try {
-            throw new IOException();
-//            ObjectOutputStream main_worker_writer = replicatedWorker.getMain();
-//            synchronized (main_worker_writer) {
-//                write_logic.accept(main_worker_writer);
-//                main_worker_writer.flush();
-//            }
-//            return main_id;
+//            throw new IOException();
+            ObjectOutputStream main_worker_writer = replicatedWorker.getMain();
+            synchronized (main_worker_writer) {
+                write_logic.accept(main_worker_writer);
+                main_worker_writer.flush();
+            }
+            return main_id;
         } catch (IOException e) {
 
             System.err.println("Main worker failed. Going for replicas... " + e.getMessage());
@@ -128,12 +128,12 @@ public class ManagerRequestHandler extends Thread {
         int main_id = replicatedWorker.getMainId();
         synchronized (replicatedWorker) {
             try {
-                throw new IOException();
-//                ObjectOutputStream main_worker_writer = replicatedWorker.getMain();
-//                write_logic.accept(main_worker_writer);
-//                main_worker_writer.flush();
-//
-//                return new Pair<>(replicatedWorker.getId(), replicatedWorker.getId());
+//                throw new IOException();
+                ObjectOutputStream main_worker_writer = replicatedWorker.getMain();
+                write_logic.accept(main_worker_writer);
+                main_worker_writer.flush();
+
+                return new Pair<>(replicatedWorker.getId(), replicatedWorker.getId());
             } catch (IOException e) {
 
                 System.err.println("Main worker failed. Going for replicas... " + e.getMessage());

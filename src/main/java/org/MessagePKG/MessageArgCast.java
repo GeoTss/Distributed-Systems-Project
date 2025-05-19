@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 public enum MessageArgCast {
     INT_ARG(Integer.class),
+    LONG_ARG(Long.class),
     FLOAT_ARG(Float.class),
     STRING_CAST(String.class),
     SHOP_ARG(Shop.class),

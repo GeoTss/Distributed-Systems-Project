@@ -3,7 +3,6 @@ package org.Workers;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.InetAddress;
 import java.net.Socket;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -17,12 +16,14 @@ import org.Domain.Shop;
 import org.Domain.Utils.Pair;
 import org.Filters.Filter;
 import org.MessagePKG.Message;
+import org.MessagePKG.MessageArgCast;
 import org.MessagePKG.MessageType;
 import org.ReducerSide.Reducer;
+import org.ServerSide.ConnectionType;
 import org.ServerSide.MasterServer;
 
 
-public class WorkerClient extends Thread {
+public class WorkerClient {
 
     private int id;
     private Socket socket;
@@ -129,8 +130,24 @@ public class WorkerClient extends Thread {
 
     public Shop getShopFromId(int worker_id, int shop_id) {
         ArrayList<Shop> shop_list = getShopListFromId(worker_id);
+        if(shop_list == null){
+            System.out.println("shop_list for shop with id " + shop_id + " doesn't exist in worker with id " + worker_id);
+            return null;
+        }
+        else if(shop_list.isEmpty()){
+            System.out.println("shop_list for shop with id " + shop_id + " is empty in worker with id " + worker_id);
+            return null;
+        }
 
-        return shop_list.stream().filter(shop -> shop_id == shop.getId()).findFirst().orElse(null);
+        for(Shop s_shop: shop_list){
+            System.out.println(s_shop + "\n");
+            if(shop_id == s_shop.getId()) {
+                System.out.println("Found shop: " + s_shop);
+                return s_shop;
+            }
+        }
+        System.out.println("Didn't find shop...");
+        return null;
     }
 
     private void send(ObjectOutputStream out, long request_id, int worker_id, Object result) throws IOException {
@@ -143,8 +160,34 @@ public class WorkerClient extends Thread {
         }
     }
 
-    private void handleCommand(long request_id, int worker_id, MessageType command, Message message) throws IOException, ClassNotFoundException {
+    private void handleCommand(Message message) throws IOException, ClassNotFoundException {
+
+        System.out.println("Got message: " + message);
+
+        long request_id = message.getArgument("request_id");
+        int worker_id = message.getArgument("worker_id");
+
+        int command_ord = message.getArgument("command_ord");
+        MessageType command = MessageType.values()[command_ord];
+
         switch (command) {
+
+            case IS_WORKER_ALIVE -> {
+                Boolean result = true;
+                send(server_output_stream, request_id, worker_id, result);
+            }
+
+            case ADD_BACKUP -> {
+                int worker_backup_id = message.getArgument("worker_backup_id");
+
+                ArrayList<Shop> worker_managed_shops = message.getArgument("shop_list");
+                System.out.println("Worker id: " + id + " Received " + worker_backup_id + " and list with " + worker_managed_shops.size() + " shops");
+
+                synchronized (managed_shops) {
+                    managed_shops.put(worker_backup_id, new ArrayList<>(worker_managed_shops));
+                }
+                System.out.println("Worker " + id + " in map: " + managed_shops.get(worker_backup_id).size());
+            }
 
             case ADD_SHOP, SYNC_ADD_SHOP -> {
                 Shop new_shop = message.getArgument("new_shop");
@@ -328,9 +371,12 @@ public class WorkerClient extends Thread {
     void connectToServer() {
         try {
 
-            socket = new Socket("127.0.0.1", MasterServer.SERVER_CLIENT_PORT);
+            socket = new Socket(MasterServer.SERVER_HOST, MasterServer.SERVER_CLIENT_PORT);
             server_output_stream = new ObjectOutputStream(socket.getOutputStream());
             server_input_stream = new ObjectInputStream(socket.getInputStream());
+
+            server_output_stream.writeInt(ConnectionType.WORKER.ordinal());
+            server_output_stream.flush();
 
             System.out.println("Worker connected with server at port: " + MasterServer.SERVER_CLIENT_PORT);
 
@@ -342,12 +388,15 @@ public class WorkerClient extends Thread {
     void connectToReducer(){
         try {
 
-            socket = new Socket("127.0.0.1", Reducer.REDUCER_WORKER_PORT);
+            socket = new Socket(Reducer.REDUCER_HOST, Reducer.REDUCER_WORKER_PORT);
 
             reducer_output_stream = new ObjectOutputStream(socket.getOutputStream());
             reducer_input_stream = new ObjectInputStream(socket.getInputStream());
 
-            reducer_output_stream.writeInt(id);
+            Message msg = new Message();
+            msg.addArgument("worker_id", new Pair<>(MessageArgCast.INT_ARG, id));
+
+            reducer_output_stream.writeObject(msg);
             reducer_output_stream.flush();
 
             System.out.println("Worker connected with reducer at port: " + Reducer.REDUCER_WORKER_PORT);
@@ -357,8 +406,7 @@ public class WorkerClient extends Thread {
         }
     }
 
-    @Override
-    public void run() {
+    public void start() {
         try {
 
             connectToServer();
@@ -370,51 +418,33 @@ public class WorkerClient extends Thread {
 
             connectToReducer();
 
-            int worker_command_ord = server_input_stream.readInt();
-            MessageType worker_command = MessageType.values()[worker_command_ord];
-
-            while (worker_command != MessageType.END_BACKUP_LIST) {
-
-                int worker_backup_id = server_input_stream.readInt();
-
-                @SuppressWarnings("unchecked")
-                ArrayList<Shop> worker_managed_shops = (ArrayList<Shop>) server_input_stream.readObject();
-                System.out.println("Worker id: " + id + " Received " + worker_backup_id + " and list with " + worker_managed_shops.size() + " shops");
-
-                managed_shops.put(worker_backup_id, new ArrayList<>(worker_managed_shops));
-                System.out.println("Worker " + id + " in map: " + managed_shops.get(worker_backup_id).size());
-
-                worker_command_ord = server_input_stream.readInt();
-                worker_command = MessageType.values()[worker_command_ord];
-            }
-
-            MessageType worker_command_c;
+            MessageType worker_command;
             do {
-                synchronized (server_input_stream) {
-                    worker_command_c = MessageType.values()[server_input_stream.readInt()];
-                    final MessageType worker_command_fc = worker_command_c;
-                    final long request_id = server_input_stream.readLong();
-                    final int worker_id = server_input_stream.readInt();
-                    final Message message = (Message) server_input_stream.readObject();
 
+                Message message = (Message) server_input_stream.readObject();
 
-                    System.out.println("Got " + worker_command_fc);
-                    System.out.println("With arguments: " + message);
+                int command_ord = message.getArgument("command_ord");
+                worker_command = MessageType.values()[command_ord];
 
-                    new Thread(() -> {
-                        try {
-                            handleCommand(request_id, worker_id, worker_command_fc, message);
-                        } catch (IOException | ClassNotFoundException e) {
-                            e.printStackTrace();
-                        }
-                    }).start();
-                }
+                new Thread(() -> {
+                    try {
+                        handleCommand(message);
+                    } catch (IOException | ClassNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                }).start();
 
-            }while(worker_command_c != MessageType.QUIT);
+            }while(worker_command != MessageType.QUIT);
 
         } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
             throw new RuntimeException(e);
         }
+    }
+
+    public static void main(String[] args) {
+        WorkerClient worker = new WorkerClient();
+        worker.start();
     }
 
     @Override

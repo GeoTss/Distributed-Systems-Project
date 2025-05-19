@@ -1,5 +1,7 @@
 package org.ServerSide;
 
+import java.util.ArrayList;
+
 public class ServerConfigInfo {
     private int worker_count;
     private int number_of_replicas;

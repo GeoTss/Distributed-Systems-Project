@@ -15,6 +15,11 @@ public class ServerConfigDeserializer implements JsonDeserializer<ServerConfigIn
                 obj.get("NumberOfReplicas").getAsInt()
         );
 
+        //JsonArray worker_info_arr = obj.getAsJsonArray("WorkerInfo");
+        //for(JsonElement worker: worker_info_arr){
+        //
+        //}
+
         return configInfo;
     }
 }

@@ -2,6 +2,8 @@ package org.ReducerSide;
 
 import org.Domain.Shop;
 import org.Domain.Utils.Pair;
+import org.MessagePKG.Message;
+import org.ServerSide.ConnectionType;
 import org.ServerSide.MasterServer;
 import org.ServerSide.RequestMonitor;
 import org.Workers.Listeners.ReplicationListener;
@@ -9,7 +11,6 @@ import org.Workers.Listeners.ReplicationListener;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
@@ -18,10 +19,13 @@ import java.util.HashMap;
 
 public class Reducer{
 
+    ServerSocket red_server_socket;
+
+    public static String REDUCER_HOST = "127.0.0.1";
+
     private int id;
     private int managing_workers_count = 0;
     public static final int REDUCER_WORKER_PORT = 7555;
-    public static final String REDUCER_HOST = "127.0.0.1";
 
     HashMap<Integer, ReplicationListener> worker_listeners = new HashMap<>();
 
@@ -30,48 +34,27 @@ public class Reducer{
 
     private void connectToServer() {
         try {
-            Socket request_socket = new Socket("127.0.0.1", MasterServer.SERVER_CLIENT_PORT);
+            System.out.println("Trying to connect with server...");
+            Socket request_socket = new Socket(MasterServer.SERVER_HOST, MasterServer.SERVER_CLIENT_PORT);
+
+            System.out.println("Server accepted the connection request.");
 
             server_output_stream = new ObjectOutputStream(request_socket.getOutputStream());
             server_input_stream = new ObjectInputStream(request_socket.getInputStream());
 
-            id = server_input_stream.readInt();
-            managing_workers_count = server_input_stream.readInt();
-            System.out.println("Reducer's id: " + id);
-            System.out.println("Reducer manages " + managing_workers_count + " workers.");
-            System.out.println("Reducer connected with server at port: " + MasterServer.SERVER_CLIENT_PORT);
+            server_output_stream.writeInt(ConnectionType.REDUCER.ordinal());
+            server_output_stream.flush();
+
+//            Message msg = (Message) server_input_stream.readObject();
+//
+//            id = msg.getArgument("reducer_id");
+//            managing_workers_count = msg.getArgument("worker_count");
+//
+//            System.out.println("Reducer's id: " + id);
+//            System.out.println("Reducer manages " + managing_workers_count + " workers.");
+//            System.out.println("Reducer connected with server at port: " + MasterServer.SERVER_CLIENT_PORT);
         }catch(IOException e){
             e.printStackTrace();
-        }
-    }
-
-    private void connectWithWorkers() throws IOException {
-        ServerSocket red_server_socket = new ServerSocket(REDUCER_WORKER_PORT);
-
-        int worker_count = 0;
-        int command_ord = server_input_stream.readInt();
-        ReducerPreparationType command = ReducerPreparationType.values()[command_ord];
-
-        while (command != ReducerPreparationType.REDUCER_END_OF_WORKERS && worker_count < managing_workers_count) {
-            Socket worker_socket = red_server_socket.accept();
-
-            ObjectOutputStream worker_out = new ObjectOutputStream(worker_socket.getOutputStream());
-            ObjectInputStream worker_in = new ObjectInputStream(worker_socket.getInputStream());
-
-            int listener_id = worker_in.readInt();
-            System.out.println("Worker with id " + listener_id + " connected.");
-            ReplicationListener worker_listener = new ReplicationListener(worker_in);
-            worker_listener.setId(listener_id);
-
-            worker_listeners.put(listener_id, worker_listener);
-
-            worker_listener.start();
-
-            command_ord = server_input_stream.readInt();
-            command = ReducerPreparationType.values()[command_ord];
-
-            if(!(command == ReducerPreparationType.REDUCER_ADD_WORKER_CONNECTION))
-                break;
         }
     }
 
@@ -85,10 +68,8 @@ public class Reducer{
         }
     }
 
-    private ArrayList<RequestMonitor> prepareListeners(long request_id, Object extra_args){
+    private ArrayList<RequestMonitor> prepareListeners(long request_id, ArrayList<Pair<Integer, Integer>> workers_sent_to){
 
-        @SuppressWarnings("unchecked")
-        ArrayList<Pair<Integer, Integer>> workers_sent_to = (ArrayList<Pair<Integer, Integer>>) extra_args;
         System.out.println(workers_sent_to);
 
         ArrayList<RequestMonitor> result_monitors = new ArrayList<>();
@@ -111,11 +92,30 @@ public class Reducer{
         return result_monitors;
     }
 
-    private void handlePreparation(long request_id, ReducerPreparationType preparation, Object extra_args) throws InterruptedException, IOException {
+    private void handlePreparation(Message msg) throws InterruptedException, IOException {
+
+        int preparation_ord = msg.getArgument("prep_ord");
+
+        ReducerPreparationType preparation = ReducerPreparationType.values()[preparation_ord];
+        System.out.println("Got " + preparation);
+
         switch (preparation){
+
+            case SET_INFO -> {
+                id = msg.getArgument("reducer_id");
+                managing_workers_count = msg.getArgument("worker_count");
+
+                System.out.println("Reducer's id: " + id);
+                System.out.println("Reducer manages " + managing_workers_count + " workers.");
+                System.out.println("Reducer connected with server at port: " + MasterServer.SERVER_CLIENT_PORT);
+            }
+
             case REDUCER_PREPARE_FILTER -> {
 
-                ArrayList<RequestMonitor> result_monitors = prepareListeners(request_id, extra_args);
+                long request_id = msg.getArgument("request_id");
+                ArrayList<Pair<Integer, Integer>> workers_sent_to = msg.getArgument("workers_sent_to");
+
+                ArrayList<RequestMonitor> result_monitors = prepareListeners(request_id, workers_sent_to);
 
                 System.out.println("Waiting for all workers to send results...");
                 ArrayList<Shop> resulting_shops = new ArrayList<>();
@@ -130,7 +130,11 @@ public class Reducer{
             }
 
             case REDUCER_PREPARE_SHOP_CATEGORY_SALES, REDUCER_PREPARE_PRODUCT_CATEGORY_SALES -> {
-                ArrayList<RequestMonitor> result_monitors = prepareListeners(request_id, extra_args);
+
+                long request_id = msg.getArgument("request_id");
+                ArrayList<Pair<Integer, Integer>> workers_sent_to = msg.getArgument("workers_sent_to");
+
+                ArrayList<RequestMonitor> result_monitors = prepareListeners(request_id, workers_sent_to);
 
                 Pair<ArrayList<Pair<String, Integer>>, Integer> result = new Pair<>(new ArrayList<>(), 0);
 
@@ -155,35 +159,51 @@ public class Reducer{
         server_input_stream.close();
     }
 
+    private void acceptConnections() {
+        try {
+            final ServerSocket red_server_socket = new ServerSocket(REDUCER_WORKER_PORT);
+
+            while(true){
+                Socket worker_socket = red_server_socket.accept();
+
+                ObjectOutputStream worker_out = new ObjectOutputStream(worker_socket.getOutputStream());
+                ObjectInputStream worker_in = new ObjectInputStream(worker_socket.getInputStream());
+
+                Message msg = (Message) worker_in.readObject();
+
+                int listener_id = msg.getArgument("worker_id");
+                System.out.println("Worker with id " + listener_id + " connected.");
+                ReplicationListener worker_listener = new ReplicationListener(worker_in);
+                worker_listener.setId(listener_id);
+
+                worker_listeners.put(listener_id, worker_listener);
+
+                worker_listener.start();
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public void openReducer() throws SocketException {
 
         connectToServer();
 
         try {
-            connectWithWorkers();
+
+            (new Thread(this::acceptConnections)).start();
 
             while (true) {
-                long request_id;
-                int preparation_ord;
-                Object extra_args;
 
-                synchronized (server_input_stream) {
-                    request_id = server_input_stream.readLong();
-                    preparation_ord = server_input_stream.readInt();
-                    extra_args = server_input_stream.readObject();
+                Message msg = (Message) server_input_stream.readObject();
 
-                    ReducerPreparationType preparation = ReducerPreparationType.values()[preparation_ord];
-                    System.out.println("Got " + preparation);
-
-                    new Thread(() -> {
-                        try {
-                            handlePreparation(request_id, preparation, extra_args);
-                        }catch (IOException | InterruptedException e){
-                            e.printStackTrace();
-                        }
-                    }).start();
-                }
-
+                new Thread(() -> {
+                    try {
+                        handlePreparation(msg);
+                    }catch (IOException | InterruptedException e){
+                        e.printStackTrace();
+                    }
+                }).start();
             }
         }catch (IOException e){
             e.printStackTrace();
@@ -201,6 +221,7 @@ public class Reducer{
     }
 
     public static void main(String[] args) throws SocketException {
+        System.out.println("Starting reducer program.");
         new Reducer().openReducer();
     }
 }

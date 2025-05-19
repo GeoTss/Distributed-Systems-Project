@@ -71,12 +71,10 @@ public class ReplicationListener extends Thread {
                     result = worker_in.readObject();
                 }
 
-                HashMap<Integer, RequestMonitor> worker_results;
-
                 synchronized (monitor_responses_rep) {
                     HashMap<Integer, RequestMonitor> monitors = monitor_responses_rep.get(requestId);
                     if (monitors != null && monitors.containsKey(from_id)) {
-                        // deliver immediately
+
                         RequestMonitor mon = monitors.remove(from_id);
                         mon.setResult(result);
                         if (monitors.isEmpty()) {
@@ -88,8 +86,6 @@ public class ReplicationListener extends Thread {
                                 .put(from_id, result);
                     }
                 }
-
-
             }
         } catch (IOException | ClassNotFoundException e) {
             try {
@@ -107,5 +103,12 @@ public class ReplicationListener extends Thread {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public void shutdown() {
+        try {
+            worker_in.close();
+        } catch (IOException ignored) {}
+        this.interrupt();
     }
 }
