@@ -1,0 +1,23 @@
+{
+    "StoreName": "Snuscore",
+    "Latitude": 46.7839138,
+    "Longitude": -23.642246,
+    "FoodCategory": "Snus",
+    "Stars": 1,
+    "NoOfVotes": 179,
+    "StoreLogo": "/usr/bin/images/snuscore.png",
+    "Products": [
+        {
+            "ProductName": "Ginger Zing",
+            "ProductType": "Original Portion",
+            "Available Amount": 743,
+            "Price": 3.16
+        },
+        {
+            "ProductName": "Caramel Delight",
+            "ProductType": "Loose Snus",
+            "Available Amount": 205,
+            "Price": 9.0
+        }
+    ]
+}

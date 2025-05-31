@@ -1,0 +1,29 @@
+{
+    "StoreName": "Smells Like Snus Spirit",
+    "Latitude": 8.3920689,
+    "Longitude": -12.7002641,
+    "FoodCategory": "Snus",
+    "Stars": 3,
+    "NoOfVotes": 180,
+    "StoreLogo": "/usr/bin/images/smells_like_snus_spirit.png",
+    "Products": [
+        {
+            "ProductName": "Ghost Pepper Punch",
+            "ProductType": "Nicotine Pouches",
+            "Available Amount": 225,
+            "Price": 14.38
+        },
+        {
+            "ProductName": "Berry Blast",
+            "ProductType": "Herbal Snus",
+            "Available Amount": 333,
+            "Price": 14.2
+        },
+        {
+            "ProductName": "Ginger Zing",
+            "ProductType": "Herbal Snus",
+            "Available Amount": 64,
+            "Price": 14.69
+        }
+    ]
+}

@@ -1,0 +1,29 @@
+{
+    "StoreName": "Mr. Brightsnus",
+    "Latitude": -29.1097259,
+    "Longitude": 21.2889286,
+    "FoodCategory": "Snus",
+    "Stars": 1,
+    "NoOfVotes": 118,
+    "StoreLogo": "/usr/bin/images/mr._brightsnus.png",
+    "Products": [
+        {
+            "ProductName": "Kraken\u2019s Coconut Craze",
+            "ProductType": "Original Portion",
+            "Available Amount": 679,
+            "Price": 14.42
+        },
+        {
+            "ProductName": "Lemon Zest",
+            "ProductType": "Snus Pouches",
+            "Available Amount": 706,
+            "Price": 8.13
+        },
+        {
+            "ProductName": "Coconut Craze",
+            "ProductType": "Herbal Snus",
+            "Available Amount": 662,
+            "Price": 14.36
+        }
+    ]
+}

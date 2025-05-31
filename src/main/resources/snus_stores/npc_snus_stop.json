@@ -1,0 +1,23 @@
+{
+    "StoreName": "NPC Snus Stop",
+    "Latitude": 19.4347363,
+    "Longitude": -35.9049797,
+    "FoodCategory": "Snus",
+    "Stars": 5,
+    "NoOfVotes": 178,
+    "StoreLogo": "/usr/bin/images/npc_snus_stop.png",
+    "Products": [
+        {
+            "ProductName": "Ginger Zing",
+            "ProductType": "Original Portion",
+            "Available Amount": 93,
+            "Price": 10.78
+        },
+        {
+            "ProductName": "Vanilla Dream",
+            "ProductType": "Herbal Snus",
+            "Available Amount": 426,
+            "Price": 12.19
+        }
+    ]
+}

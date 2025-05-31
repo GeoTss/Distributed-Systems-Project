@@ -1,0 +1,47 @@
+{
+    "StoreName": "Call Me Snus",
+    "Latitude": -4.345078,
+    "Longitude": -34.1327975,
+    "FoodCategory": "Snus",
+    "Stars": 3,
+    "NoOfVotes": 51,
+    "StoreLogo": "/usr/bin/images/call_me_snus.png",
+    "Products": [
+        {
+            "ProductName": "Berry Blast",
+            "ProductType": "Nicotine Pouches",
+            "Available Amount": 641,
+            "Price": 5.44
+        },
+        {
+            "ProductName": "Coconut Craze",
+            "ProductType": "Herbal Snus",
+            "Available Amount": 315,
+            "Price": 4.92
+        },
+        {
+            "ProductName": "Peachy Keen",
+            "ProductType": "Flavored Snus",
+            "Available Amount": 255,
+            "Price": 6.94
+        },
+        {
+            "ProductName": "Berry Blast",
+            "ProductType": "Nicotine Pouches",
+            "Available Amount": 435,
+            "Price": 13.96
+        },
+        {
+            "ProductName": "Watermelon Wave",
+            "ProductType": "Loose Snus",
+            "Available Amount": 759,
+            "Price": 12.16
+        },
+        {
+            "ProductName": "Zombie Apocalypse Flavor",
+            "ProductType": "Nicotine Pouches",
+            "Available Amount": 309,
+            "Price": 13.81
+        }
+    ]
+}

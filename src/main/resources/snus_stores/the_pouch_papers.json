@@ -1,0 +1,23 @@
+{
+    "StoreName": "The Pouch Papers",
+    "Latitude": -19.5248336,
+    "Longitude": 32.4189884,
+    "FoodCategory": "Snus",
+    "Stars": 1,
+    "NoOfVotes": 134,
+    "StoreLogo": "/usr/bin/images/the_pouch_papers.png",
+    "Products": [
+        {
+            "ProductName": "Ghost Pepper Punch",
+            "ProductType": "Slim",
+            "Available Amount": 381,
+            "Price": 3.41
+        },
+        {
+            "ProductName": "Time Traveler\u2019s Citrus",
+            "ProductType": "Chewing Tobacco",
+            "Available Amount": 501,
+            "Price": 3.95
+        }
+    ]
+}

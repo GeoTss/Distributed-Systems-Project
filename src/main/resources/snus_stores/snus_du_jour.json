@@ -1,0 +1,47 @@
+{
+    "StoreName": "Snus du Jour",
+    "Latitude": -32.8082997,
+    "Longitude": 34.9507345,
+    "FoodCategory": "Snus",
+    "Stars": 1,
+    "NoOfVotes": 60,
+    "StoreLogo": "/usr/bin/images/snus_du_jour.png",
+    "Products": [
+        {
+            "ProductName": "Peachy Keen",
+            "ProductType": "Long Cut",
+            "Available Amount": 387,
+            "Price": 14.83
+        },
+        {
+            "ProductName": "Spicy Cinnamon",
+            "ProductType": "Moist Snuff",
+            "Available Amount": 858,
+            "Price": 5.68
+        },
+        {
+            "ProductName": "Blueberry Bliss",
+            "ProductType": "Loose Snus",
+            "Available Amount": 134,
+            "Price": 2.65
+        },
+        {
+            "ProductName": "Strawberry Fields",
+            "ProductType": "Chewing Tobacco",
+            "Available Amount": 990,
+            "Price": 4.53
+        },
+        {
+            "ProductName": "Citrus Burst",
+            "ProductType": "Chewing Tobacco",
+            "Available Amount": 263,
+            "Price": 6.98
+        },
+        {
+            "ProductName": "Chocolate Indulgence",
+            "ProductType": "Dry Snuff",
+            "Available Amount": 381,
+            "Price": 3.79
+        }
+    ]
+}

@@ -1,0 +1,29 @@
+{
+    "StoreName": "The Nicotine Orgy",
+    "Latitude": -8.7619783,
+    "Longitude": 2.0409093,
+    "FoodCategory": "Snus",
+    "Stars": 3,
+    "NoOfVotes": 125,
+    "StoreLogo": "/usr/bin/images/the_nicotine_orgy.png",
+    "Products": [
+        {
+            "ProductName": "Strawberry Fields",
+            "ProductType": "Slim",
+            "Available Amount": 926,
+            "Price": 2.72
+        },
+        {
+            "ProductName": "Peachy Keen",
+            "ProductType": "Regular",
+            "Available Amount": 199,
+            "Price": 12.2
+        },
+        {
+            "ProductName": "Mermaid\u2019s Kiss Mint",
+            "ProductType": "Flavored Snus",
+            "Available Amount": 117,
+            "Price": 2.76
+        }
+    ]
+}

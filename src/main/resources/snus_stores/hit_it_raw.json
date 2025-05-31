@@ -1,0 +1,47 @@
+{
+    "StoreName": "Hit it Raw",
+    "Latitude": -7.317892,
+    "Longitude": -10.7113195,
+    "FoodCategory": "Snus",
+    "Stars": 3,
+    "NoOfVotes": 53,
+    "StoreLogo": "/usr/bin/images/hit_it_raw.png",
+    "Products": [
+        {
+            "ProductName": "Unicorn Tears",
+            "ProductType": "Loose Snus",
+            "Available Amount": 496,
+            "Price": 2.91
+        },
+        {
+            "ProductName": "Kraken\u2019s Coconut Craze",
+            "ProductType": "Herbal Snus",
+            "Available Amount": 491,
+            "Price": 14.85
+        },
+        {
+            "ProductName": "Alien Abduction Berry",
+            "ProductType": "Snus Pouches",
+            "Available Amount": 200,
+            "Price": 11.99
+        },
+        {
+            "ProductName": "Time Traveler\u2019s Citrus",
+            "ProductType": "Dry Snuff",
+            "Available Amount": 945,
+            "Price": 6.76
+        },
+        {
+            "ProductName": "Mermaid\u2019s Kiss Mint",
+            "ProductType": "Flavored Snus",
+            "Available Amount": 851,
+            "Price": 14.38
+        },
+        {
+            "ProductName": "Vanilla Dream",
+            "ProductType": "Slim",
+            "Available Amount": 627,
+            "Price": 4.93
+        }
+    ]
+}

@@ -1,0 +1,29 @@
+{
+    "StoreName": "Led Snusppelin",
+    "Latitude": 31.4011854,
+    "Longitude": 10.3647318,
+    "FoodCategory": "Snus",
+    "Stars": 4,
+    "NoOfVotes": 143,
+    "StoreLogo": "/usr/bin/images/led_snusppelin.png",
+    "Products": [
+        {
+            "ProductName": "Citrus Burst",
+            "ProductType": "Long Cut",
+            "Available Amount": 792,
+            "Price": 9.15
+        },
+        {
+            "ProductName": "Time Traveler\u2019s Citrus",
+            "ProductType": "Slim",
+            "Available Amount": 918,
+            "Price": 7.97
+        },
+        {
+            "ProductName": "Alien Abduction Berry",
+            "ProductType": "Chewing Tobacco",
+            "Available Amount": 281,
+            "Price": 4.31
+        }
+    ]
+}

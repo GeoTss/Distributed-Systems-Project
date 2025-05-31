@@ -1,0 +1,23 @@
+{
+    "StoreName": "The Forbidden Pouch",
+    "Latitude": -9.3797334,
+    "Longitude": 11.7013561,
+    "FoodCategory": "Snus",
+    "Stars": 4,
+    "NoOfVotes": 143,
+    "StoreLogo": "/usr/bin/images/the_forbidden_pouch.png",
+    "Products": [
+        {
+            "ProductName": "Caramel Delight",
+            "ProductType": "Flavored Snus",
+            "Available Amount": 139,
+            "Price": 12.14
+        },
+        {
+            "ProductName": "Zombie Apocalypse Flavor",
+            "ProductType": "Dry Snuff",
+            "Available Amount": 664,
+            "Price": 10.8
+        }
+    ]
+}

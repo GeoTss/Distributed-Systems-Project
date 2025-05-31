@@ -1,0 +1,41 @@
+{
+    "StoreName": "Quantum Snusics",
+    "Latitude": 4.3795265,
+    "Longitude": 6.4993076,
+    "FoodCategory": "Snus",
+    "Stars": 4,
+    "NoOfVotes": 107,
+    "StoreLogo": "/usr/bin/images/quantum_snusics.png",
+    "Products": [
+        {
+            "ProductName": "Dragonfruit Delight",
+            "ProductType": "Herbal Snus",
+            "Available Amount": 265,
+            "Price": 13.24
+        },
+        {
+            "ProductName": "Unicorn Tears",
+            "ProductType": "Herbal Snus",
+            "Available Amount": 495,
+            "Price": 11.04
+        },
+        {
+            "ProductName": "Spicy Cinnamon",
+            "ProductType": "Herbal Snus",
+            "Available Amount": 746,
+            "Price": 6.79
+        },
+        {
+            "ProductName": "Vampire\u2019s Blood Orange",
+            "ProductType": "Flavored Snus",
+            "Available Amount": 543,
+            "Price": 8.41
+        },
+        {
+            "ProductName": "Coconut Craze",
+            "ProductType": "Dry Snuff",
+            "Available Amount": 505,
+            "Price": 14.76
+        }
+    ]
+}

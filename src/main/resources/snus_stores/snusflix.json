@@ -1,0 +1,41 @@
+{
+    "StoreName": "Snusflix",
+    "Latitude": -37.1039453,
+    "Longitude": 16.3976055,
+    "FoodCategory": "Snus",
+    "Stars": 5,
+    "NoOfVotes": 196,
+    "StoreLogo": "/usr/bin/images/snusflix.png",
+    "Products": [
+        {
+            "ProductName": "Chocolate Indulgence",
+            "ProductType": "Chewing Tobacco",
+            "Available Amount": 808,
+            "Price": 5.56
+        },
+        {
+            "ProductName": "Alien Abduction Berry",
+            "ProductType": "Slim",
+            "Available Amount": 859,
+            "Price": 13.92
+        },
+        {
+            "ProductName": "Chocolate Indulgence",
+            "ProductType": "Loose Snus",
+            "Available Amount": 128,
+            "Price": 8.78
+        },
+        {
+            "ProductName": "Honey Gold",
+            "ProductType": "Long Cut",
+            "Available Amount": 832,
+            "Price": 7.33
+        },
+        {
+            "ProductName": "Coconut Craze",
+            "ProductType": "Slim",
+            "Available Amount": 272,
+            "Price": 12.57
+        }
+    ]
+}

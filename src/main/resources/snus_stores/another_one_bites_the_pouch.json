@@ -1,0 +1,23 @@
+{
+    "StoreName": "Another One Bites the Pouch",
+    "Latitude": -22.9584829,
+    "Longitude": 13.0631514,
+    "FoodCategory": "Snus",
+    "Stars": 3,
+    "NoOfVotes": 11,
+    "StoreLogo": "/usr/bin/images/another_one_bites_the_pouch.png",
+    "Products": [
+        {
+            "ProductName": "Honey Gold",
+            "ProductType": "Regular",
+            "Available Amount": 627,
+            "Price": 13.8
+        },
+        {
+            "ProductName": "Mango Tango",
+            "ProductType": "Chewing Tobacco",
+            "Available Amount": 591,
+            "Price": 14.71
+        }
+    ]
+}

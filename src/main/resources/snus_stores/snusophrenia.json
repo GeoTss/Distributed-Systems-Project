@@ -1,0 +1,23 @@
+{
+    "StoreName": "Snusophrenia",
+    "Latitude": 28.4314323,
+    "Longitude": 12.854434,
+    "FoodCategory": "Snus",
+    "Stars": 3,
+    "NoOfVotes": 65,
+    "StoreLogo": "/usr/bin/images/snusophrenia.png",
+    "Products": [
+        {
+            "ProductName": "Watermelon Wave",
+            "ProductType": "White Portion",
+            "Available Amount": 327,
+            "Price": 14.82
+        },
+        {
+            "ProductName": "Mango Tango",
+            "ProductType": "Chewing Tobacco",
+            "Available Amount": 504,
+            "Price": 2.51
+        }
+    ]
+}

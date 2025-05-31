@@ -1,0 +1,35 @@
+{
+    "StoreName": "Pouch Against the Machine",
+    "Latitude": 2.990949,
+    "Longitude": -10.6059668,
+    "FoodCategory": "Snus",
+    "Stars": 1,
+    "NoOfVotes": 117,
+    "StoreLogo": "/usr/bin/images/pouch_against_the_machine.png",
+    "Products": [
+        {
+            "ProductName": "Zombie Apocalypse Flavor",
+            "ProductType": "Chewing Tobacco",
+            "Available Amount": 512,
+            "Price": 8.68
+        },
+        {
+            "ProductName": "Ginger Zing",
+            "ProductType": "Nicotine Pouches",
+            "Available Amount": 409,
+            "Price": 10.19
+        },
+        {
+            "ProductName": "Time Traveler\u2019s Citrus",
+            "ProductType": "Regular",
+            "Available Amount": 150,
+            "Price": 12.4
+        },
+        {
+            "ProductName": "Time Traveler\u2019s Citrus",
+            "ProductType": "Long Cut",
+            "Available Amount": 423,
+            "Price": 11.78
+        }
+    ]
+}

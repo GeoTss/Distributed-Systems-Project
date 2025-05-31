@@ -1,0 +1,35 @@
+{
+    "StoreName": "Snusonomics",
+    "Latitude": -28.480035,
+    "Longitude": 10.6016773,
+    "FoodCategory": "Snus",
+    "Stars": 1,
+    "NoOfVotes": 155,
+    "StoreLogo": "/usr/bin/images/snusonomics.png",
+    "Products": [
+        {
+            "ProductName": "Peachy Keen",
+            "ProductType": "Short Cut",
+            "Available Amount": 491,
+            "Price": 3.39
+        },
+        {
+            "ProductName": "Mango Tango",
+            "ProductType": "Long Cut",
+            "Available Amount": 996,
+            "Price": 9.89
+        },
+        {
+            "ProductName": "Vampire\u2019s Blood Orange",
+            "ProductType": "White Portion",
+            "Available Amount": 148,
+            "Price": 11.2
+        },
+        {
+            "ProductName": "Vanilla Dream",
+            "ProductType": "Chewing Tobacco",
+            "Available Amount": 343,
+            "Price": 6.87
+        }
+    ]
+}

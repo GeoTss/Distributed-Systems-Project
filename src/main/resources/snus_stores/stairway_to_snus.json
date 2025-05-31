@@ -1,0 +1,23 @@
+{
+    "StoreName": "Stairway to Snus",
+    "Latitude": 33.1938408,
+    "Longitude": -15.8031668,
+    "FoodCategory": "Snus",
+    "Stars": 4,
+    "NoOfVotes": 45,
+    "StoreLogo": "/usr/bin/images/stairway_to_snus.png",
+    "Products": [
+        {
+            "ProductName": "Citrus Burst",
+            "ProductType": "Regular",
+            "Available Amount": 925,
+            "Price": 10.78
+        },
+        {
+            "ProductName": "Lemon Zest",
+            "ProductType": "Nicotine Pouches",
+            "Available Amount": 431,
+            "Price": 10.01
+        }
+    ]
+}

@@ -1,0 +1,41 @@
+{
+    "StoreName": "The Snus Manifesto",
+    "Latitude": -38.7328118,
+    "Longitude": -26.2929345,
+    "FoodCategory": "Snus",
+    "Stars": 4,
+    "NoOfVotes": 191,
+    "StoreLogo": "/usr/bin/images/the_snus_manifesto.png",
+    "Products": [
+        {
+            "ProductName": "Apple Crisp",
+            "ProductType": "Moist Snuff",
+            "Available Amount": 379,
+            "Price": 5.5
+        },
+        {
+            "ProductName": "Pineapple Punch",
+            "ProductType": "Loose Snus",
+            "Available Amount": 762,
+            "Price": 8.45
+        },
+        {
+            "ProductName": "Dragonfruit Delight",
+            "ProductType": "White Portion",
+            "Available Amount": 114,
+            "Price": 3.08
+        },
+        {
+            "ProductName": "Spicy Cinnamon",
+            "ProductType": "Regular",
+            "Available Amount": 503,
+            "Price": 4.42
+        },
+        {
+            "ProductName": "Tropical Paradise",
+            "ProductType": "Flavored Snus",
+            "Available Amount": 324,
+            "Price": 6.55
+        }
+    ]
+}

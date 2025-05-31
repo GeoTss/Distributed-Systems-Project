@@ -1,0 +1,47 @@
+{
+    "StoreName": "Based & Pouched",
+    "Latitude": -23.7630327,
+    "Longitude": -27.0061081,
+    "FoodCategory": "Snus",
+    "Stars": 3,
+    "NoOfVotes": 85,
+    "StoreLogo": "/usr/bin/images/based_&_pouched.png",
+    "Products": [
+        {
+            "ProductName": "Tropical Paradise",
+            "ProductType": "Regular",
+            "Available Amount": 940,
+            "Price": 3.45
+        },
+        {
+            "ProductName": "Lemon Zest",
+            "ProductType": "Long Cut",
+            "Available Amount": 878,
+            "Price": 3.43
+        },
+        {
+            "ProductName": "Caramel Delight",
+            "ProductType": "Original Portion",
+            "Available Amount": 855,
+            "Price": 13.32
+        },
+        {
+            "ProductName": "Coconut Craze",
+            "ProductType": "Original Portion",
+            "Available Amount": 808,
+            "Price": 5.71
+        },
+        {
+            "ProductName": "Minty Fresh",
+            "ProductType": "Long Cut",
+            "Available Amount": 400,
+            "Price": 6.48
+        },
+        {
+            "ProductName": "Blueberry Bliss",
+            "ProductType": "Herbal Snus",
+            "Available Amount": 650,
+            "Price": 7.28
+        }
+    ]
+}

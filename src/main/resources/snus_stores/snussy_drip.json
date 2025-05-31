@@ -1,0 +1,47 @@
+{
+    "StoreName": "Snussy Drip",
+    "Latitude": -25.8922639,
+    "Longitude": 15.376501,
+    "FoodCategory": "Snus",
+    "Stars": 4,
+    "NoOfVotes": 45,
+    "StoreLogo": "/usr/bin/images/snussy_drip.png",
+    "Products": [
+        {
+            "ProductName": "Pineapple Punch",
+            "ProductType": "Slim",
+            "Available Amount": 283,
+            "Price": 6.33
+        },
+        {
+            "ProductName": "Honey Gold",
+            "ProductType": "White Portion",
+            "Available Amount": 645,
+            "Price": 13.63
+        },
+        {
+            "ProductName": "Dragonfruit Delight",
+            "ProductType": "Herbal Snus",
+            "Available Amount": 215,
+            "Price": 10.46
+        },
+        {
+            "ProductName": "Vampire\u2019s Blood Orange",
+            "ProductType": "Chewing Tobacco",
+            "Available Amount": 393,
+            "Price": 14.46
+        },
+        {
+            "ProductName": "Berry Blast",
+            "ProductType": "Long Cut",
+            "Available Amount": 322,
+            "Price": 13.47
+        },
+        {
+            "ProductName": "Watermelon Wave",
+            "ProductType": "Original Portion",
+            "Available Amount": 857,
+            "Price": 11.61
+        }
+    ]
+}

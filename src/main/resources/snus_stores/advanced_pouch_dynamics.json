@@ -1,0 +1,23 @@
+{
+    "StoreName": "Advanced Pouch Dynamics",
+    "Latitude": 4.9194512,
+    "Longitude": -33.2186816,
+    "FoodCategory": "Snus",
+    "Stars": 4,
+    "NoOfVotes": 162,
+    "StoreLogo": "/usr/bin/images/advanced_pouch_dynamics.png",
+    "Products": [
+        {
+            "ProductName": "Ginger Zing",
+            "ProductType": "Dry Snuff",
+            "Available Amount": 582,
+            "Price": 5.25
+        },
+        {
+            "ProductName": "Spicy Cinnamon",
+            "ProductType": "Long Cut",
+            "Available Amount": 244,
+            "Price": 6.76
+        }
+    ]
+}

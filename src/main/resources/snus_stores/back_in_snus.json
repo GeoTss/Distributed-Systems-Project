@@ -1,0 +1,41 @@
+{
+    "StoreName": "Back in Snus",
+    "Latitude": -27.9280951,
+    "Longitude": 16.6222834,
+    "FoodCategory": "Snus",
+    "Stars": 2,
+    "NoOfVotes": 145,
+    "StoreLogo": "/usr/bin/images/back_in_snus.png",
+    "Products": [
+        {
+            "ProductName": "Coconut Craze",
+            "ProductType": "Snus Pouches",
+            "Available Amount": 281,
+            "Price": 7.94
+        },
+        {
+            "ProductName": "Tropical Paradise",
+            "ProductType": "Regular",
+            "Available Amount": 877,
+            "Price": 14.34
+        },
+        {
+            "ProductName": "Berry Blast",
+            "ProductType": "Short Cut",
+            "Available Amount": 425,
+            "Price": 5.46
+        },
+        {
+            "ProductName": "Lemon Zest",
+            "ProductType": "Flavored Snus",
+            "Available Amount": 757,
+            "Price": 9.61
+        },
+        {
+            "ProductName": "Coconut Craze",
+            "ProductType": "Moist Snuff",
+            "Available Amount": 533,
+            "Price": 11.97
+        }
+    ]
+}

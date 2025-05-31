@@ -1,0 +1,41 @@
+{
+    "StoreName": "Red Hot Snus Peppers",
+    "Latitude": 22.8942195,
+    "Longitude": 26.636646,
+    "FoodCategory": "Snus",
+    "Stars": 3,
+    "NoOfVotes": 117,
+    "StoreLogo": "/usr/bin/images/red_hot_snus_peppers.png",
+    "Products": [
+        {
+            "ProductName": "Pineapple Punch",
+            "ProductType": "Short Cut",
+            "Available Amount": 458,
+            "Price": 13.74
+        },
+        {
+            "ProductName": "Vampire\u2019s Blood Orange",
+            "ProductType": "Loose Snus",
+            "Available Amount": 867,
+            "Price": 7.74
+        },
+        {
+            "ProductName": "Ghost Pepper Punch",
+            "ProductType": "Slim",
+            "Available Amount": 279,
+            "Price": 7.72
+        },
+        {
+            "ProductName": "Alien Abduction Berry",
+            "ProductType": "Chewing Tobacco",
+            "Available Amount": 852,
+            "Price": 11.33
+        },
+        {
+            "ProductName": "Strawberry Fields",
+            "ProductType": "Nicotine Pouches",
+            "Available Amount": 567,
+            "Price": 10.72
+        }
+    ]
+}

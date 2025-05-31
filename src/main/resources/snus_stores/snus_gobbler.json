@@ -1,0 +1,41 @@
+{
+    "StoreName": "Snus Gobbler",
+    "Latitude": -5.9535366,
+    "Longitude": -3.6798642,
+    "FoodCategory": "Snus",
+    "Stars": 4,
+    "NoOfVotes": 172,
+    "StoreLogo": "/usr/bin/images/snus_gobbler.png",
+    "Products": [
+        {
+            "ProductName": "Apple Crisp",
+            "ProductType": "Moist Snuff",
+            "Available Amount": 118,
+            "Price": 8.44
+        },
+        {
+            "ProductName": "Peachy Keen",
+            "ProductType": "Slim",
+            "Available Amount": 295,
+            "Price": 5.98
+        },
+        {
+            "ProductName": "Minty Fresh",
+            "ProductType": "Slim",
+            "Available Amount": 262,
+            "Price": 8.49
+        },
+        {
+            "ProductName": "Coffee Kick",
+            "ProductType": "Dry Snuff",
+            "Available Amount": 842,
+            "Price": 13.32
+        },
+        {
+            "ProductName": "Ginger Zing",
+            "ProductType": "Moist Snuff",
+            "Available Amount": 299,
+            "Price": 10.71
+        }
+    ]
+}

@@ -1,0 +1,23 @@
+{
+    "StoreName": "Caught Slippin\u2019 a Snus",
+    "Latitude": -18.250158,
+    "Longitude": -15.8199519,
+    "FoodCategory": "Snus",
+    "Stars": 5,
+    "NoOfVotes": 170,
+    "StoreLogo": "/usr/bin/images/caught_slippin\u2019_a_snus.png",
+    "Products": [
+        {
+            "ProductName": "Watermelon Wave",
+            "ProductType": "Chewing Tobacco",
+            "Available Amount": 370,
+            "Price": 13.9
+        },
+        {
+            "ProductName": "Time Traveler\u2019s Citrus",
+            "ProductType": "Chewing Tobacco",
+            "Available Amount": 343,
+            "Price": 10.08
+        }
+    ]
+}

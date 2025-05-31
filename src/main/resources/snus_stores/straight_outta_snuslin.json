@@ -1,0 +1,29 @@
+{
+    "StoreName": "Straight Outta Snuslin",
+    "Latitude": -1.3955922,
+    "Longitude": -13.6630377,
+    "FoodCategory": "Snus",
+    "Stars": 5,
+    "NoOfVotes": 76,
+    "StoreLogo": "/usr/bin/images/straight_outta_snuslin.png",
+    "Products": [
+        {
+            "ProductName": "Honey Gold",
+            "ProductType": "Flavored Snus",
+            "Available Amount": 417,
+            "Price": 10.86
+        },
+        {
+            "ProductName": "Vanilla Dream",
+            "ProductType": "Flavored Snus",
+            "Available Amount": 440,
+            "Price": 12.58
+        },
+        {
+            "ProductName": "Ghost Pepper Punch",
+            "ProductType": "White Portion",
+            "Available Amount": 167,
+            "Price": 3.14
+        }
+    ]
+}

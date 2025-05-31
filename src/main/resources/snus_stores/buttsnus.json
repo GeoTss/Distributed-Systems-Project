@@ -1,0 +1,47 @@
+{
+    "StoreName": "ButtSnus",
+    "Latitude": 14.3589405,
+    "Longitude": 22.8205771,
+    "FoodCategory": "Snus",
+    "Stars": 5,
+    "NoOfVotes": 16,
+    "StoreLogo": "/usr/bin/images/buttsnus.png",
+    "Products": [
+        {
+            "ProductName": "Strawberry Fields",
+            "ProductType": "Loose Snus",
+            "Available Amount": 924,
+            "Price": 8.72
+        },
+        {
+            "ProductName": "Citrus Burst",
+            "ProductType": "Original Portion",
+            "Available Amount": 73,
+            "Price": 13.35
+        },
+        {
+            "ProductName": "Peachy Keen",
+            "ProductType": "White Portion",
+            "Available Amount": 148,
+            "Price": 7.15
+        },
+        {
+            "ProductName": "Bigfoot\u2019s Berry Blast",
+            "ProductType": "Short Cut",
+            "Available Amount": 247,
+            "Price": 6.69
+        },
+        {
+            "ProductName": "Peachy Keen",
+            "ProductType": "Chewing Tobacco",
+            "Available Amount": 924,
+            "Price": 5.16
+        },
+        {
+            "ProductName": "Dragonfruit Delight",
+            "ProductType": "Moist Snuff",
+            "Available Amount": 854,
+            "Price": 5.39
+        }
+    ]
+}

@@ -1,0 +1,41 @@
+{
+    "StoreName": "OnlySnus",
+    "Latitude": 47.3996474,
+    "Longitude": 22.2073429,
+    "FoodCategory": "Snus",
+    "Stars": 4,
+    "NoOfVotes": 178,
+    "StoreLogo": "/usr/bin/images/onlysnus.png",
+    "Products": [
+        {
+            "ProductName": "Vampire\u2019s Blood Orange",
+            "ProductType": "Nicotine Pouches",
+            "Available Amount": 981,
+            "Price": 12.0
+        },
+        {
+            "ProductName": "Time Traveler\u2019s Citrus",
+            "ProductType": "Flavored Snus",
+            "Available Amount": 737,
+            "Price": 13.24
+        },
+        {
+            "ProductName": "Strawberry Fields",
+            "ProductType": "Regular",
+            "Available Amount": 655,
+            "Price": 3.83
+        },
+        {
+            "ProductName": "Zombie Apocalypse Flavor",
+            "ProductType": "Snus Pouches",
+            "Available Amount": 210,
+            "Price": 7.6
+        },
+        {
+            "ProductName": "Spicy Cinnamon",
+            "ProductType": "Regular",
+            "Available Amount": 754,
+            "Price": 3.16
+        }
+    ]
+}

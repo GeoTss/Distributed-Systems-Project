@@ -1,0 +1,29 @@
+{
+    "StoreName": "All Eyez on Snus",
+    "Latitude": -29.8875309,
+    "Longitude": 28.0923359,
+    "FoodCategory": "Snus",
+    "Stars": 1,
+    "NoOfVotes": 162,
+    "StoreLogo": "/usr/bin/images/all_eyez_on_snus.png",
+    "Products": [
+        {
+            "ProductName": "Kraken\u2019s Coconut Craze",
+            "ProductType": "Snus Pouches",
+            "Available Amount": 906,
+            "Price": 13.08
+        },
+        {
+            "ProductName": "Mermaid\u2019s Kiss Mint",
+            "ProductType": "Chewing Tobacco",
+            "Available Amount": 93,
+            "Price": 9.96
+        },
+        {
+            "ProductName": "Spicy Cinnamon",
+            "ProductType": "Long Cut",
+            "Available Amount": 757,
+            "Price": 12.66
+        }
+    ]
+}

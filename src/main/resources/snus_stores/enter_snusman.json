@@ -1,0 +1,23 @@
+{
+    "StoreName": "Enter Snusman",
+    "Latitude": -24.4799401,
+    "Longitude": 18.7297903,
+    "FoodCategory": "Snus",
+    "Stars": 1,
+    "NoOfVotes": 99,
+    "StoreLogo": "/usr/bin/images/enter_snusman.png",
+    "Products": [
+        {
+            "ProductName": "Chocolate Indulgence",
+            "ProductType": "Snus Pouches",
+            "Available Amount": 240,
+            "Price": 13.93
+        },
+        {
+            "ProductName": "Spicy Cinnamon",
+            "ProductType": "Flavored Snus",
+            "Available Amount": 302,
+            "Price": 10.26
+        }
+    ]
+}

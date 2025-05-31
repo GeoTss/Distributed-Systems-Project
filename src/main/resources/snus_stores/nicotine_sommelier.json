@@ -1,0 +1,41 @@
+{
+    "StoreName": "Nicotine Sommelier",
+    "Latitude": -33.7609775,
+    "Longitude": -49.5247419,
+    "FoodCategory": "Snus",
+    "Stars": 2,
+    "NoOfVotes": 89,
+    "StoreLogo": "/usr/bin/images/nicotine_sommelier.png",
+    "Products": [
+        {
+            "ProductName": "Dragonfruit Delight",
+            "ProductType": "Nicotine Pouches",
+            "Available Amount": 999,
+            "Price": 7.92
+        },
+        {
+            "ProductName": "Berry Blast",
+            "ProductType": "Long Cut",
+            "Available Amount": 891,
+            "Price": 2.63
+        },
+        {
+            "ProductName": "Alien Abduction Berry",
+            "ProductType": "Original Portion",
+            "Available Amount": 752,
+            "Price": 13.83
+        },
+        {
+            "ProductName": "Time Traveler\u2019s Citrus",
+            "ProductType": "White Portion",
+            "Available Amount": 483,
+            "Price": 13.72
+        },
+        {
+            "ProductName": "Spicy Cinnamon",
+            "ProductType": "Long Cut",
+            "Available Amount": 268,
+            "Price": 7.94
+        }
+    ]
+}

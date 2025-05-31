@@ -1,0 +1,29 @@
+{
+    "StoreName": "The Pouch Knight Rises",
+    "Latitude": 48.995369,
+    "Longitude": -46.6249858,
+    "FoodCategory": "Snus",
+    "Stars": 5,
+    "NoOfVotes": 32,
+    "StoreLogo": "/usr/bin/images/the_pouch_knight_rises.png",
+    "Products": [
+        {
+            "ProductName": "Lemon Zest",
+            "ProductType": "Moist Snuff",
+            "Available Amount": 785,
+            "Price": 9.65
+        },
+        {
+            "ProductName": "Berry Blast",
+            "ProductType": "Herbal Snus",
+            "Available Amount": 135,
+            "Price": 10.44
+        },
+        {
+            "ProductName": "Honey Gold",
+            "ProductType": "Moist Snuff",
+            "Available Amount": 376,
+            "Price": 13.08
+        }
+    ]
+}

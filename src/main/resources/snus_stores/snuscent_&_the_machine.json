@@ -1,0 +1,41 @@
+{
+    "StoreName": "Snuscent & the Machine",
+    "Latitude": -12.2740899,
+    "Longitude": -27.7774271,
+    "FoodCategory": "Snus",
+    "Stars": 2,
+    "NoOfVotes": 45,
+    "StoreLogo": "/usr/bin/images/snuscent_&_the_machine.png",
+    "Products": [
+        {
+            "ProductName": "Dragonfruit Delight",
+            "ProductType": "Herbal Snus",
+            "Available Amount": 248,
+            "Price": 10.42
+        },
+        {
+            "ProductName": "Alien Abduction Berry",
+            "ProductType": "Chewing Tobacco",
+            "Available Amount": 445,
+            "Price": 6.3
+        },
+        {
+            "ProductName": "Mango Tango",
+            "ProductType": "Moist Snuff",
+            "Available Amount": 592,
+            "Price": 5.63
+        },
+        {
+            "ProductName": "Apple Crisp",
+            "ProductType": "Dry Snuff",
+            "Available Amount": 272,
+            "Price": 10.48
+        },
+        {
+            "ProductName": "Honey Gold",
+            "ProductType": "Snus Pouches",
+            "Available Amount": 644,
+            "Price": 6.88
+        }
+    ]
+}

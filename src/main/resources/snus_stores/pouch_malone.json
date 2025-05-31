@@ -1,0 +1,23 @@
+{
+    "StoreName": "Pouch Malone",
+    "Latitude": 21.5075746,
+    "Longitude": 15.0639092,
+    "FoodCategory": "Snus",
+    "Stars": 4,
+    "NoOfVotes": 141,
+    "StoreLogo": "/usr/bin/images/pouch_malone.png",
+    "Products": [
+        {
+            "ProductName": "Tropical Paradise",
+            "ProductType": "Nicotine Pouches",
+            "Available Amount": 479,
+            "Price": 4.26
+        },
+        {
+            "ProductName": "Bigfoot\u2019s Berry Blast",
+            "ProductType": "Slim",
+            "Available Amount": 758,
+            "Price": 6.39
+        }
+    ]
+}

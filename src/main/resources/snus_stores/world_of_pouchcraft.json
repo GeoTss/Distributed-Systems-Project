@@ -1,0 +1,35 @@
+{
+    "StoreName": "World of Pouchcraft",
+    "Latitude": -0.7275043,
+    "Longitude": -7.12427,
+    "FoodCategory": "Snus",
+    "Stars": 5,
+    "NoOfVotes": 72,
+    "StoreLogo": "/usr/bin/images/world_of_pouchcraft.png",
+    "Products": [
+        {
+            "ProductName": "Tropical Paradise",
+            "ProductType": "Original Portion",
+            "Available Amount": 53,
+            "Price": 14.84
+        },
+        {
+            "ProductName": "Ghost Pepper Punch",
+            "ProductType": "Chewing Tobacco",
+            "Available Amount": 962,
+            "Price": 10.07
+        },
+        {
+            "ProductName": "Peachy Keen",
+            "ProductType": "Loose Snus",
+            "Available Amount": 845,
+            "Price": 11.8
+        },
+        {
+            "ProductName": "Dragonfruit Delight",
+            "ProductType": "Original Portion",
+            "Available Amount": 994,
+            "Price": 4.77
+        }
+    ]
+}

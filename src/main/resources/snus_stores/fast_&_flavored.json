@@ -1,0 +1,41 @@
+{
+    "StoreName": "Fast & Flavored",
+    "Latitude": 14.0399823,
+    "Longitude": 36.3798624,
+    "FoodCategory": "Snus",
+    "Stars": 5,
+    "NoOfVotes": 164,
+    "StoreLogo": "/usr/bin/images/fast_&_flavored.png",
+    "Products": [
+        {
+            "ProductName": "Lemon Zest",
+            "ProductType": "Slim",
+            "Available Amount": 286,
+            "Price": 10.94
+        },
+        {
+            "ProductName": "Spicy Cinnamon",
+            "ProductType": "Flavored Snus",
+            "Available Amount": 855,
+            "Price": 4.17
+        },
+        {
+            "ProductName": "Time Traveler\u2019s Citrus",
+            "ProductType": "Regular",
+            "Available Amount": 595,
+            "Price": 13.05
+        },
+        {
+            "ProductName": "Blueberry Bliss",
+            "ProductType": "Herbal Snus",
+            "Available Amount": 555,
+            "Price": 9.0
+        },
+        {
+            "ProductName": "Lemon Zest",
+            "ProductType": "Loose Snus",
+            "Available Amount": 441,
+            "Price": 10.14
+        }
+    ]
+}

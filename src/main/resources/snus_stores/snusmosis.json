@@ -1,0 +1,41 @@
+{
+    "StoreName": "Snusmosis",
+    "Latitude": 42.882415,
+    "Longitude": -22.6089502,
+    "FoodCategory": "Snus",
+    "Stars": 5,
+    "NoOfVotes": 199,
+    "StoreLogo": "/usr/bin/images/snusmosis.png",
+    "Products": [
+        {
+            "ProductName": "Time Traveler\u2019s Citrus",
+            "ProductType": "Chewing Tobacco",
+            "Available Amount": 291,
+            "Price": 7.91
+        },
+        {
+            "ProductName": "Chocolate Indulgence",
+            "ProductType": "Regular",
+            "Available Amount": 999,
+            "Price": 8.77
+        },
+        {
+            "ProductName": "Strawberry Fields",
+            "ProductType": "Chewing Tobacco",
+            "Available Amount": 163,
+            "Price": 14.92
+        },
+        {
+            "ProductName": "Spicy Cinnamon",
+            "ProductType": "Snus Pouches",
+            "Available Amount": 519,
+            "Price": 6.78
+        },
+        {
+            "ProductName": "Strawberry Fields",
+            "ProductType": "Chewing Tobacco",
+            "Available Amount": 252,
+            "Price": 12.68
+        }
+    ]
+}

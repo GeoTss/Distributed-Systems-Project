@@ -1,0 +1,23 @@
+{
+    "StoreName": "Wish You Were Snus",
+    "Latitude": -34.1047349,
+    "Longitude": -36.0266215,
+    "FoodCategory": "Snus",
+    "Stars": 3,
+    "NoOfVotes": 52,
+    "StoreLogo": "/usr/bin/images/wish_you_were_snus.png",
+    "Products": [
+        {
+            "ProductName": "Pineapple Punch",
+            "ProductType": "Moist Snuff",
+            "Available Amount": 591,
+            "Price": 7.85
+        },
+        {
+            "ProductName": "Mermaid\u2019s Kiss Mint",
+            "ProductType": "Long Cut",
+            "Available Amount": 515,
+            "Price": 14.3
+        }
+    ]
+}

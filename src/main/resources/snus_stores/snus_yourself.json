@@ -1,0 +1,41 @@
+{
+    "StoreName": "Snus Yourself",
+    "Latitude": -2.018926,
+    "Longitude": 30.7691998,
+    "FoodCategory": "Snus",
+    "Stars": 4,
+    "NoOfVotes": 184,
+    "StoreLogo": "/usr/bin/images/snus_yourself.png",
+    "Products": [
+        {
+            "ProductName": "Unicorn Tears",
+            "ProductType": "Snus Pouches",
+            "Available Amount": 711,
+            "Price": 6.58
+        },
+        {
+            "ProductName": "Spicy Cinnamon",
+            "ProductType": "Flavored Snus",
+            "Available Amount": 152,
+            "Price": 6.41
+        },
+        {
+            "ProductName": "Peachy Keen",
+            "ProductType": "Nicotine Pouches",
+            "Available Amount": 556,
+            "Price": 6.91
+        },
+        {
+            "ProductName": "Vanilla Dream",
+            "ProductType": "Flavored Snus",
+            "Available Amount": 565,
+            "Price": 12.32
+        },
+        {
+            "ProductName": "Mango Tango",
+            "ProductType": "Moist Snuff",
+            "Available Amount": 773,
+            "Price": 8.86
+        }
+    ]
+}

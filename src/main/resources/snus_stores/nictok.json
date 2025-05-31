@@ -1,0 +1,47 @@
+{
+    "StoreName": "NicTok",
+    "Latitude": 13.2695548,
+    "Longitude": 2.9481703,
+    "FoodCategory": "Snus",
+    "Stars": 3,
+    "NoOfVotes": 25,
+    "StoreLogo": "/usr/bin/images/nictok.png",
+    "Products": [
+        {
+            "ProductName": "Vampire\u2019s Blood Orange",
+            "ProductType": "Herbal Snus",
+            "Available Amount": 866,
+            "Price": 2.66
+        },
+        {
+            "ProductName": "Bigfoot\u2019s Berry Blast",
+            "ProductType": "Nicotine Pouches",
+            "Available Amount": 481,
+            "Price": 8.95
+        },
+        {
+            "ProductName": "Kraken\u2019s Coconut Craze",
+            "ProductType": "Regular",
+            "Available Amount": 304,
+            "Price": 4.45
+        },
+        {
+            "ProductName": "Mango Tango",
+            "ProductType": "White Portion",
+            "Available Amount": 774,
+            "Price": 3.67
+        },
+        {
+            "ProductName": "Caramel Delight",
+            "ProductType": "Short Cut",
+            "Available Amount": 149,
+            "Price": 12.88
+        },
+        {
+            "ProductName": "Coconut Craze",
+            "ProductType": "Loose Snus",
+            "Available Amount": 512,
+            "Price": 10.39
+        }
+    ]
+}

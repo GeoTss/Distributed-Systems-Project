@@ -1,0 +1,23 @@
+{
+    "StoreName": "The Marshall Snus LP",
+    "Latitude": 19.2529218,
+    "Longitude": -14.6316156,
+    "FoodCategory": "Snus",
+    "Stars": 5,
+    "NoOfVotes": 95,
+    "StoreLogo": "/usr/bin/images/the_marshall_snus_lp.png",
+    "Products": [
+        {
+            "ProductName": "Coffee Kick",
+            "ProductType": "Flavored Snus",
+            "Available Amount": 961,
+            "Price": 8.43
+        },
+        {
+            "ProductName": "Kraken\u2019s Coconut Craze",
+            "ProductType": "Slim",
+            "Available Amount": 983,
+            "Price": 6.27
+        }
+    ]
+}

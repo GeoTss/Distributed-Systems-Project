@@ -1,0 +1,35 @@
+{
+    "StoreName": "Snussy Addicts Unite",
+    "Latitude": -7.3413526,
+    "Longitude": 18.8806519,
+    "FoodCategory": "Snus",
+    "Stars": 1,
+    "NoOfVotes": 180,
+    "StoreLogo": "/usr/bin/images/snussy_addicts_unite.png",
+    "Products": [
+        {
+            "ProductName": "Strawberry Fields",
+            "ProductType": "Short Cut",
+            "Available Amount": 497,
+            "Price": 13.81
+        },
+        {
+            "ProductName": "Minty Fresh",
+            "ProductType": "Chewing Tobacco",
+            "Available Amount": 462,
+            "Price": 9.47
+        },
+        {
+            "ProductName": "Pineapple Punch",
+            "ProductType": "Original Portion",
+            "Available Amount": 907,
+            "Price": 7.23
+        },
+        {
+            "ProductName": "Unicorn Tears",
+            "ProductType": "Long Cut",
+            "Available Amount": 173,
+            "Price": 3.69
+        }
+    ]
+}

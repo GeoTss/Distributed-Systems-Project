@@ -1,0 +1,23 @@
+{
+    "StoreName": "System of a Snus",
+    "Latitude": 11.440852,
+    "Longitude": -12.098161,
+    "FoodCategory": "Snus",
+    "Stars": 1,
+    "NoOfVotes": 195,
+    "StoreLogo": "/usr/bin/images/system_of_a_snus.png",
+    "Products": [
+        {
+            "ProductName": "Ginger Zing",
+            "ProductType": "Original Portion",
+            "Available Amount": 694,
+            "Price": 3.32
+        },
+        {
+            "ProductName": "Peachy Keen",
+            "ProductType": "Original Portion",
+            "Available Amount": 402,
+            "Price": 11.12
+        }
+    ]
+}

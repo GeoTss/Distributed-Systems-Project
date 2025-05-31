@@ -1,0 +1,35 @@
+{
+    "StoreName": "Choke on a Pouch",
+    "Latitude": 34.3533572,
+    "Longitude": -41.5372314,
+    "FoodCategory": "Snus",
+    "Stars": 5,
+    "NoOfVotes": 122,
+    "StoreLogo": "/usr/bin/images/choke_on_a_pouch.png",
+    "Products": [
+        {
+            "ProductName": "Minty Fresh",
+            "ProductType": "Slim",
+            "Available Amount": 645,
+            "Price": 13.44
+        },
+        {
+            "ProductName": "Minty Fresh",
+            "ProductType": "Slim",
+            "Available Amount": 706,
+            "Price": 12.56
+        },
+        {
+            "ProductName": "Dragonfruit Delight",
+            "ProductType": "Dry Snuff",
+            "Available Amount": 618,
+            "Price": 8.51
+        },
+        {
+            "ProductName": "Chocolate Indulgence",
+            "ProductType": "White Portion",
+            "Available Amount": 190,
+            "Price": 13.05
+        }
+    ]
+}

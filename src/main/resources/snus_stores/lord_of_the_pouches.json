@@ -1,0 +1,47 @@
+{
+    "StoreName": "Lord of the Pouches",
+    "Latitude": -29.9016257,
+    "Longitude": 34.8865379,
+    "FoodCategory": "Snus",
+    "Stars": 5,
+    "NoOfVotes": 5,
+    "StoreLogo": "/usr/bin/images/lord_of_the_pouches.png",
+    "Products": [
+        {
+            "ProductName": "Citrus Burst",
+            "ProductType": "Nicotine Pouches",
+            "Available Amount": 138,
+            "Price": 2.7
+        },
+        {
+            "ProductName": "Pineapple Punch",
+            "ProductType": "Snus Pouches",
+            "Available Amount": 997,
+            "Price": 8.85
+        },
+        {
+            "ProductName": "Vampire\u2019s Blood Orange",
+            "ProductType": "Slim",
+            "Available Amount": 731,
+            "Price": 9.32
+        },
+        {
+            "ProductName": "Coffee Kick",
+            "ProductType": "Moist Snuff",
+            "Available Amount": 628,
+            "Price": 3.11
+        },
+        {
+            "ProductName": "Unicorn Tears",
+            "ProductType": "Regular",
+            "Available Amount": 516,
+            "Price": 8.93
+        },
+        {
+            "ProductName": "Dragonfruit Delight",
+            "ProductType": "Flavored Snus",
+            "Available Amount": 349,
+            "Price": 7.83
+        }
+    ]
+}

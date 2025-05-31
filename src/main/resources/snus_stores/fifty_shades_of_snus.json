@@ -1,0 +1,35 @@
+{
+    "StoreName": "Fifty Shades of Snus",
+    "Latitude": -24.5168679,
+    "Longitude": 44.3283635,
+    "FoodCategory": "Snus",
+    "Stars": 1,
+    "NoOfVotes": 32,
+    "StoreLogo": "/usr/bin/images/fifty_shades_of_snus.png",
+    "Products": [
+        {
+            "ProductName": "Tropical Paradise",
+            "ProductType": "Slim",
+            "Available Amount": 344,
+            "Price": 12.31
+        },
+        {
+            "ProductName": "Ghost Pepper Punch",
+            "ProductType": "Short Cut",
+            "Available Amount": 926,
+            "Price": 7.95
+        },
+        {
+            "ProductName": "Coconut Craze",
+            "ProductType": "White Portion",
+            "Available Amount": 229,
+            "Price": 7.43
+        },
+        {
+            "ProductName": "Strawberry Fields",
+            "ProductType": "Flavored Snus",
+            "Available Amount": 861,
+            "Price": 5.34
+        }
+    ]
+}

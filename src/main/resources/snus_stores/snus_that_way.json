@@ -1,0 +1,47 @@
+{
+    "StoreName": "Snus That Way",
+    "Latitude": -41.6905623,
+    "Longitude": -24.1148239,
+    "FoodCategory": "Snus",
+    "Stars": 1,
+    "NoOfVotes": 44,
+    "StoreLogo": "/usr/bin/images/snus_that_way.png",
+    "Products": [
+        {
+            "ProductName": "Watermelon Wave",
+            "ProductType": "Dry Snuff",
+            "Available Amount": 282,
+            "Price": 13.77
+        },
+        {
+            "ProductName": "Berry Blast",
+            "ProductType": "Chewing Tobacco",
+            "Available Amount": 920,
+            "Price": 7.86
+        },
+        {
+            "ProductName": "Lemon Zest",
+            "ProductType": "Long Cut",
+            "Available Amount": 245,
+            "Price": 5.05
+        },
+        {
+            "ProductName": "Coffee Kick",
+            "ProductType": "White Portion",
+            "Available Amount": 716,
+            "Price": 4.71
+        },
+        {
+            "ProductName": "Apple Crisp",
+            "ProductType": "Original Portion",
+            "Available Amount": 225,
+            "Price": 12.97
+        },
+        {
+            "ProductName": "Spicy Cinnamon",
+            "ProductType": "Regular",
+            "Available Amount": 901,
+            "Price": 13.86
+        }
+    ]
+}

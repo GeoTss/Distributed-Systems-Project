@@ -1,0 +1,41 @@
+{
+    "StoreName": "Infinite Snus",
+    "Latitude": 24.5659959,
+    "Longitude": 28.68578,
+    "FoodCategory": "Snus",
+    "Stars": 5,
+    "NoOfVotes": 37,
+    "StoreLogo": "/usr/bin/images/infinite_snus.png",
+    "Products": [
+        {
+            "ProductName": "Zombie Apocalypse Flavor",
+            "ProductType": "Loose Snus",
+            "Available Amount": 81,
+            "Price": 10.47
+        },
+        {
+            "ProductName": "Berry Blast",
+            "ProductType": "Herbal Snus",
+            "Available Amount": 231,
+            "Price": 13.97
+        },
+        {
+            "ProductName": "Alien Abduction Berry",
+            "ProductType": "Chewing Tobacco",
+            "Available Amount": 613,
+            "Price": 6.06
+        },
+        {
+            "ProductName": "Mermaid\u2019s Kiss Mint",
+            "ProductType": "White Portion",
+            "Available Amount": 611,
+            "Price": 6.72
+        },
+        {
+            "ProductName": "Mermaid\u2019s Kiss Mint",
+            "ProductType": "White Portion",
+            "Available Amount": 220,
+            "Price": 6.73
+        }
+    ]
+}

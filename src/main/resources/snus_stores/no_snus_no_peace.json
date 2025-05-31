@@ -1,0 +1,29 @@
+{
+    "StoreName": "No Snus No Peace",
+    "Latitude": 14.0398611,
+    "Longitude": 33.9539179,
+    "FoodCategory": "Snus",
+    "Stars": 4,
+    "NoOfVotes": 147,
+    "StoreLogo": "/usr/bin/images/no_snus_no_peace.png",
+    "Products": [
+        {
+            "ProductName": "Coffee Kick",
+            "ProductType": "Long Cut",
+            "Available Amount": 185,
+            "Price": 5.09
+        },
+        {
+            "ProductName": "Ginger Zing",
+            "ProductType": "Short Cut",
+            "Available Amount": 117,
+            "Price": 14.6
+        },
+        {
+            "ProductName": "Coffee Kick",
+            "ProductType": "Moist Snuff",
+            "Available Amount": 72,
+            "Price": 9.39
+        }
+    ]
+}

@@ -1,0 +1,23 @@
+{
+    "StoreName": "Bad Snus",
+    "Latitude": 44.5152484,
+    "Longitude": -39.6744075,
+    "FoodCategory": "Snus",
+    "Stars": 5,
+    "NoOfVotes": 196,
+    "StoreLogo": "/usr/bin/images/bad_snus.png",
+    "Products": [
+        {
+            "ProductName": "Pineapple Punch",
+            "ProductType": "Snus Pouches",
+            "Available Amount": 441,
+            "Price": 14.98
+        },
+        {
+            "ProductName": "Watermelon Wave",
+            "ProductType": "Loose Snus",
+            "Available Amount": 732,
+            "Price": 8.97
+        }
+    ]
+}

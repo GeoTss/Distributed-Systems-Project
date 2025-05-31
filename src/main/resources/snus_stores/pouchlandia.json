@@ -1,0 +1,23 @@
+{
+    "StoreName": "Pouchlandia",
+    "Latitude": -33.9337265,
+    "Longitude": -13.2957444,
+    "FoodCategory": "Snus",
+    "Stars": 5,
+    "NoOfVotes": 31,
+    "StoreLogo": "/usr/bin/images/pouchlandia.png",
+    "Products": [
+        {
+            "ProductName": "Caramel Delight",
+            "ProductType": "Snus Pouches",
+            "Available Amount": 282,
+            "Price": 5.64
+        },
+        {
+            "ProductName": "Strawberry Fields",
+            "ProductType": "Flavored Snus",
+            "Available Amount": 550,
+            "Price": 8.46
+        }
+    ]
+}

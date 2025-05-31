@@ -1,0 +1,41 @@
+{
+    "StoreName": "Grand Snuselier",
+    "Latitude": -8.7055788,
+    "Longitude": 23.6067879,
+    "FoodCategory": "Snus",
+    "Stars": 2,
+    "NoOfVotes": 175,
+    "StoreLogo": "/usr/bin/images/grand_snuselier.png",
+    "Products": [
+        {
+            "ProductName": "Bigfoot\u2019s Berry Blast",
+            "ProductType": "Chewing Tobacco",
+            "Available Amount": 166,
+            "Price": 7.98
+        },
+        {
+            "ProductName": "Tropical Paradise",
+            "ProductType": "Long Cut",
+            "Available Amount": 368,
+            "Price": 11.85
+        },
+        {
+            "ProductName": "Blueberry Bliss",
+            "ProductType": "Slim",
+            "Available Amount": 217,
+            "Price": 14.68
+        },
+        {
+            "ProductName": "Mango Tango",
+            "ProductType": "Loose Snus",
+            "Available Amount": 52,
+            "Price": 6.43
+        },
+        {
+            "ProductName": "Alien Abduction Berry",
+            "ProductType": "Loose Snus",
+            "Available Amount": 188,
+            "Price": 9.61
+        }
+    ]
+}

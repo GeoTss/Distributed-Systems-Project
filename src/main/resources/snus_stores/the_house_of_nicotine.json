@@ -1,0 +1,23 @@
+{
+    "StoreName": "The House of Nicotine",
+    "Latitude": -29.185489,
+    "Longitude": 21.2142189,
+    "FoodCategory": "Snus",
+    "Stars": 3,
+    "NoOfVotes": 78,
+    "StoreLogo": "/usr/bin/images/the_house_of_nicotine.png",
+    "Products": [
+        {
+            "ProductName": "Pineapple Punch",
+            "ProductType": "Slim",
+            "Available Amount": 923,
+            "Price": 6.26
+        },
+        {
+            "ProductName": "Mango Tango",
+            "ProductType": "Chewing Tobacco",
+            "Available Amount": 445,
+            "Price": 6.85
+        }
+    ]
+}

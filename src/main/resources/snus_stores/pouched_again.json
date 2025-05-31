@@ -1,0 +1,29 @@
+{
+    "StoreName": "Pouched Again",
+    "Latitude": 24.9737024,
+    "Longitude": 43.6864312,
+    "FoodCategory": "Snus",
+    "Stars": 4,
+    "NoOfVotes": 155,
+    "StoreLogo": "/usr/bin/images/pouched_again.png",
+    "Products": [
+        {
+            "ProductName": "Minty Fresh",
+            "ProductType": "Dry Snuff",
+            "Available Amount": 994,
+            "Price": 6.22
+        },
+        {
+            "ProductName": "Vampire\u2019s Blood Orange",
+            "ProductType": "Original Portion",
+            "Available Amount": 449,
+            "Price": 6.92
+        },
+        {
+            "ProductName": "Vampire\u2019s Blood Orange",
+            "ProductType": "Original Portion",
+            "Available Amount": 69,
+            "Price": 13.21
+        }
+    ]
+}

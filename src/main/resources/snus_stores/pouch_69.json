@@ -1,0 +1,41 @@
+{
+    "StoreName": "Pouch 69",
+    "Latitude": 0.3891924,
+    "Longitude": 8.7171646,
+    "FoodCategory": "Snus",
+    "Stars": 4,
+    "NoOfVotes": 6,
+    "StoreLogo": "/usr/bin/images/pouch_69.png",
+    "Products": [
+        {
+            "ProductName": "Ghost Pepper Punch",
+            "ProductType": "Chewing Tobacco",
+            "Available Amount": 616,
+            "Price": 11.02
+        },
+        {
+            "ProductName": "Apple Crisp",
+            "ProductType": "Regular",
+            "Available Amount": 647,
+            "Price": 12.98
+        },
+        {
+            "ProductName": "Pineapple Punch",
+            "ProductType": "Long Cut",
+            "Available Amount": 394,
+            "Price": 5.94
+        },
+        {
+            "ProductName": "Blueberry Bliss",
+            "ProductType": "Loose Snus",
+            "Available Amount": 574,
+            "Price": 9.49
+        },
+        {
+            "ProductName": "Minty Fresh",
+            "ProductType": "Long Cut",
+            "Available Amount": 588,
+            "Price": 2.91
+        }
+    ]
+}

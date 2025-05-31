@@ -1,0 +1,35 @@
+{
+    "StoreName": "Mask Off, Pouch On",
+    "Latitude": 3.109372,
+    "Longitude": 18.1731173,
+    "FoodCategory": "Snus",
+    "Stars": 1,
+    "NoOfVotes": 150,
+    "StoreLogo": "/usr/bin/images/mask_off,_pouch_on.png",
+    "Products": [
+        {
+            "ProductName": "Dragonfruit Delight",
+            "ProductType": "Snus Pouches",
+            "Available Amount": 240,
+            "Price": 12.76
+        },
+        {
+            "ProductName": "Citrus Burst",
+            "ProductType": "Long Cut",
+            "Available Amount": 965,
+            "Price": 14.44
+        },
+        {
+            "ProductName": "Bigfoot\u2019s Berry Blast",
+            "ProductType": "Flavored Snus",
+            "Available Amount": 253,
+            "Price": 5.65
+        },
+        {
+            "ProductName": "Pineapple Punch",
+            "ProductType": "Dry Snuff",
+            "Available Amount": 316,
+            "Price": 4.77
+        }
+    ]
+}

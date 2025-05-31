@@ -1,0 +1,35 @@
+{
+    "StoreName": "Snusluts Anonymous",
+    "Latitude": 7.5368168,
+    "Longitude": -49.8574923,
+    "FoodCategory": "Snus",
+    "Stars": 3,
+    "NoOfVotes": 148,
+    "StoreLogo": "/usr/bin/images/snusluts_anonymous.png",
+    "Products": [
+        {
+            "ProductName": "Caramel Delight",
+            "ProductType": "Long Cut",
+            "Available Amount": 706,
+            "Price": 7.96
+        },
+        {
+            "ProductName": "Time Traveler\u2019s Citrus",
+            "ProductType": "Herbal Snus",
+            "Available Amount": 820,
+            "Price": 12.22
+        },
+        {
+            "ProductName": "Ginger Zing",
+            "ProductType": "Slim",
+            "Available Amount": 689,
+            "Price": 5.04
+        },
+        {
+            "ProductName": "Caramel Delight",
+            "ProductType": "Loose Snus",
+            "Available Amount": 130,
+            "Price": 4.61
+        }
+    ]
+}

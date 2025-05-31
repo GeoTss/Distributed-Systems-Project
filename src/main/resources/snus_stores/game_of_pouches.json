@@ -1,0 +1,35 @@
+{
+    "StoreName": "Game of Pouches",
+    "Latitude": -38.3941368,
+    "Longitude": 47.831545,
+    "FoodCategory": "Snus",
+    "Stars": 2,
+    "NoOfVotes": 103,
+    "StoreLogo": "/usr/bin/images/game_of_pouches.png",
+    "Products": [
+        {
+            "ProductName": "Mango Tango",
+            "ProductType": "Loose Snus",
+            "Available Amount": 240,
+            "Price": 13.25
+        },
+        {
+            "ProductName": "Minty Fresh",
+            "ProductType": "Short Cut",
+            "Available Amount": 786,
+            "Price": 10.14
+        },
+        {
+            "ProductName": "Coffee Kick",
+            "ProductType": "Loose Snus",
+            "Available Amount": 431,
+            "Price": 8.23
+        },
+        {
+            "ProductName": "Blueberry Bliss",
+            "ProductType": "Chewing Tobacco",
+            "Available Amount": 534,
+            "Price": 11.72
+        }
+    ]
+}

@@ -1,0 +1,23 @@
+{
+    "StoreName": "Haute Snus",
+    "Latitude": 25.2468001,
+    "Longitude": 12.6438306,
+    "FoodCategory": "Snus",
+    "Stars": 3,
+    "NoOfVotes": 29,
+    "StoreLogo": "/usr/bin/images/haute_snus.png",
+    "Products": [
+        {
+            "ProductName": "Honey Gold",
+            "ProductType": "Herbal Snus",
+            "Available Amount": 620,
+            "Price": 14.32
+        },
+        {
+            "ProductName": "Ginger Zing",
+            "ProductType": "Short Cut",
+            "Available Amount": 479,
+            "Price": 4.31
+        }
+    ]
+}

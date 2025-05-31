@@ -1,0 +1,41 @@
+{
+    "StoreName": "Pouch Goblin",
+    "Latitude": 10.9965419,
+    "Longitude": -1.2487891,
+    "FoodCategory": "Snus",
+    "Stars": 5,
+    "NoOfVotes": 181,
+    "StoreLogo": "/usr/bin/images/pouch_goblin.png",
+    "Products": [
+        {
+            "ProductName": "Alien Abduction Berry",
+            "ProductType": "Slim",
+            "Available Amount": 333,
+            "Price": 5.23
+        },
+        {
+            "ProductName": "Ghost Pepper Punch",
+            "ProductType": "Slim",
+            "Available Amount": 227,
+            "Price": 4.91
+        },
+        {
+            "ProductName": "Ghost Pepper Punch",
+            "ProductType": "Moist Snuff",
+            "Available Amount": 241,
+            "Price": 5.3
+        },
+        {
+            "ProductName": "Blueberry Bliss",
+            "ProductType": "Chewing Tobacco",
+            "Available Amount": 415,
+            "Price": 10.41
+        },
+        {
+            "ProductName": "Time Traveler\u2019s Citrus",
+            "ProductType": "Regular",
+            "Available Amount": 571,
+            "Price": 8.75
+        }
+    ]
+}

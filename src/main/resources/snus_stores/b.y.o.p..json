@@ -1,0 +1,47 @@
+{
+    "StoreName": "B.Y.O.P.",
+    "Latitude": -9.6444555,
+    "Longitude": -45.6871438,
+    "FoodCategory": "Snus",
+    "Stars": 1,
+    "NoOfVotes": 133,
+    "StoreLogo": "/usr/bin/images/b.y.o.p..png",
+    "Products": [
+        {
+            "ProductName": "Coconut Craze",
+            "ProductType": "Slim",
+            "Available Amount": 767,
+            "Price": 11.41
+        },
+        {
+            "ProductName": "Minty Fresh",
+            "ProductType": "Long Cut",
+            "Available Amount": 720,
+            "Price": 4.25
+        },
+        {
+            "ProductName": "Zombie Apocalypse Flavor",
+            "ProductType": "Dry Snuff",
+            "Available Amount": 76,
+            "Price": 2.97
+        },
+        {
+            "ProductName": "Citrus Burst",
+            "ProductType": "Herbal Snus",
+            "Available Amount": 555,
+            "Price": 4.52
+        },
+        {
+            "ProductName": "Bigfoot\u2019s Berry Blast",
+            "ProductType": "Moist Snuff",
+            "Available Amount": 88,
+            "Price": 8.9
+        },
+        {
+            "ProductName": "Apple Crisp",
+            "ProductType": "White Portion",
+            "Available Amount": 252,
+            "Price": 8.0
+        }
+    ]
+}

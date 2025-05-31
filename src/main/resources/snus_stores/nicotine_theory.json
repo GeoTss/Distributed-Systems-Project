@@ -1,0 +1,41 @@
+{
+    "StoreName": "Nicotine Theory",
+    "Latitude": 8.3560345,
+    "Longitude": 44.086415,
+    "FoodCategory": "Snus",
+    "Stars": 2,
+    "NoOfVotes": 76,
+    "StoreLogo": "/usr/bin/images/nicotine_theory.png",
+    "Products": [
+        {
+            "ProductName": "Watermelon Wave",
+            "ProductType": "Chewing Tobacco",
+            "Available Amount": 571,
+            "Price": 7.2
+        },
+        {
+            "ProductName": "Unicorn Tears",
+            "ProductType": "Nicotine Pouches",
+            "Available Amount": 900,
+            "Price": 12.08
+        },
+        {
+            "ProductName": "Spicy Cinnamon",
+            "ProductType": "Nicotine Pouches",
+            "Available Amount": 976,
+            "Price": 8.48
+        },
+        {
+            "ProductName": "Dragonfruit Delight",
+            "ProductType": "Loose Snus",
+            "Available Amount": 839,
+            "Price": 6.06
+        },
+        {
+            "ProductName": "Alien Abduction Berry",
+            "ProductType": "White Portion",
+            "Available Amount": 860,
+            "Price": 13.01
+        }
+    ]
+}

@@ -1,0 +1,47 @@
+{
+    "StoreName": "Snus Royale",
+    "Latitude": -20.5620366,
+    "Longitude": 12.268423,
+    "FoodCategory": "Snus",
+    "Stars": 4,
+    "NoOfVotes": 197,
+    "StoreLogo": "/usr/bin/images/snus_royale.png",
+    "Products": [
+        {
+            "ProductName": "Minty Fresh",
+            "ProductType": "Loose Snus",
+            "Available Amount": 213,
+            "Price": 8.75
+        },
+        {
+            "ProductName": "Kraken\u2019s Coconut Craze",
+            "ProductType": "Flavored Snus",
+            "Available Amount": 939,
+            "Price": 11.84
+        },
+        {
+            "ProductName": "Berry Blast",
+            "ProductType": "Flavored Snus",
+            "Available Amount": 972,
+            "Price": 5.17
+        },
+        {
+            "ProductName": "Spicy Cinnamon",
+            "ProductType": "Chewing Tobacco",
+            "Available Amount": 173,
+            "Price": 8.91
+        },
+        {
+            "ProductName": "Berry Blast",
+            "ProductType": "Nicotine Pouches",
+            "Available Amount": 874,
+            "Price": 4.68
+        },
+        {
+            "ProductName": "Coconut Craze",
+            "ProductType": "Snus Pouches",
+            "Available Amount": 709,
+            "Price": 9.41
+        }
+    ]
+}

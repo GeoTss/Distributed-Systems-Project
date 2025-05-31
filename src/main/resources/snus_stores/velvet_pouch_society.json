@@ -1,0 +1,47 @@
+{
+    "StoreName": "Velvet Pouch Society",
+    "Latitude": 25.8035229,
+    "Longitude": -16.3894239,
+    "FoodCategory": "Snus",
+    "Stars": 3,
+    "NoOfVotes": 63,
+    "StoreLogo": "/usr/bin/images/velvet_pouch_society.png",
+    "Products": [
+        {
+            "ProductName": "Spicy Cinnamon",
+            "ProductType": "Regular",
+            "Available Amount": 74,
+            "Price": 9.52
+        },
+        {
+            "ProductName": "Zombie Apocalypse Flavor",
+            "ProductType": "Herbal Snus",
+            "Available Amount": 428,
+            "Price": 6.04
+        },
+        {
+            "ProductName": "Minty Fresh",
+            "ProductType": "Moist Snuff",
+            "Available Amount": 58,
+            "Price": 6.08
+        },
+        {
+            "ProductName": "Alien Abduction Berry",
+            "ProductType": "Loose Snus",
+            "Available Amount": 979,
+            "Price": 4.03
+        },
+        {
+            "ProductName": "Lemon Zest",
+            "ProductType": "Slim",
+            "Available Amount": 960,
+            "Price": 12.08
+        },
+        {
+            "ProductName": "Mermaid\u2019s Kiss Mint",
+            "ProductType": "Loose Snus",
+            "Available Amount": 933,
+            "Price": 14.94
+        }
+    ]
+}

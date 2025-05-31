@@ -1,0 +1,47 @@
+{
+    "StoreName": "PhD in Pouches",
+    "Latitude": -3.176227,
+    "Longitude": -25.3210623,
+    "FoodCategory": "Snus",
+    "Stars": 4,
+    "NoOfVotes": 103,
+    "StoreLogo": "/usr/bin/images/phd_in_pouches.png",
+    "Products": [
+        {
+            "ProductName": "Minty Fresh",
+            "ProductType": "Long Cut",
+            "Available Amount": 996,
+            "Price": 7.69
+        },
+        {
+            "ProductName": "Chocolate Indulgence",
+            "ProductType": "Nicotine Pouches",
+            "Available Amount": 265,
+            "Price": 7.47
+        },
+        {
+            "ProductName": "Peachy Keen",
+            "ProductType": "Nicotine Pouches",
+            "Available Amount": 130,
+            "Price": 14.76
+        },
+        {
+            "ProductName": "Watermelon Wave",
+            "ProductType": "Short Cut",
+            "Available Amount": 447,
+            "Price": 12.84
+        },
+        {
+            "ProductName": "Strawberry Fields",
+            "ProductType": "Snus Pouches",
+            "Available Amount": 508,
+            "Price": 11.53
+        },
+        {
+            "ProductName": "Caramel Delight",
+            "ProductType": "Herbal Snus",
+            "Available Amount": 609,
+            "Price": 14.0
+        }
+    ]
+}

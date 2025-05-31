@@ -1,0 +1,35 @@
+{
+    "StoreName": "Club Nicotine",
+    "Latitude": -22.5356742,
+    "Longitude": 3.6979564,
+    "FoodCategory": "Snus",
+    "Stars": 1,
+    "NoOfVotes": 186,
+    "StoreLogo": "/usr/bin/images/club_nicotine.png",
+    "Products": [
+        {
+            "ProductName": "Bigfoot\u2019s Berry Blast",
+            "ProductType": "Loose Snus",
+            "Available Amount": 939,
+            "Price": 11.41
+        },
+        {
+            "ProductName": "Time Traveler\u2019s Citrus",
+            "ProductType": "Slim",
+            "Available Amount": 136,
+            "Price": 6.29
+        },
+        {
+            "ProductName": "Ghost Pepper Punch",
+            "ProductType": "Long Cut",
+            "Available Amount": 134,
+            "Price": 8.76
+        },
+        {
+            "ProductName": "Alien Abduction Berry",
+            "ProductType": "Herbal Snus",
+            "Available Amount": 811,
+            "Price": 10.16
+        }
+    ]
+}

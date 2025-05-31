@@ -1,0 +1,35 @@
+{
+    "StoreName": "Nicki Snusage",
+    "Latitude": 5.7413688,
+    "Longitude": 29.8950849,
+    "FoodCategory": "Snus",
+    "Stars": 5,
+    "NoOfVotes": 166,
+    "StoreLogo": "/usr/bin/images/nicki_snusage.png",
+    "Products": [
+        {
+            "ProductName": "Kraken\u2019s Coconut Craze",
+            "ProductType": "Short Cut",
+            "Available Amount": 583,
+            "Price": 7.01
+        },
+        {
+            "ProductName": "Dragonfruit Delight",
+            "ProductType": "Moist Snuff",
+            "Available Amount": 371,
+            "Price": 4.73
+        },
+        {
+            "ProductName": "Caramel Delight",
+            "ProductType": "Chewing Tobacco",
+            "Available Amount": 781,
+            "Price": 5.86
+        },
+        {
+            "ProductName": "Blueberry Bliss",
+            "ProductType": "Regular",
+            "Available Amount": 863,
+            "Price": 4.14
+        }
+    ]
+}

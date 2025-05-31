@@ -1,0 +1,35 @@
+{
+    "StoreName": "Snus.exe",
+    "Latitude": -49.9598726,
+    "Longitude": -10.8844087,
+    "FoodCategory": "Snus",
+    "Stars": 3,
+    "NoOfVotes": 52,
+    "StoreLogo": "/usr/bin/images/snus.exe.png",
+    "Products": [
+        {
+            "ProductName": "Strawberry Fields",
+            "ProductType": "Moist Snuff",
+            "Available Amount": 248,
+            "Price": 11.89
+        },
+        {
+            "ProductName": "Berry Blast",
+            "ProductType": "Loose Snus",
+            "Available Amount": 473,
+            "Price": 11.95
+        },
+        {
+            "ProductName": "Blueberry Bliss",
+            "ProductType": "Regular",
+            "Available Amount": 683,
+            "Price": 6.19
+        },
+        {
+            "ProductName": "Citrus Burst",
+            "ProductType": "Loose Snus",
+            "Available Amount": 704,
+            "Price": 10.92
+        }
+    ]
+}

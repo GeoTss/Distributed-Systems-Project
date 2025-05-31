@@ -1,0 +1,23 @@
+{
+    "StoreName": "Pouch Me Daddy",
+    "Latitude": 42.7570159,
+    "Longitude": -31.0271003,
+    "FoodCategory": "Snus",
+    "Stars": 1,
+    "NoOfVotes": 183,
+    "StoreLogo": "/usr/bin/images/pouch_me_daddy.png",
+    "Products": [
+        {
+            "ProductName": "Peachy Keen",
+            "ProductType": "Slim",
+            "Available Amount": 63,
+            "Price": 10.43
+        },
+        {
+            "ProductName": "Apple Crisp",
+            "ProductType": "Original Portion",
+            "Available Amount": 950,
+            "Price": 5.54
+        }
+    ]
+}

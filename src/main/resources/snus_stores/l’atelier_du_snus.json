@@ -1,0 +1,35 @@
+{
+    "StoreName": "L\u2019Atelier du Snus",
+    "Latitude": 23.2270982,
+    "Longitude": 37.9577538,
+    "FoodCategory": "Snus",
+    "Stars": 1,
+    "NoOfVotes": 174,
+    "StoreLogo": "/usr/bin/images/l\u2019atelier_du_snus.png",
+    "Products": [
+        {
+            "ProductName": "Time Traveler\u2019s Citrus",
+            "ProductType": "Chewing Tobacco",
+            "Available Amount": 167,
+            "Price": 6.76
+        },
+        {
+            "ProductName": "Kraken\u2019s Coconut Craze",
+            "ProductType": "Snus Pouches",
+            "Available Amount": 214,
+            "Price": 8.17
+        },
+        {
+            "ProductName": "Strawberry Fields",
+            "ProductType": "White Portion",
+            "Available Amount": 622,
+            "Price": 4.27
+        },
+        {
+            "ProductName": "Berry Blast",
+            "ProductType": "Original Portion",
+            "Available Amount": 531,
+            "Price": 11.93
+        }
+    ]
+}

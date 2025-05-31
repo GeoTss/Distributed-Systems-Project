@@ -1,0 +1,47 @@
+{
+    "StoreName": "Arctic Snuskeys",
+    "Latitude": 36.0048492,
+    "Longitude": -39.8108034,
+    "FoodCategory": "Snus",
+    "Stars": 1,
+    "NoOfVotes": 132,
+    "StoreLogo": "/usr/bin/images/arctic_snuskeys.png",
+    "Products": [
+        {
+            "ProductName": "Blueberry Bliss",
+            "ProductType": "White Portion",
+            "Available Amount": 922,
+            "Price": 10.82
+        },
+        {
+            "ProductName": "Blueberry Bliss",
+            "ProductType": "Regular",
+            "Available Amount": 627,
+            "Price": 8.23
+        },
+        {
+            "ProductName": "Peachy Keen",
+            "ProductType": "Snus Pouches",
+            "Available Amount": 255,
+            "Price": 14.89
+        },
+        {
+            "ProductName": "Mango Tango",
+            "ProductType": "Dry Snuff",
+            "Available Amount": 107,
+            "Price": 11.67
+        },
+        {
+            "ProductName": "Coffee Kick",
+            "ProductType": "White Portion",
+            "Available Amount": 659,
+            "Price": 14.45
+        },
+        {
+            "ProductName": "Minty Fresh",
+            "ProductType": "Loose Snus",
+            "Available Amount": 519,
+            "Price": 4.06
+        }
+    ]
+}

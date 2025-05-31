@@ -1,0 +1,47 @@
+{
+    "StoreName": "How I Met Your Snus",
+    "Latitude": -47.0780831,
+    "Longitude": 41.9837314,
+    "FoodCategory": "Snus",
+    "Stars": 2,
+    "NoOfVotes": 178,
+    "StoreLogo": "/usr/bin/images/how_i_met_your_snus.png",
+    "Products": [
+        {
+            "ProductName": "Pineapple Punch",
+            "ProductType": "White Portion",
+            "Available Amount": 228,
+            "Price": 6.62
+        },
+        {
+            "ProductName": "Mango Tango",
+            "ProductType": "Short Cut",
+            "Available Amount": 789,
+            "Price": 13.41
+        },
+        {
+            "ProductName": "Caramel Delight",
+            "ProductType": "Snus Pouches",
+            "Available Amount": 238,
+            "Price": 13.57
+        },
+        {
+            "ProductName": "Minty Fresh",
+            "ProductType": "Short Cut",
+            "Available Amount": 296,
+            "Price": 10.37
+        },
+        {
+            "ProductName": "Caramel Delight",
+            "ProductType": "Chewing Tobacco",
+            "Available Amount": 945,
+            "Price": 12.33
+        },
+        {
+            "ProductName": "Minty Fresh",
+            "ProductType": "Chewing Tobacco",
+            "Available Amount": 710,
+            "Price": 11.62
+        }
+    ]
+}

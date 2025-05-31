@@ -1,0 +1,47 @@
+{
+    "StoreName": "Bohemian Snusody",
+    "Latitude": -13.1595088,
+    "Longitude": 45.9903005,
+    "FoodCategory": "Snus",
+    "Stars": 3,
+    "NoOfVotes": 40,
+    "StoreLogo": "/usr/bin/images/bohemian_snusody.png",
+    "Products": [
+        {
+            "ProductName": "Ghost Pepper Punch",
+            "ProductType": "Flavored Snus",
+            "Available Amount": 104,
+            "Price": 11.21
+        },
+        {
+            "ProductName": "Kraken\u2019s Coconut Craze",
+            "ProductType": "Moist Snuff",
+            "Available Amount": 873,
+            "Price": 14.43
+        },
+        {
+            "ProductName": "Coconut Craze",
+            "ProductType": "Regular",
+            "Available Amount": 634,
+            "Price": 9.23
+        },
+        {
+            "ProductName": "Kraken\u2019s Coconut Craze",
+            "ProductType": "Original Portion",
+            "Available Amount": 484,
+            "Price": 10.95
+        },
+        {
+            "ProductName": "Blueberry Bliss",
+            "ProductType": "Herbal Snus",
+            "Available Amount": 297,
+            "Price": 9.68
+        },
+        {
+            "ProductName": "Ginger Zing",
+            "ProductType": "Moist Snuff",
+            "Available Amount": 568,
+            "Price": 12.82
+        }
+    ]
+}

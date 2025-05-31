@@ -1,0 +1,35 @@
+{
+    "StoreName": "Snus in the USA",
+    "Latitude": -12.4516986,
+    "Longitude": 40.7226094,
+    "FoodCategory": "Snus",
+    "Stars": 2,
+    "NoOfVotes": 63,
+    "StoreLogo": "/usr/bin/images/snus_in_the_usa.png",
+    "Products": [
+        {
+            "ProductName": "Time Traveler\u2019s Citrus",
+            "ProductType": "Original Portion",
+            "Available Amount": 392,
+            "Price": 3.37
+        },
+        {
+            "ProductName": "Apple Crisp",
+            "ProductType": "Flavored Snus",
+            "Available Amount": 956,
+            "Price": 12.7
+        },
+        {
+            "ProductName": "Apple Crisp",
+            "ProductType": "Dry Snuff",
+            "Available Amount": 561,
+            "Price": 14.5
+        },
+        {
+            "ProductName": "Chocolate Indulgence",
+            "ProductType": "Slim",
+            "Available Amount": 339,
+            "Price": 11.2
+        }
+    ]
+}

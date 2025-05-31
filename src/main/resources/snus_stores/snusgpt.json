@@ -1,0 +1,35 @@
+{
+    "StoreName": "SnusGPT",
+    "Latitude": -25.251786,
+    "Longitude": -0.6957808,
+    "FoodCategory": "Snus",
+    "Stars": 5,
+    "NoOfVotes": 71,
+    "StoreLogo": "/usr/bin/images/snusgpt.png",
+    "Products": [
+        {
+            "ProductName": "Ginger Zing",
+            "ProductType": "Flavored Snus",
+            "Available Amount": 623,
+            "Price": 12.74
+        },
+        {
+            "ProductName": "Citrus Burst",
+            "ProductType": "Snus Pouches",
+            "Available Amount": 913,
+            "Price": 14.11
+        },
+        {
+            "ProductName": "Peachy Keen",
+            "ProductType": "Long Cut",
+            "Available Amount": 835,
+            "Price": 6.17
+        },
+        {
+            "ProductName": "Kraken\u2019s Coconut Craze",
+            "ProductType": "Original Portion",
+            "Available Amount": 400,
+            "Price": 6.31
+        }
+    ]
+}

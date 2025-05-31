@@ -1,0 +1,35 @@
+{
+    "StoreName": "Send Snus",
+    "Latitude": -47.0477919,
+    "Longitude": 14.7311214,
+    "FoodCategory": "Snus",
+    "Stars": 2,
+    "NoOfVotes": 130,
+    "StoreLogo": "/usr/bin/images/send_snus.png",
+    "Products": [
+        {
+            "ProductName": "Minty Fresh",
+            "ProductType": "White Portion",
+            "Available Amount": 235,
+            "Price": 13.94
+        },
+        {
+            "ProductName": "Vanilla Dream",
+            "ProductType": "Moist Snuff",
+            "Available Amount": 213,
+            "Price": 12.62
+        },
+        {
+            "ProductName": "Time Traveler\u2019s Citrus",
+            "ProductType": "Flavored Snus",
+            "Available Amount": 535,
+            "Price": 12.1
+        },
+        {
+            "ProductName": "Zombie Apocalypse Flavor",
+            "ProductType": "Slim",
+            "Available Amount": 752,
+            "Price": 2.76
+        }
+    ]
+}

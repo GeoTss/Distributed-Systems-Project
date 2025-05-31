@@ -1,0 +1,35 @@
+{
+    "StoreName": "Red Dead Redemsnus",
+    "Latitude": -34.2477393,
+    "Longitude": 33.9275772,
+    "FoodCategory": "Snus",
+    "Stars": 1,
+    "NoOfVotes": 189,
+    "StoreLogo": "/usr/bin/images/red_dead_redemsnus.png",
+    "Products": [
+        {
+            "ProductName": "Blueberry Bliss",
+            "ProductType": "Flavored Snus",
+            "Available Amount": 605,
+            "Price": 10.96
+        },
+        {
+            "ProductName": "Time Traveler\u2019s Citrus",
+            "ProductType": "Chewing Tobacco",
+            "Available Amount": 803,
+            "Price": 2.76
+        },
+        {
+            "ProductName": "Lemon Zest",
+            "ProductType": "Dry Snuff",
+            "Available Amount": 180,
+            "Price": 4.1
+        },
+        {
+            "ProductName": "Kraken\u2019s Coconut Craze",
+            "ProductType": "Dry Snuff",
+            "Available Amount": 159,
+            "Price": 11.4
+        }
+    ]
+}

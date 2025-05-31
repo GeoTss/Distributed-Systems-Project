@@ -1,0 +1,41 @@
+{
+    "StoreName": "Somebody That I Used to Snus",
+    "Latitude": -26.898214,
+    "Longitude": 3.989132,
+    "FoodCategory": "Snus",
+    "Stars": 5,
+    "NoOfVotes": 53,
+    "StoreLogo": "/usr/bin/images/somebody_that_i_used_to_snus.png",
+    "Products": [
+        {
+            "ProductName": "Minty Fresh",
+            "ProductType": "Flavored Snus",
+            "Available Amount": 256,
+            "Price": 7.29
+        },
+        {
+            "ProductName": "Lemon Zest",
+            "ProductType": "Slim",
+            "Available Amount": 376,
+            "Price": 8.25
+        },
+        {
+            "ProductName": "Minty Fresh",
+            "ProductType": "Flavored Snus",
+            "Available Amount": 988,
+            "Price": 6.72
+        },
+        {
+            "ProductName": "Coffee Kick",
+            "ProductType": "Long Cut",
+            "Available Amount": 95,
+            "Price": 6.61
+        },
+        {
+            "ProductName": "Blueberry Bliss",
+            "ProductType": "Regular",
+            "Available Amount": 585,
+            "Price": 12.89
+        }
+    ]
+}

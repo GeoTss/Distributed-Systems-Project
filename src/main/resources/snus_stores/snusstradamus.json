@@ -1,0 +1,41 @@
+{
+    "StoreName": "Snusstradamus",
+    "Latitude": 39.3209781,
+    "Longitude": 12.6902668,
+    "FoodCategory": "Snus",
+    "Stars": 4,
+    "NoOfVotes": 53,
+    "StoreLogo": "/usr/bin/images/snusstradamus.png",
+    "Products": [
+        {
+            "ProductName": "Alien Abduction Berry",
+            "ProductType": "Moist Snuff",
+            "Available Amount": 391,
+            "Price": 7.22
+        },
+        {
+            "ProductName": "Alien Abduction Berry",
+            "ProductType": "Herbal Snus",
+            "Available Amount": 984,
+            "Price": 2.81
+        },
+        {
+            "ProductName": "Ghost Pepper Punch",
+            "ProductType": "Long Cut",
+            "Available Amount": 338,
+            "Price": 5.31
+        },
+        {
+            "ProductName": "Coconut Craze",
+            "ProductType": "Original Portion",
+            "Available Amount": 317,
+            "Price": 7.38
+        },
+        {
+            "ProductName": "Mermaid\u2019s Kiss Mint",
+            "ProductType": "White Portion",
+            "Available Amount": 591,
+            "Price": 6.15
+        }
+    ]
+}

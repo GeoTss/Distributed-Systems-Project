@@ -1,0 +1,29 @@
+{
+    "StoreName": "My Chemical Snusmance",
+    "Latitude": -3.3135736,
+    "Longitude": 6.8765814,
+    "FoodCategory": "Snus",
+    "Stars": 2,
+    "NoOfVotes": 156,
+    "StoreLogo": "/usr/bin/images/my_chemical_snusmance.png",
+    "Products": [
+        {
+            "ProductName": "Unicorn Tears",
+            "ProductType": "Snus Pouches",
+            "Available Amount": 329,
+            "Price": 13.44
+        },
+        {
+            "ProductName": "Ginger Zing",
+            "ProductType": "Snus Pouches",
+            "Available Amount": 306,
+            "Price": 9.06
+        },
+        {
+            "ProductName": "Pineapple Punch",
+            "ProductType": "Original Portion",
+            "Available Amount": 354,
+            "Price": 9.17
+        }
+    ]
+}

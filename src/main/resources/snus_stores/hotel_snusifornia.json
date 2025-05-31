@@ -1,0 +1,47 @@
+{
+    "StoreName": "Hotel Snusifornia",
+    "Latitude": 41.1157537,
+    "Longitude": -23.8120934,
+    "FoodCategory": "Snus",
+    "Stars": 1,
+    "NoOfVotes": 190,
+    "StoreLogo": "/usr/bin/images/hotel_snusifornia.png",
+    "Products": [
+        {
+            "ProductName": "Spicy Cinnamon",
+            "ProductType": "Chewing Tobacco",
+            "Available Amount": 751,
+            "Price": 3.51
+        },
+        {
+            "ProductName": "Dragonfruit Delight",
+            "ProductType": "White Portion",
+            "Available Amount": 157,
+            "Price": 5.96
+        },
+        {
+            "ProductName": "Honey Gold",
+            "ProductType": "Loose Snus",
+            "Available Amount": 867,
+            "Price": 9.72
+        },
+        {
+            "ProductName": "Citrus Burst",
+            "ProductType": "Loose Snus",
+            "Available Amount": 846,
+            "Price": 6.84
+        },
+        {
+            "ProductName": "Watermelon Wave",
+            "ProductType": "White Portion",
+            "Available Amount": 605,
+            "Price": 3.47
+        },
+        {
+            "ProductName": "Alien Abduction Berry",
+            "ProductType": "Dry Snuff",
+            "Available Amount": 325,
+            "Price": 14.14
+        }
+    ]
+}

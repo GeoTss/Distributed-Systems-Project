@@ -1,0 +1,47 @@
+{
+    "StoreName": "Snus 101",
+    "Latitude": 14.3090864,
+    "Longitude": 45.3866985,
+    "FoodCategory": "Snus",
+    "Stars": 5,
+    "NoOfVotes": 135,
+    "StoreLogo": "/usr/bin/images/snus_101.png",
+    "Products": [
+        {
+            "ProductName": "Alien Abduction Berry",
+            "ProductType": "White Portion",
+            "Available Amount": 878,
+            "Price": 14.08
+        },
+        {
+            "ProductName": "Kraken\u2019s Coconut Craze",
+            "ProductType": "Long Cut",
+            "Available Amount": 823,
+            "Price": 11.03
+        },
+        {
+            "ProductName": "Pineapple Punch",
+            "ProductType": "Dry Snuff",
+            "Available Amount": 847,
+            "Price": 10.37
+        },
+        {
+            "ProductName": "Kraken\u2019s Coconut Craze",
+            "ProductType": "Slim",
+            "Available Amount": 742,
+            "Price": 9.43
+        },
+        {
+            "ProductName": "Vampire\u2019s Blood Orange",
+            "ProductType": "Nicotine Pouches",
+            "Available Amount": 797,
+            "Price": 13.91
+        },
+        {
+            "ProductName": "Bigfoot\u2019s Berry Blast",
+            "ProductType": "Loose Snus",
+            "Available Amount": 632,
+            "Price": 11.28
+        }
+    ]
+}

@@ -1,0 +1,29 @@
+{
+    "StoreName": "Snus in Your Mouth",
+    "Latitude": 8.3473031,
+    "Longitude": 31.1308992,
+    "FoodCategory": "Snus",
+    "Stars": 1,
+    "NoOfVotes": 132,
+    "StoreLogo": "/usr/bin/images/snus_in_your_mouth.png",
+    "Products": [
+        {
+            "ProductName": "Mango Tango",
+            "ProductType": "Dry Snuff",
+            "Available Amount": 544,
+            "Price": 11.58
+        },
+        {
+            "ProductName": "Peachy Keen",
+            "ProductType": "Herbal Snus",
+            "Available Amount": 824,
+            "Price": 7.15
+        },
+        {
+            "ProductName": "Mermaid\u2019s Kiss Mint",
+            "ProductType": "Chewing Tobacco",
+            "Available Amount": 678,
+            "Price": 5.23
+        }
+    ]
+}

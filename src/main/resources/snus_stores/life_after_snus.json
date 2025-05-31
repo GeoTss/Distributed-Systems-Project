@@ -1,0 +1,23 @@
+{
+    "StoreName": "Life After Snus",
+    "Latitude": 28.0068282,
+    "Longitude": -18.6997757,
+    "FoodCategory": "Snus",
+    "Stars": 1,
+    "NoOfVotes": 115,
+    "StoreLogo": "/usr/bin/images/life_after_snus.png",
+    "Products": [
+        {
+            "ProductName": "Strawberry Fields",
+            "ProductType": "Regular",
+            "Available Amount": 606,
+            "Price": 12.25
+        },
+        {
+            "ProductName": "Citrus Burst",
+            "ProductType": "Snus Pouches",
+            "Available Amount": 501,
+            "Price": 8.67
+        }
+    ]
+}

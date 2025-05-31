@@ -1,0 +1,23 @@
+{
+    "StoreName": "Highway to Snus",
+    "Latitude": -15.3607904,
+    "Longitude": 24.2424255,
+    "FoodCategory": "Snus",
+    "Stars": 4,
+    "NoOfVotes": 63,
+    "StoreLogo": "/usr/bin/images/highway_to_snus.png",
+    "Products": [
+        {
+            "ProductName": "Unicorn Tears",
+            "ProductType": "White Portion",
+            "Available Amount": 632,
+            "Price": 12.7
+        },
+        {
+            "ProductName": "Coconut Craze",
+            "ProductType": "Regular",
+            "Available Amount": 715,
+            "Price": 4.16
+        }
+    ]
+}

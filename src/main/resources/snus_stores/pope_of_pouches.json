@@ -1,0 +1,23 @@
+{
+    "StoreName": "Pope of Pouches",
+    "Latitude": -7.2380651,
+    "Longitude": -8.3814166,
+    "FoodCategory": "Snus",
+    "Stars": 5,
+    "NoOfVotes": 96,
+    "StoreLogo": "/usr/bin/images/pope_of_pouches.png",
+    "Products": [
+        {
+            "ProductName": "Lemon Zest",
+            "ProductType": "Slim",
+            "Available Amount": 462,
+            "Price": 13.47
+        },
+        {
+            "ProductName": "Blueberry Bliss",
+            "ProductType": "Loose Snus",
+            "Available Amount": 819,
+            "Price": 9.84
+        }
+    ]
+}

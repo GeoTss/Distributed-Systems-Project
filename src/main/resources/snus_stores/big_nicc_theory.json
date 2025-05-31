@@ -1,0 +1,47 @@
+{
+    "StoreName": "Big Nicc Theory",
+    "Latitude": 22.5107705,
+    "Longitude": -38.6526754,
+    "FoodCategory": "Snus",
+    "Stars": 1,
+    "NoOfVotes": 187,
+    "StoreLogo": "/usr/bin/images/big_nicc_theory.png",
+    "Products": [
+        {
+            "ProductName": "Mango Tango",
+            "ProductType": "Long Cut",
+            "Available Amount": 428,
+            "Price": 7.41
+        },
+        {
+            "ProductName": "Strawberry Fields",
+            "ProductType": "Slim",
+            "Available Amount": 210,
+            "Price": 3.28
+        },
+        {
+            "ProductName": "Unicorn Tears",
+            "ProductType": "Dry Snuff",
+            "Available Amount": 202,
+            "Price": 4.92
+        },
+        {
+            "ProductName": "Ginger Zing",
+            "ProductType": "Original Portion",
+            "Available Amount": 570,
+            "Price": 8.19
+        },
+        {
+            "ProductName": "Strawberry Fields",
+            "ProductType": "Nicotine Pouches",
+            "Available Amount": 171,
+            "Price": 9.58
+        },
+        {
+            "ProductName": "Unicorn Tears",
+            "ProductType": "Snus Pouches",
+            "Available Amount": 506,
+            "Price": 6.99
+        }
+    ]
+}

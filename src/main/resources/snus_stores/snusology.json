@@ -1,0 +1,23 @@
+{
+    "StoreName": "Snusology",
+    "Latitude": 42.1515797,
+    "Longitude": 35.1623471,
+    "FoodCategory": "Snus",
+    "Stars": 4,
+    "NoOfVotes": 197,
+    "StoreLogo": "/usr/bin/images/snusology.png",
+    "Products": [
+        {
+            "ProductName": "Mango Tango",
+            "ProductType": "Snus Pouches",
+            "Available Amount": 124,
+            "Price": 13.62
+        },
+        {
+            "ProductName": "Mermaid\u2019s Kiss Mint",
+            "ProductType": "White Portion",
+            "Available Amount": 815,
+            "Price": 2.74
+        }
+    ]
+}

@@ -1,0 +1,29 @@
+{
+    "StoreName": "Big Nic Energy",
+    "Latitude": 47.3789613,
+    "Longitude": 15.1468053,
+    "FoodCategory": "Snus",
+    "Stars": 5,
+    "NoOfVotes": 176,
+    "StoreLogo": "/usr/bin/images/big_nic_energy.png",
+    "Products": [
+        {
+            "ProductName": "Ginger Zing",
+            "ProductType": "Long Cut",
+            "Available Amount": 933,
+            "Price": 6.69
+        },
+        {
+            "ProductName": "Ghost Pepper Punch",
+            "ProductType": "Original Portion",
+            "Available Amount": 918,
+            "Price": 14.96
+        },
+        {
+            "ProductName": "Dragonfruit Delight",
+            "ProductType": "Herbal Snus",
+            "Available Amount": 342,
+            "Price": 14.21
+        }
+    ]
+}

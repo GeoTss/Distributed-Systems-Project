@@ -1,0 +1,23 @@
+{
+    "StoreName": "The Snussiah",
+    "Latitude": -34.853899,
+    "Longitude": 10.6379367,
+    "FoodCategory": "Snus",
+    "Stars": 3,
+    "NoOfVotes": 12,
+    "StoreLogo": "/usr/bin/images/the_snussiah.png",
+    "Products": [
+        {
+            "ProductName": "Pineapple Punch",
+            "ProductType": "Loose Snus",
+            "Available Amount": 772,
+            "Price": 8.48
+        },
+        {
+            "ProductName": "Zombie Apocalypse Flavor",
+            "ProductType": "White Portion",
+            "Available Amount": 545,
+            "Price": 7.73
+        }
+    ]
+}

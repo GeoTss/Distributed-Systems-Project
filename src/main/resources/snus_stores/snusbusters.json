@@ -1,0 +1,23 @@
+{
+    "StoreName": "Snusbusters",
+    "Latitude": -35.0944327,
+    "Longitude": 6.0544088,
+    "FoodCategory": "Snus",
+    "Stars": 1,
+    "NoOfVotes": 166,
+    "StoreLogo": "/usr/bin/images/snusbusters.png",
+    "Products": [
+        {
+            "ProductName": "Chocolate Indulgence",
+            "ProductType": "Long Cut",
+            "Available Amount": 837,
+            "Price": 7.3
+        },
+        {
+            "ProductName": "Kraken\u2019s Coconut Craze",
+            "ProductType": "Long Cut",
+            "Available Amount": 415,
+            "Price": 9.77
+        }
+    ]
+}

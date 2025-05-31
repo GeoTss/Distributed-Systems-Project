@@ -1,0 +1,35 @@
+{
+    "StoreName": "Twenty Pouch Pilots",
+    "Latitude": -37.6000115,
+    "Longitude": -13.7528495,
+    "FoodCategory": "Snus",
+    "Stars": 5,
+    "NoOfVotes": 161,
+    "StoreLogo": "/usr/bin/images/twenty_pouch_pilots.png",
+    "Products": [
+        {
+            "ProductName": "Mango Tango",
+            "ProductType": "Original Portion",
+            "Available Amount": 773,
+            "Price": 6.82
+        },
+        {
+            "ProductName": "Honey Gold",
+            "ProductType": "Nicotine Pouches",
+            "Available Amount": 460,
+            "Price": 3.76
+        },
+        {
+            "ProductName": "Unicorn Tears",
+            "ProductType": "Snus Pouches",
+            "Available Amount": 234,
+            "Price": 8.35
+        },
+        {
+            "ProductName": "Mermaid\u2019s Kiss Mint",
+            "ProductType": "Long Cut",
+            "Available Amount": 68,
+            "Price": 12.32
+        }
+    ]
+}

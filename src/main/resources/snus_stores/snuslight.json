@@ -1,0 +1,35 @@
+{
+    "StoreName": "Snuslight",
+    "Latitude": -6.0659978,
+    "Longitude": -41.774968,
+    "FoodCategory": "Snus",
+    "Stars": 1,
+    "NoOfVotes": 53,
+    "StoreLogo": "/usr/bin/images/snuslight.png",
+    "Products": [
+        {
+            "ProductName": "Tropical Paradise",
+            "ProductType": "White Portion",
+            "Available Amount": 58,
+            "Price": 12.88
+        },
+        {
+            "ProductName": "Lemon Zest",
+            "ProductType": "Loose Snus",
+            "Available Amount": 328,
+            "Price": 13.47
+        },
+        {
+            "ProductName": "Coconut Craze",
+            "ProductType": "Short Cut",
+            "Available Amount": 771,
+            "Price": 3.64
+        },
+        {
+            "ProductName": "Bigfoot\u2019s Berry Blast",
+            "ProductType": "Nicotine Pouches",
+            "Available Amount": 116,
+            "Price": 5.18
+        }
+    ]
+}

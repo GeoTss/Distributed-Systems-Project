@@ -1,0 +1,29 @@
+{
+    "StoreName": "Pouch of the Apes",
+    "Latitude": 46.270395,
+    "Longitude": -29.2345868,
+    "FoodCategory": "Snus",
+    "Stars": 4,
+    "NoOfVotes": 133,
+    "StoreLogo": "/usr/bin/images/pouch_of_the_apes.png",
+    "Products": [
+        {
+            "ProductName": "Pineapple Punch",
+            "ProductType": "Regular",
+            "Available Amount": 567,
+            "Price": 11.34
+        },
+        {
+            "ProductName": "Vampire\u2019s Blood Orange",
+            "ProductType": "Herbal Snus",
+            "Available Amount": 852,
+            "Price": 10.56
+        },
+        {
+            "ProductName": "Minty Fresh",
+            "ProductType": "Moist Snuff",
+            "Available Amount": 911,
+            "Price": 3.49
+        }
+    ]
+}
