@@ -5,6 +5,7 @@ import com.example.client_efood.Domain.Utils.Pair;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class Message implements Serializable {
 
@@ -12,12 +13,27 @@ public class Message implements Serializable {
 
     private HashMap<String, Pair<MessageArgCast, Object>> argument_list = new HashMap<>();
 
+    public Message() {}
+
+    public Message(Message other) {
+        if (other != null && other.argument_list != null) {
+            for (Map.Entry<String, Pair<MessageArgCast, Object>> entry : other.argument_list.entrySet()) {
+
+                this.argument_list.put(entry.getKey(), new Pair<>(entry.getValue().first, entry.getValue().second));
+            }
+        }
+    }
+
     public <T> T getArgument(String tag){
         Pair<MessageArgCast, Object> arg_pair = argument_list.get(tag);
         return arg_pair.first.getCastedArg(arg_pair.second);
     }
 
     public void addArgument(String tag, Pair<MessageArgCast, Object> arg){
+        argument_list.put(tag, arg);
+    }
+
+    public void replaceArgument(String tag, Pair<MessageArgCast, Object> arg){
         argument_list.put(tag, arg);
     }
 

@@ -71,6 +71,9 @@ public class ClientBatch {
                 ObjectOutputStream out = new ObjectOutputStream(new_worker_con.getOutputStream());
                 ObjectInputStream in = new ObjectInputStream(new_worker_con.getInputStream());
 
+                out.writeInt(ConnectionType.CLIENT.ordinal());
+                out.flush();
+
                 batchWorkerStreams.put(worker_id, new Pair<>(out, in));
 
                 batchWorkerListeners.put(worker_id, new ReplicationListener(in));

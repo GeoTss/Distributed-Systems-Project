@@ -23,6 +23,8 @@ import com.example.client_efood.ReducerSide.Reducer;
 import com.example.client_efood.ServerSide.ConnectionType;
 import com.example.client_efood.ServerSide.MasterServer;
 
+import javax.xml.crypto.Data;
+
 
 public class WorkerClient {
 
@@ -34,6 +36,9 @@ public class WorkerClient {
     private ObjectOutputStream reducer_output_stream;
 
     private HashMap<Integer, ArrayList<Shop>> managed_shops = new HashMap<>();
+
+    private ChangeLog change_log = new ChangeLog();
+
     private int listening_port = 8888;
 
     public ArrayList<Shop> applyFilters(int worker_id, ArrayList<Filter> received_filters) throws IOException, ClassNotFoundException {
@@ -70,7 +75,7 @@ public class WorkerClient {
         }
     }
 
-    public CheckoutResultWrapper checkout(Shop shop, ServerCart serverCart, float balance) throws IOException {
+    public CheckoutResultWrapper checkout(Shop shop, ServerCart serverCart, float balance) {
 
         synchronized (shop) {
             ReadableCart in_sync_cart = getActualCart(shop, serverCart);
@@ -146,7 +151,6 @@ public class WorkerClient {
 
         for(Shop s_shop: shop_list){
             if(shop_id == s_shop.getId()) {
-                System.out.println("Found shop: " + s_shop);
                 return s_shop;
             }
         }
@@ -162,6 +166,98 @@ public class WorkerClient {
             out.writeObject(result);
             out.flush();
         }
+    }
+
+    private void handleAddShop(Message message, int worker_id){
+        Shop new_shop = message.getArgument("new_shop");
+
+        ArrayList<Shop> shop_list = getShopListFromId(worker_id);
+        shop_list.add(new_shop);
+    }
+
+    private void handleAddOldProduct(Message message, int worker_id){
+        int shop_id = message.getArgument("shop_id");
+        int product_id = message.getArgument("product_id");
+
+        Shop shop = getShopFromId(worker_id, shop_id);
+        Product product = shop.getProductById(product_id);
+
+        synchronized (product) {
+            product.set_removed_status(false);
+        }
+    }
+
+    private void handleAddProduct(Message message, int worker_id){
+        int shop_id = message.getArgument("shop_id");
+        Product new_product = message.getArgument("new_product");
+
+        Shop shop = getShopFromId(worker_id, shop_id);
+        shop.addProduct(new_product);
+    }
+
+    private void handleRemoveProduct(Message message, int worker_id){
+        int shop_id = message.getArgument("shop_id");
+        int product_id = message.getArgument("product_id");
+
+        Shop shop = getShopFromId(worker_id, shop_id);
+        Product product = shop.getProductById(product_id);
+
+        synchronized (product) {
+            product.set_removed_status(true);
+        }
+    }
+
+    private void handleAddProductStock(Message message, int worker_id){
+        int shop_id = message.getArgument("shop_id");
+        int product_id = message.getArgument("product_id");
+        int quantity = message.getArgument("quantity");
+
+        Shop shop = getShopFromId(worker_id, shop_id);
+        Product product = shop.getProductById(product_id);
+
+        System.out.println("Product: " + product);
+
+        synchronized (shop) {
+            System.out.println("Previous: " + product);
+            product.addAvailableAmount(quantity);
+            System.out.println("Updated: " + product);
+        }
+    }
+
+    private void handleRemoveProductStock(Message message, int worker_id){
+        int shop_id = message.getArgument("shop_id");
+        int product_id = message.getArgument("product_id");
+        int quantity = message.getArgument("quantity");
+
+        Shop shop = getShopFromId(worker_id, shop_id);
+        Product product = shop.getProductById(product_id);
+
+        synchronized (shop) {
+            System.out.println("Product: " + product);
+
+            System.out.println("Previous stock: " + product.getAvailableAmount());
+            product.removeAvailableAmount(quantity);
+            System.out.println("New stock: " + product.getAvailableAmount());
+        }
+    }
+
+    private void handleGiveRating(Message message, int worker_id){
+        int chosen_shop_id = message.getArgument("shop_id");
+        Shop corresponding_shop = getShopFromId(worker_id, chosen_shop_id);
+        float rating = message.getArgument("rating");
+
+        rateShop(corresponding_shop, rating);
+    }
+
+    private CheckoutResultWrapper handleCheckout(Message message, int worker_id) {
+        int chosen_shop_id = message.getArgument("shop_id");
+        Shop corresponding_shop = getShopFromId(worker_id, chosen_shop_id);
+
+        ServerCart serverCart = message.getArgument("cart");
+        float balance = message.getArgument("balance");
+        CheckoutResultWrapper checked_out = checkout(corresponding_shop, serverCart, balance);
+
+        return checked_out;
     }
 
     private void handleCommand(Message message, ObjectOutputStream out) throws IOException, ClassNotFoundException {
@@ -188,82 +284,69 @@ public class WorkerClient {
                 System.out.println("Worker id: " + id + " Received " + worker_backup_id + " and list with " + worker_managed_shops.size() + " shops");
 
                 synchronized (managed_shops) {
-                    managed_shops.put(worker_backup_id, new ArrayList<>(worker_managed_shops));
+                    managed_shops.computeIfAbsent(worker_backup_id, k -> new ArrayList<>(worker_managed_shops));
                 }
                 System.out.println("Worker " + worker_backup_id + " in map with shop list size: " + managed_shops.get(worker_backup_id).size());
             }
 
-            case ADD_SHOP, SYNC_ADD_SHOP -> {
-                Shop new_shop = message.getArgument("new_shop");
+            case ADD_SHOP -> {
+                handleAddShop(message, worker_id);
 
-                ArrayList<Shop> shop_list = getShopListFromId(worker_id);
-                shop_list.add(new_shop);
+                change_log.addChange(new DataChange(message));
             }
 
-            case ADD_OLD_PRODUCT_TO_SHOP, SYNC_ADD_OLD_PRODUCT_TO_SHOP -> {
-                int shop_id = message.getArgument("shop_id");
-                int product_id = message.getArgument("product_id");
-
-                Shop shop = getShopFromId(worker_id, shop_id);
-                Product product = shop.getProductById(product_id);
-
-                synchronized (product) {
-                    product.set_removed_status(false);
-                }
+            case SYNC_ADD_SHOP -> {
+                handleAddShop(message, worker_id);
             }
 
-            case ADD_PRODUCT_TO_SHOP, SYNC_ADD_PRODUCT_TO_SHOP -> {
-                int shop_id = message.getArgument("shop_id");
-                Product new_product = message.getArgument("new_product");
+            case ADD_OLD_PRODUCT_TO_SHOP -> {
+                handleAddOldProduct(message, worker_id);
 
-                Shop shop = getShopFromId(worker_id, shop_id);
-                shop.addProduct(new_product);
+                change_log.addChange(new DataChange(message));
             }
 
-            case REMOVE_PRODUCT_FROM_SHOP, SYNC_REMOVE_PRODUCT_FROM_SHOP -> {
-                int shop_id = message.getArgument("shop_id");
-                int product_id = message.getArgument("product_id");
-
-                Shop shop = getShopFromId(worker_id, shop_id);
-                Product product = shop.getProductById(product_id);
-
-                synchronized (product) {
-                    product.set_removed_status(true);
-                }
+            case SYNC_ADD_OLD_PRODUCT_TO_SHOP -> {
+                handleAddOldProduct(message, worker_id);
             }
 
-            case ADD_PRODUCT_STOCK, SYNC_ADD_PRODUCT_STOCK -> {
-                int shop_id = message.getArgument("shop_id");
-                int product_id = message.getArgument("product_id");
-                int quantity = message.getArgument("quantity");
+            case ADD_PRODUCT_TO_SHOP -> {
+                handleAddProduct(message, worker_id);
 
-                Shop shop = getShopFromId(worker_id, shop_id);
-                Product product = shop.getProductById(product_id);
-
-                System.out.println("Product: " + product);
-
-                synchronized (shop) {
-                    System.out.println("Previous: " + product);
-                    product.addAvailableAmount(quantity);
-                    System.out.println("Updated: " + product);
-                }
+                change_log.addChange(new DataChange(message));
             }
 
-            case REMOVE_PRODUCT_STOCK, SYNC_REMOVE_PRODUCT_STOCK -> {
-                int shop_id = message.getArgument("shop_id");
-                int product_id = message.getArgument("product_id");
-                int quantity = message.getArgument("quantity");
+            case SYNC_ADD_PRODUCT_TO_SHOP -> {
+                handleAddProduct(message, worker_id);
+            }
 
-                Shop shop = getShopFromId(worker_id, shop_id);
-                Product product = shop.getProductById(product_id);
+            case REMOVE_PRODUCT_FROM_SHOP -> {
+                handleRemoveProduct(message, worker_id);
 
-                synchronized (shop) {
-                    System.out.println("Product: " + product);
+                change_log.addChange(new DataChange(message));
+            }
 
-                    System.out.println("Previous stock: " + product.getAvailableAmount());
-                    product.removeAvailableAmount(quantity);
-                    System.out.println("New stock: " + product.getAvailableAmount());
-                }
+            case SYNC_REMOVE_PRODUCT_FROM_SHOP -> {
+                handleRemoveProduct(message, worker_id);
+            }
+
+            case ADD_PRODUCT_STOCK -> {
+                handleAddProductStock(message, worker_id);
+
+                change_log.addChange(new DataChange(message));
+            }
+
+            case SYNC_ADD_PRODUCT_STOCK -> {
+                handleAddProductStock(message, worker_id);
+            }
+
+            case REMOVE_PRODUCT_STOCK -> {
+                handleRemoveProductStock(message, worker_id);
+
+                change_log.addChange(new DataChange(message));
+            }
+
+            case SYNC_REMOVE_PRODUCT_STOCK -> {
+                handleRemoveProductStock(message, worker_id);
             }
 
             case GET_SHOP_CATEGORY_SALES -> {
@@ -332,12 +415,10 @@ public class WorkerClient {
                 send(out, request_id, id, result_cart);
             }
             case CHECKOUT_CART -> {
-                int chosen_shop_id = message.getArgument("shop_id");
-                Shop corresponding_shop = getShopFromId(worker_id, chosen_shop_id);
 
-                ServerCart serverCart = message.getArgument("cart");
-                float balance = message.getArgument("balance");
-                CheckoutResultWrapper checked_out = checkout(corresponding_shop, serverCart, balance);
+                CheckoutResultWrapper checked_out = handleCheckout(message, worker_id);
+
+                change_log.addChange(new DataChange(message));
 
                 send(out, request_id, id, checked_out);
             }
@@ -354,27 +435,99 @@ public class WorkerClient {
             }
 
             case GIVE_RATING -> {
-                int chosen_shop_id = message.getArgument("shop_id");
-                Shop corresponding_shop = getShopFromId(worker_id, chosen_shop_id);
 
-                float rating = message.getArgument("rating");
-
-                rateShop(corresponding_shop, rating);
+                handleGiveRating(message, worker_id);
+                change_log.addChange(new DataChange(message));
 
                 Boolean gave_rating = true;
-
                 send(out, request_id, id, gave_rating);
             }
 
-            case SYNC_RATING -> {
-                int chosen_shop_id = message.getArgument("shop_id");
-                Shop corresponding_shop = getShopFromId(worker_id, chosen_shop_id);
+            case SYNC_GIVE_RATING -> {
+                handleGiveRating(message, worker_id);
+            }
 
-                float rating = message.getArgument("rating");
+            case SYNC_CHANGES -> {
+                int replica_port = message.getArgument("replica_port");
 
-                rateShop(corresponding_shop, rating);
+                ObjectInputStream sync_in = null;
+                ObjectOutputStream sync_out = null;
+                Socket sync_socket = null;
+                try {
+                    sync_socket = new Socket("192.168.1.9", replica_port);
+
+                    sync_out = new ObjectOutputStream(sync_socket.getOutputStream());
+                    sync_in = new ObjectInputStream(sync_socket.getInputStream());
+
+                    sync_out.writeInt(ConnectionType.WORKER.ordinal());
+                    sync_out.flush();
+
+                    Message log_message = new Message();
+                    log_message.addArgument("command_ord", new Pair<>(MessageArgCast.INT_ARG, MessageType.SYNC_CHANGES.ordinal()));
+                    log_message.addArgument("change_log", new Pair<>(MessageArgCast.ARRAY_LIST_ARG, change_log.getChanges()));
+
+                    System.out.println("Worker " + id +  " Before syncing: " + change_log);
+
+                    sync_out.writeObject(log_message);
+                    sync_out.flush();
+
+                    @SuppressWarnings("unchecked")
+                    ArrayList<DataChange> other_changes = (ArrayList<DataChange>) sync_in.readObject();
+
+                    System.out.println("Worker " + id + ": Got changes: " + other_changes);
+
+                    for (DataChange dt_change : other_changes) {
+                        if (!change_log.contains(dt_change)) {
+                            applyChange(dt_change);
+                            change_log.addChange(dt_change);
+                        }
+                    }
+
+                    Message quit_msg = new Message();
+                    quit_msg.addArgument("command_ord", new Pair<>(MessageArgCast.INT_ARG, MessageType.QUIT.ordinal()));
+
+                    sync_out.reset();
+                    sync_out.writeObject(quit_msg);
+                    sync_out.flush();
+
+                    sync_in.close();
+                    sync_out.close();
+                    sync_socket.close();
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+
+                    if(sync_in != null)
+                        sync_in.close();
+                    if(sync_out != null)
+                        sync_out.close();
+                    if(sync_socket != null)
+                        sync_socket.close();
+                }
+
+                System.out.println("Worker " + id +  " Change log now: " + change_log);
             }
         }
+    }
+
+    private void applyChange(DataChange dt_change) throws IOException, ClassNotFoundException {
+        System.out.println("Worker " + id + ": Applying change: " + dt_change);
+
+        Message change = dt_change.getMessage();
+
+        int command_ord = change.getArgument("command_ord");
+        MessageType command = MessageType.values()[command_ord];
+
+        final String sync_prefix = "SYNC_";
+
+        System.out.println(command + " -> " + sync_prefix + command);
+        MessageType sync_command = MessageType.valueOf(sync_prefix + command);
+
+        final Message change_cp = new Message(change);
+
+        change_cp.replaceArgument("command_ord", new Pair<>(MessageArgCast.INT_ARG, sync_command.ordinal()));
+
+        handleCommand(change_cp, null);
     }
 
     private ArrayList<Pair<String, Integer>> getProductCategorySales(ArrayList<Shop> shops, String category) {
@@ -435,18 +588,21 @@ public class WorkerClient {
         }
     }
 
-    void manageCommands(Socket socket){
+    void manageClientCommands(ObjectOutputStream out, ObjectInputStream in){
         try {
-            ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
-            ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
 
-            MessageType worker_command;
+            MessageType worker_command = null;
             do {
 
                 Message message = (Message) in.readObject();
 
-                int command_ord = message.getArgument("command_ord");
-                worker_command = MessageType.values()[command_ord];
+                try {
+                    int command_ord = message.getArgument("command_ord");
+                    worker_command = MessageType.values()[command_ord];
+                }catch (NullPointerException e){
+                    e.printStackTrace();
+                    continue;
+                }
 
                 new Thread(() -> {
                     try {
@@ -459,6 +615,76 @@ public class WorkerClient {
             }while(worker_command != MessageType.QUIT);
 
         } catch (IOException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void manageWorkerCommands(ObjectOutputStream out, ObjectInputStream in) throws IOException {
+        try {
+
+            MessageType worker_command;
+            do {
+
+                Message message = (Message) in.readObject();
+                System.out.println("Received: " + message);
+
+                int command_ord = message.getArgument("command_ord");
+                worker_command = MessageType.values()[command_ord];
+
+                if(worker_command == MessageType.QUIT)
+                    break;
+
+                MessageType finalWorker_command = worker_command;
+                new Thread(() -> {
+                    try {
+                        if (finalWorker_command == MessageType.SYNC_CHANGES) {
+                            ArrayList<DataChange> changes = message.getArgument("change_log");
+
+                            System.out.println("Worker " + id + " Before syncing: " + change_log);
+
+                            for (DataChange dt_change : changes) {
+                                if (!change_log.contains(dt_change)) {
+                                    applyChange(dt_change);
+                                    change_log.addChange(dt_change);
+                                }
+                            }
+
+                            System.out.println("Worker " + id + " Change log now: " + change_log);
+
+                            out.reset();
+                            out.writeObject(change_log.getChanges());
+                            out.flush();
+                        }
+                    } catch (IOException | ClassNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                }).start();
+
+            }while(worker_command != MessageType.QUIT);
+
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+
+            out.close();
+            in.close();
+        }
+    }
+
+    void handleConnection(Socket socket){
+        try{
+            ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+            ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
+
+            int con_type_ord = in.readInt();
+            ConnectionType connection_type = ConnectionType.values()[con_type_ord];
+
+            if(connection_type == ConnectionType.CLIENT)
+                manageClientCommands(out, in);
+            else if(connection_type == ConnectionType.WORKER)
+                manageWorkerCommands(out, in);
+
+
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
@@ -476,7 +702,7 @@ public class WorkerClient {
             while(true){
                 Socket connection_socket = connection.accept();
 
-                (new Thread(() -> manageCommands(connection_socket))).start();
+                (new Thread(() -> handleConnection(connection_socket))).start();
             }
 
         } catch (IOException e) {

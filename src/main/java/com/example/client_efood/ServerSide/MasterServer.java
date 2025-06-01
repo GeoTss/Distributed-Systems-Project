@@ -294,6 +294,36 @@ public class MasterServer {
             }
         }
 
+        for (int j = 1; j <= numReplicas; ++j) {
+
+            int fallbackId = (assignedId + j) % workerCount;
+            if (fallbackId == assignedId)
+                break;
+
+            Pair<ObjectOutputStream, ObjectInputStream> fallbackStreams =
+                    worker_streams.get(fallbackId);
+            if (fallbackStreams == null)
+                continue;
+
+            ObjectOutputStream fallbackOut = fallbackStreams.first;
+            ObjectInputStream fallbackIn = fallbackStreams.second;
+            if (fallbackOut == null || fallbackIn == null)
+                continue;
+
+            Message sync_message = new Message();
+            sync_message.addArgument("command_ord", new Pair<>(MessageArgCast.INT_ARG, MessageType.SYNC_CHANGES.ordinal()));
+            sync_message.addArgument("worker_id", new Pair<>(MessageArgCast.INT_ARG, assignedId));
+            sync_message.addArgument("request_id", new Pair<>(MessageArgCast.LONG_ARG, SERVER_ID));
+            sync_message.addArgument("replica_port", new Pair<>(MessageArgCast.INT_ARG, worker_id_port.get(fallbackId)));
+
+            synchronized (assigned_out) {
+                assigned_out.reset();
+                assigned_out.writeObject(sync_message);
+                assigned_out.flush();
+            }
+        }
+
+
         System.out.println("New worker schema: {");
         replicated_worker_handlers.values().forEach(System.out::println);
         System.out.println("}");
