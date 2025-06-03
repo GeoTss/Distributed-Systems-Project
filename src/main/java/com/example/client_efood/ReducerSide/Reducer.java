@@ -21,7 +21,7 @@ public class Reducer{
 
     ServerSocket red_server_socket;
 
-    public static String REDUCER_HOST = "127.0.0.1";
+    public static String REDUCER_HOST = "10.26.16.168";
 
     private int id;
     private int managing_workers_count = 0;

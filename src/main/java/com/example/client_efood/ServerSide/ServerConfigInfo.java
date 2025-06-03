@@ -43,6 +43,7 @@ public class ServerConfigInfo {
         this.worker_hosts = worker_hosts;
     }
 
+    public String getWorkerHost(int worker_id) { return worker_hosts.get(worker_id); }
     public int getWorkerPort(int worker_id){
         return worker_ports.get(worker_id);
     }
@@ -52,6 +53,7 @@ public class ServerConfigInfo {
         return "Worker Count: " + worker_count +
                 "\nNumber of worker replicas: " + number_of_replicas +
                 "\nClient batch size: " + client_batch_size +
+                "\nWorker Hosts: " + worker_hosts +
                 "\nWorker Ports: " + worker_ports;
     }
 

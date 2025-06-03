@@ -4,6 +4,7 @@ import com.example.client_efood.ClientSide.ClientRequestHandler;
 import com.example.client_efood.Domain.Utils.Pair;
 import com.example.client_efood.MessagePKG.Message;
 import com.example.client_efood.MessagePKG.MessageArgCast;
+import com.example.client_efood.ReducerSide.Reducer;
 import com.example.client_efood.Workers.Listeners.ReplicationListener;
 
 import java.io.IOException;
@@ -42,7 +43,7 @@ public class ClientBatch {
         clientHandler.setClientBatch(this);
     }
 
-    public void setNewWorkerStreams(int worker_id, int worker_port) throws IOException {
+    public void setNewWorkerStreams(int worker_id, String worker_host, int worker_port) throws IOException {
 
         Pair<ObjectOutputStream, ObjectInputStream> existingStreams = batchWorkerStreams.remove(worker_id);
         if (existingStreams != null) {
@@ -67,7 +68,7 @@ public class ClientBatch {
         synchronized (batchWorkerStreams) {
             try {
                 System.out.println("Trying to connect to worker " + worker_id + " with port: " + worker_port + "...");
-                Socket new_worker_con = new Socket("192.168.1.9", worker_port);
+                Socket new_worker_con = new Socket(worker_host, worker_port);
                 ObjectOutputStream out = new ObjectOutputStream(new_worker_con.getOutputStream());
                 ObjectInputStream in = new ObjectInputStream(new_worker_con.getInputStream());
 
@@ -88,16 +89,16 @@ public class ClientBatch {
     public int initializeBatch() {
         for (Integer worker_id : MasterServer.worker_streams.keySet()){
 
-            Integer worker_port = MasterServer.worker_id_port.get(worker_id);
+//            Integer worker_port = MasterServer.worker_id_port.get(worker_id);
             try {
-                setNewWorkerStreams(worker_id, worker_port);
+                setNewWorkerStreams(worker_id, MasterServer.config_info.getWorkerHost(worker_id), MasterServer.config_info.getWorkerPort(worker_id));
             }catch(IOException e){
                 System.out.println("Error occurred while trying to connect with worker.");
                 e.printStackTrace();
             }
 
             try {
-                Socket new_reducer_con = new Socket("192.168.1.9", 7555);
+                Socket new_reducer_con = new Socket(Reducer.REDUCER_HOST, Reducer.REDUCER_WORKER_PORT);
                 batchReducerOutputStream = new ObjectOutputStream(new_reducer_con.getOutputStream());
                 batchReducerInputStream = new ObjectInputStream(new_reducer_con.getInputStream());
 

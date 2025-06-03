@@ -25,6 +25,8 @@ public class ServerConfigDeserializer implements JsonDeserializer<ServerConfigIn
             JsonObject portObj = worker.getAsJsonObject();
             String host = portObj.get("Host").getAsString();
             int port = portObj.get("Port").getAsInt();
+
+            worker_hosts.add(host);
             worker_ports.add(port);
         }
 

@@ -480,6 +480,7 @@ public class WorkerClient {
             }
 
             case SYNC_CHANGES -> {
+
                 String replica_host = message.getArgument("replica_host");
                 int replica_port = message.getArgument("replica_port");
 

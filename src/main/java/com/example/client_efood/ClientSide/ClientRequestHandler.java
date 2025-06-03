@@ -162,8 +162,8 @@ public class ClientRequestHandler extends Thread {
             sync_msg.addArgument("command_ord", new Pair<>(MessageArgCast.INT_ARG, MessageType.SYNC_CHANGES.ordinal()));
             sync_msg.addArgument("request_id", new Pair<>(MessageArgCast.LONG_ARG, request_id));
             sync_msg.addArgument("worker_id", new Pair<>(MessageArgCast.INT_ARG, replicated_worker.getId()));
-            sync_msg.addArgument("replica_host", new Pair<>(MessageArgCast.STRING_CAST, worker_id_host.get(replicated_worker.getId())));
-            sync_msg.addArgument("replica_port", new Pair<>(MessageArgCast.INT_ARG, worker_id_port.get(replicated_worker.getId())));
+            sync_msg.addArgument("replica_host", new Pair<>(MessageArgCast.STRING_CAST, config_info.getWorkerHost(replicated_worker.getId())));
+            sync_msg.addArgument("replica_port", new Pair<>(MessageArgCast.INT_ARG, config_info.getWorkerPort(replicated_worker.getId())));
 
             try {
                 synchronized (replica_out) {
@@ -177,36 +177,36 @@ public class ClientRequestHandler extends Thread {
             }
         }
 
-        for(int replica_id: replicated_worker.getReplicaIds()){
-            for(int to_sync_repl: replicated_worker.getReplicaIds()){
-                if(replica_id == to_sync_repl)
-                    continue;
-
-                ObjectOutputStream replica_out = client_batch.workerOutput(replica_id);
-
-                if(replica_out == null)
-                    continue;
-
-                Message sync_msg = new Message();
-
-                sync_msg.addArgument("command_ord", new Pair<>(MessageArgCast.INT_ARG, MessageType.SYNC_CHANGES.ordinal()));
-                sync_msg.addArgument("request_id", new Pair<>(MessageArgCast.LONG_ARG, request_id));
-                sync_msg.addArgument("worker_id", new Pair<>(MessageArgCast.INT_ARG, replicated_worker.getId()));
-                sync_msg.addArgument("replica_host", new Pair<>(MessageArgCast.STRING_CAST, worker_id_host.get(to_sync_repl)));
-                sync_msg.addArgument("replica_port", new Pair<>(MessageArgCast.INT_ARG, worker_id_port.get(to_sync_repl)));
-
-                try {
-                    synchronized (replica_out) {
-                        replica_out.reset();
-                        replica_out.writeObject(sync_msg);
-                        replica_out.flush();
-                    }
-                }catch (IOException e){
-                    e.printStackTrace();
-                    replica_out = null;
-                }
-            }
-        }
+//        for(int replica_id: replicated_worker.getReplicaIds()){
+//            for(int to_sync_repl: replicated_worker.getReplicaIds()){
+//                if(replica_id == to_sync_repl)
+//                    continue;
+//
+//                ObjectOutputStream replica_out = client_batch.workerOutput(replica_id);
+//
+//                if(replica_out == null)
+//                    continue;
+//
+//                Message sync_msg = new Message();
+//
+//                sync_msg.addArgument("command_ord", new Pair<>(MessageArgCast.INT_ARG, MessageType.SYNC_CHANGES.ordinal()));
+//                sync_msg.addArgument("request_id", new Pair<>(MessageArgCast.LONG_ARG, request_id));
+//                sync_msg.addArgument("worker_id", new Pair<>(MessageArgCast.INT_ARG, replicated_worker.getId()));
+//                sync_msg.addArgument("replica_host", new Pair<>(MessageArgCast.STRING_CAST, config_info.getWorkerHost(replicated_worker.getId())));
+//                sync_msg.addArgument("replica_port", new Pair<>(MessageArgCast.INT_ARG, config_info.getWorkerPort(replicated_worker.getId())));
+//
+//                try {
+//                    synchronized (replica_out) {
+//                        replica_out.reset();
+//                        replica_out.writeObject(sync_msg);
+//                        replica_out.flush();
+//                    }
+//                }catch (IOException e){
+//                    e.printStackTrace();
+//                    replica_out = null;
+//                }
+//            }
+//        }
     }
 
     public void handleCommand(Message msg) throws IOException, ClassNotFoundException, InterruptedException {
