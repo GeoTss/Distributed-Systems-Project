@@ -23,9 +23,6 @@ import com.example.client_efood.ReducerSide.Reducer;
 import com.example.client_efood.ServerSide.ConnectionType;
 import com.example.client_efood.ServerSide.MasterServer;
 
-import javax.xml.crypto.Data;
-
-
 public class WorkerClient {
 
     private int id;
@@ -37,7 +34,7 @@ public class WorkerClient {
 
     private HashMap<Integer, ArrayList<Shop>> managed_shops = new HashMap<>();
 
-    private ChangeLog change_log = new ChangeLog();
+    private HashMap<Integer, ChangeLog> worker_change_log = new HashMap<>();
 
     private int listening_port = 8888;
 
@@ -170,9 +167,12 @@ public class WorkerClient {
 
     private void handleAddShop(Message message, int worker_id){
         Shop new_shop = message.getArgument("new_shop");
+        Shop new_shop_cp = new Shop(new_shop);
 
         ArrayList<Shop> shop_list = getShopListFromId(worker_id);
-        shop_list.add(new_shop);
+        synchronized (shop_list) {
+            shop_list.add(new_shop_cp);
+        }
     }
 
     private void handleAddOldProduct(Message message, int worker_id){
@@ -190,9 +190,10 @@ public class WorkerClient {
     private void handleAddProduct(Message message, int worker_id){
         int shop_id = message.getArgument("shop_id");
         Product new_product = message.getArgument("new_product");
+        Product new_product_cp = new Product(new_product);
 
         Shop shop = getShopFromId(worker_id, shop_id);
-        shop.addProduct(new_product);
+        shop.addProduct(new_product_cp);
     }
 
     private void handleRemoveProduct(Message message, int worker_id){
@@ -270,6 +271,8 @@ public class WorkerClient {
         int command_ord = message.getArgument("command_ord");
         MessageType command = MessageType.values()[command_ord];
 
+        ChangeLog change_log = worker_change_log.get(worker_id);
+
         switch (command) {
 
             case IS_WORKER_ALIVE -> {
@@ -283,8 +286,13 @@ public class WorkerClient {
                 ArrayList<Shop> worker_managed_shops = message.getArgument("shop_list");
                 System.out.println("Worker id: " + id + " Received " + worker_backup_id + " and list with " + worker_managed_shops.size() + " shops");
 
+                System.out.println(System.identityHashCode(managed_shops));
+
                 synchronized (managed_shops) {
-                    managed_shops.computeIfAbsent(worker_backup_id, k -> new ArrayList<>(worker_managed_shops));
+                    if(managed_shops.get(worker_backup_id) == null) {
+                        managed_shops.put(worker_backup_id, worker_managed_shops);
+                        worker_change_log.put(worker_backup_id, new ChangeLog());
+                    }
                 }
                 System.out.println("Worker " + worker_backup_id + " in map with shop list size: " + managed_shops.get(worker_backup_id).size());
             }
@@ -292,7 +300,17 @@ public class WorkerClient {
             case ADD_SHOP -> {
                 handleAddShop(message, worker_id);
 
-                change_log.addChange(new DataChange(message));
+                Shop added_shop = message.getArgument("new_shop");
+                Shop shop_cp = new Shop(added_shop);
+
+                System.out.println("Added shop: " + System.identityHashCode(added_shop));
+                System.out.println("Copy of shop: " + System.identityHashCode(shop_cp));
+
+                message.replaceArgument("new_shop", new Pair<>(MessageArgCast.SHOP_ARG, shop_cp));
+
+                synchronized (change_log) {
+                    change_log.addChange(new DataChange(message));
+                }
             }
 
             case SYNC_ADD_SHOP -> {
@@ -302,7 +320,9 @@ public class WorkerClient {
             case ADD_OLD_PRODUCT_TO_SHOP -> {
                 handleAddOldProduct(message, worker_id);
 
-                change_log.addChange(new DataChange(message));
+                synchronized (change_log) {
+                    change_log.addChange(new DataChange(message));
+                }
             }
 
             case SYNC_ADD_OLD_PRODUCT_TO_SHOP -> {
@@ -312,7 +332,9 @@ public class WorkerClient {
             case ADD_PRODUCT_TO_SHOP -> {
                 handleAddProduct(message, worker_id);
 
-                change_log.addChange(new DataChange(message));
+                synchronized (change_log) {
+                    change_log.addChange(new DataChange(message));
+                }
             }
 
             case SYNC_ADD_PRODUCT_TO_SHOP -> {
@@ -322,7 +344,9 @@ public class WorkerClient {
             case REMOVE_PRODUCT_FROM_SHOP -> {
                 handleRemoveProduct(message, worker_id);
 
-                change_log.addChange(new DataChange(message));
+                synchronized (change_log) {
+                    change_log.addChange(new DataChange(message));
+                }
             }
 
             case SYNC_REMOVE_PRODUCT_FROM_SHOP -> {
@@ -332,7 +356,9 @@ public class WorkerClient {
             case ADD_PRODUCT_STOCK -> {
                 handleAddProductStock(message, worker_id);
 
-                change_log.addChange(new DataChange(message));
+                synchronized (change_log) {
+                    change_log.addChange(new DataChange(message));
+                }
             }
 
             case SYNC_ADD_PRODUCT_STOCK -> {
@@ -342,7 +368,9 @@ public class WorkerClient {
             case REMOVE_PRODUCT_STOCK -> {
                 handleRemoveProductStock(message, worker_id);
 
-                change_log.addChange(new DataChange(message));
+                synchronized (change_log) {
+                    change_log.addChange(new DataChange(message));
+                }
             }
 
             case SYNC_REMOVE_PRODUCT_STOCK -> {
@@ -418,7 +446,9 @@ public class WorkerClient {
 
                 CheckoutResultWrapper checked_out = handleCheckout(message, worker_id);
 
-                change_log.addChange(new DataChange(message));
+                synchronized (change_log) {
+                    change_log.addChange(new DataChange(message));
+                }
 
                 send(out, request_id, id, checked_out);
             }
@@ -437,7 +467,9 @@ public class WorkerClient {
             case GIVE_RATING -> {
 
                 handleGiveRating(message, worker_id);
-                change_log.addChange(new DataChange(message));
+                synchronized (change_log) {
+                    change_log.addChange(new DataChange(message));
+                }
 
                 Boolean gave_rating = true;
                 send(out, request_id, id, gave_rating);
@@ -448,13 +480,14 @@ public class WorkerClient {
             }
 
             case SYNC_CHANGES -> {
+                String replica_host = message.getArgument("replica_host");
                 int replica_port = message.getArgument("replica_port");
 
                 ObjectInputStream sync_in = null;
                 ObjectOutputStream sync_out = null;
                 Socket sync_socket = null;
                 try {
-                    sync_socket = new Socket("192.168.1.9", replica_port);
+                    sync_socket = new Socket(replica_host, replica_port);
 
                     sync_out = new ObjectOutputStream(sync_socket.getOutputStream());
                     sync_in = new ObjectInputStream(sync_socket.getInputStream());
@@ -464,7 +497,11 @@ public class WorkerClient {
 
                     Message log_message = new Message();
                     log_message.addArgument("command_ord", new Pair<>(MessageArgCast.INT_ARG, MessageType.SYNC_CHANGES.ordinal()));
-                    log_message.addArgument("change_log", new Pair<>(MessageArgCast.ARRAY_LIST_ARG, change_log.getChanges()));
+                    if(change_log == null)
+                        log_message.addArgument("change_log", new Pair<>(MessageArgCast.ARRAY_LIST_ARG, new ArrayList<>()));
+                    else
+                        log_message.addArgument("change_log", new Pair<>(MessageArgCast.ARRAY_LIST_ARG, change_log.getChanges()));
+                    log_message.addArgument("worker_id", new Pair<>(MessageArgCast.INT_ARG, worker_id));
 
                     System.out.println("Worker " + id +  " Before syncing: " + change_log);
 
@@ -479,7 +516,9 @@ public class WorkerClient {
                     for (DataChange dt_change : other_changes) {
                         if (!change_log.contains(dt_change)) {
                             applyChange(dt_change);
-                            change_log.addChange(dt_change);
+                            synchronized (change_log) {
+                                change_log.addChange(dt_change);
+                            }
                         }
                     }
 
@@ -639,13 +678,22 @@ public class WorkerClient {
                     try {
                         if (finalWorker_command == MessageType.SYNC_CHANGES) {
                             ArrayList<DataChange> changes = message.getArgument("change_log");
+                            int worker_id = message.getArgument("worker_id");
+
+                            ChangeLog change_log = worker_change_log.get(worker_id);
+                            if(change_log == null) {
+                                worker_change_log.put(worker_id, new ChangeLog());
+                                change_log = worker_change_log.get(worker_id);
+                            }
 
                             System.out.println("Worker " + id + " Before syncing: " + change_log);
 
                             for (DataChange dt_change : changes) {
                                 if (!change_log.contains(dt_change)) {
                                     applyChange(dt_change);
-                                    change_log.addChange(dt_change);
+                                    synchronized (change_log) {
+                                        change_log.addChange(dt_change);
+                                    }
                                 }
                             }
 
@@ -726,6 +774,8 @@ public class WorkerClient {
             listening_port = server_input_stream.readInt();
             System.out.println("Got ID: " + id);
             System.out.println("Got port: " + listening_port);
+
+            worker_change_log.put(id, new ChangeLog());
 
             @SuppressWarnings("unchecked")
             ArrayList<Shop> main_shop_list = (ArrayList<Shop>) server_input_stream.readObject();

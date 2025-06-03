@@ -7,6 +7,7 @@ public class ServerConfigInfo {
     private int number_of_replicas;
     private int client_batch_size;
     private ArrayList<Integer> worker_ports;
+    private ArrayList<String> worker_hosts;
 
     public ServerConfigInfo(int worker_count, int number_of_replicas, int client_batch_size){
         this.worker_count = worker_count;
@@ -32,6 +33,14 @@ public class ServerConfigInfo {
 
     public void setWorker_ports(ArrayList<Integer> worker_ports) {
         this.worker_ports = worker_ports;
+    }
+
+    public ArrayList<String> getWorker_hosts() {
+        return worker_hosts;
+    }
+
+    public void setWorker_hosts(ArrayList<String> worker_hosts) {
+        this.worker_hosts = worker_hosts;
     }
 
     public int getWorkerPort(int worker_id){

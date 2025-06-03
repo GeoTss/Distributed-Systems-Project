@@ -20,14 +20,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 
-import static com.example.client_efood.ServerSide.MasterServer.worker_listeners;
-import static com.example.client_efood.ServerSide.MasterServer.replicated_worker_handlers;
-import static com.example.client_efood.ServerSide.MasterServer.REDUCER_ID;
-import static com.example.client_efood.ServerSide.MasterServer.reducer_listener;
-import static com.example.client_efood.ServerSide.MasterServer.reducer_writer;
-import static com.example.client_efood.ServerSide.MasterServer.getWorkerForShop;
-import static com.example.client_efood.ServerSide.MasterServer.addHashShop;
-import static com.example.client_efood.ServerSide.MasterServer.has_manager_connected;
+import static com.example.client_efood.ServerSide.MasterServer.*;
 
 
 public class ManagerRequestHandler extends Thread {
@@ -77,7 +70,7 @@ public class ManagerRequestHandler extends Thread {
                         continue;
 
                     handler = worker_listeners.get(replica_id);
-                    monitor = handler.registerMonitor(request_id, worker_id, monitor);
+                    monitor = handler.registerMonitor(request_id, replica_id, monitor);
 
                     synchronized (replica_writer) {
                         write_logic.accept(replica_writer);
@@ -87,7 +80,7 @@ public class ManagerRequestHandler extends Thread {
                     return main_id;
                 } catch (IOException ex) {
 
-                    handler.unregisterMonitor(request_id, worker_id);
+                    handler.unregisterMonitor(request_id, replica_id);
                     System.err.println("Replica failed. Trying another one...");
                 }
             }
@@ -100,14 +93,17 @@ public class ManagerRequestHandler extends Thread {
 
         int main_id = replicatedWorker.getMainId();
         try {
-//            throw new IOException();
+
             ObjectOutputStream main_worker_writer = replicatedWorker.getMain();
+            if(main_worker_writer == null)
+                throw new NullPointerException();
+
             synchronized (main_worker_writer) {
                 write_logic.accept(main_worker_writer);
                 main_worker_writer.flush();
             }
             return main_id;
-        } catch (IOException e) {
+        } catch (IOException | NullPointerException e) {
 
             System.err.println("Main worker failed. Going for replicas... " + e.getMessage());
 
@@ -115,14 +111,14 @@ public class ManagerRequestHandler extends Thread {
                 try {
 
                     ObjectOutputStream replica_writer = replicatedWorker.getReplicaOutput(replica_id);
+                    if(replica_writer == null)
+                        continue;
+
                     synchronized (replica_writer) {
                         write_logic.accept(replica_writer);
                         replica_writer.flush();
                     }
 
-                    synchronized (replicatedWorker){
-                        replicatedWorker.promoteToMain(replica_id);
-                    }
                     return replica_id;
                 } catch (IOException ex) {
                     System.err.println("Replica failed. Trying another one...");
@@ -170,10 +166,32 @@ public class ManagerRequestHandler extends Thread {
         return null;
     }
 
-    void syncReplicas(ReplicationHandler replicated_worker, ThrowingConsumer<ObjectOutputStream> write_logic) throws IOException{
-        for(ObjectOutputStream replica_writer: replicated_worker.getReplicasOutputs()){
-            write_logic.accept(replica_writer);
-            replica_writer.flush();
+    void syncReplicas(ReplicationHandler replicated_worker, long request_id) {
+        for(int replica_id: replicated_worker.getReplicaIds()) {
+
+            ObjectOutputStream replica_out = replicated_worker.getReplicaOutput(replica_id);
+
+            if(replica_out == null)
+                continue;
+
+            Message sync_msg = new Message();
+
+            sync_msg.addArgument("command_ord", new Pair<>(MessageArgCast.INT_ARG, MessageType.SYNC_CHANGES.ordinal()));
+            sync_msg.addArgument("request_id", new Pair<>(MessageArgCast.LONG_ARG, request_id));
+            sync_msg.addArgument("worker_id", new Pair<>(MessageArgCast.INT_ARG, replicated_worker.getId()));
+            sync_msg.addArgument("replica_host", new Pair<>(MessageArgCast.STRING_CAST, worker_id_host.get(replicated_worker.getId())));
+            sync_msg.addArgument("replica_port", new Pair<>(MessageArgCast.INT_ARG, worker_id_port.get(replicated_worker.getId())));
+
+            try {
+                synchronized (replica_out) {
+                    replica_out.reset();
+                    replica_out.writeObject(sync_msg);
+                    replica_out.flush();
+                }
+            }catch (IOException e){
+                e.printStackTrace();
+                replica_out = null;
+            }
         }
     }
 
@@ -230,7 +248,7 @@ public class ManagerRequestHandler extends Thread {
             };
 
             System.out.println("Syncing replicas...");
-            syncReplicas(handler, writer);
+            syncReplicas(handler, requestId);
             System.out.println("Replicas synced.");
         }
         out.writeBoolean(success);
@@ -364,7 +382,7 @@ public class ManagerRequestHandler extends Thread {
             };
 
             System.out.println("Syncing replicas...");
-            syncReplicas(responsible_worker, shop_sync_writer);
+            syncReplicas(responsible_worker, requestId);
             System.out.println("Replicas synced");
         }
 
@@ -418,7 +436,7 @@ public class ManagerRequestHandler extends Thread {
             };
 
             System.out.println("Syncing replicas...");
-            syncReplicas(responsible_worker, product_sync_writer);
+            syncReplicas(responsible_worker, requestId);
             System.out.println("Replicas synced");
         }
 
@@ -461,7 +479,7 @@ public class ManagerRequestHandler extends Thread {
             };
 
             System.out.println("Syncing replicas...");
-            syncReplicas(handler, writer);
+            syncReplicas(handler, requestId);
             System.out.println("Replicas synced.");
         }
         out.writeBoolean(success);
@@ -505,7 +523,7 @@ public class ManagerRequestHandler extends Thread {
             };
 
             System.out.println("Syncing replicas...");
-            syncReplicas(handler, writer);
+            syncReplicas(handler, requestId);
             System.out.println("Replicas synced.");
         }
         out.writeBoolean(success);
@@ -549,7 +567,7 @@ public class ManagerRequestHandler extends Thread {
             };
 
             System.out.println("Syncing replicas...");
-            syncReplicas(handler, writer);
+            syncReplicas(handler, requestId);
             System.out.println("Replicas synced.");
         }
         out.writeBoolean(success);

@@ -29,14 +29,11 @@ public class MasterServer {
 
     public static HashMap<Integer, ReplicationHandler> replicated_worker_handlers = new HashMap<>();
 
-
-//    public static HashMap<Integer, HashMap<Integer, ReplicationHandler>> batch_replicated_worker_handlers = new HashMap<>();
-//    public static HashMap<Integer, HashMap<Integer, ReplicationListener>> batch_worker_listeners = new HashMap<>();
-
     HashMap<Integer, ArrayList<Shop>> worker_shop_map;
 
     public static HashMap<Integer, Pair<ObjectOutputStream, ObjectInputStream>> worker_streams = new HashMap<>();
     public static HashMap<Integer, Integer> worker_id_port = new HashMap<>();
+    public static HashMap<Integer, String> worker_id_host = new HashMap<>();
 
     public static HashMap<Integer, Integer> shop_id_hash = new HashMap<>();
 
@@ -213,6 +210,7 @@ public class MasterServer {
         worker_id_port.put(assignedId, worker_port);
 
         newIn.readBoolean();
+        System.out.println("Worker started accepting connections.");
 
         newOut.writeBoolean(true);
         newOut.flush();
@@ -239,8 +237,8 @@ public class MasterServer {
             if (fallbackId == assignedId)
                 break;
 
-            Pair<ObjectOutputStream, ObjectInputStream> fallbackStreams =
-                    worker_streams.get(fallbackId);
+            Pair<ObjectOutputStream, ObjectInputStream> fallbackStreams = worker_streams.get(fallbackId);
+
             if (fallbackStreams == null)
                 continue;
 
@@ -257,14 +255,17 @@ public class MasterServer {
             m.addArgument("shop_list", new Pair<>(MessageArgCast.ARRAY_LIST_ARG, shopList));
 
             synchronized (fallbackOut) {
-                fallbackOut.reset();
-                fallbackOut.writeObject(m);
-                fallbackOut.flush();
+                try {
+                    fallbackOut.reset();
+                    fallbackOut.writeObject(m);
+                    fallbackOut.flush();
+                }catch (IOException e){
+                    e.printStackTrace();
+                }
             }
         }
 
-        Pair<ObjectOutputStream, ObjectInputStream> assigned_streams =
-                worker_streams.get(assignedId);
+        Pair<ObjectOutputStream, ObjectInputStream> assigned_streams = worker_streams.get(assignedId);
 
         ObjectOutputStream assigned_out = assigned_streams.first;
         ObjectInputStream assigned_in = assigned_streams.second;
@@ -288,41 +289,83 @@ public class MasterServer {
             m.addArgument("shop_list", new Pair<>(MessageArgCast.ARRAY_LIST_ARG, shop_list));
 
             synchronized (assigned_out) {
-                assigned_out.reset();
-                assigned_out.writeObject(m);
-                assigned_out.flush();
+                try {
+                    assigned_out.reset();
+                    assigned_out.writeObject(m);
+                    assigned_out.flush();
+                }catch (IOException e){
+                    e.printStackTrace();
+                }
             }
         }
 
-        for (int j = 1; j <= numReplicas; ++j) {
+        ReplicationHandler replicated_worker = replicated_worker_handlers.get(assignedId);
 
-            int fallbackId = (assignedId + j) % workerCount;
-            if (fallbackId == assignedId)
-                break;
+        for(int replica_id: replicated_worker.getReplicaIds()) {
 
-            Pair<ObjectOutputStream, ObjectInputStream> fallbackStreams =
-                    worker_streams.get(fallbackId);
-            if (fallbackStreams == null)
+            Pair<ObjectOutputStream, ObjectInputStream> streams = worker_streams.get(replica_id);
+            if (streams == null)
                 continue;
 
-            ObjectOutputStream fallbackOut = fallbackStreams.first;
-            ObjectInputStream fallbackIn = fallbackStreams.second;
-            if (fallbackOut == null || fallbackIn == null)
+            ObjectOutputStream replica_out = streams.first;
+            ObjectInputStream replica_in = streams.second;
+            if (replica_out == null || replica_in == null)
                 continue;
 
-            Message sync_message = new Message();
-            sync_message.addArgument("command_ord", new Pair<>(MessageArgCast.INT_ARG, MessageType.SYNC_CHANGES.ordinal()));
-            sync_message.addArgument("worker_id", new Pair<>(MessageArgCast.INT_ARG, assignedId));
-            sync_message.addArgument("request_id", new Pair<>(MessageArgCast.LONG_ARG, SERVER_ID));
-            sync_message.addArgument("replica_port", new Pair<>(MessageArgCast.INT_ARG, worker_id_port.get(fallbackId)));
+            Message sync_msg = new Message();
 
-            synchronized (assigned_out) {
-                assigned_out.reset();
-                assigned_out.writeObject(sync_message);
-                assigned_out.flush();
+            sync_msg.addArgument("command_ord", new Pair<>(MessageArgCast.INT_ARG, MessageType.SYNC_CHANGES.ordinal()));
+            sync_msg.addArgument("request_id", new Pair<>(MessageArgCast.LONG_ARG, SERVER_ID));
+            sync_msg.addArgument("worker_id", new Pair<>(MessageArgCast.INT_ARG, replicated_worker.getId()));
+            sync_msg.addArgument("replica_host", new Pair<>(MessageArgCast.STRING_CAST, worker_id_host.get(replicated_worker.getId())));
+            sync_msg.addArgument("replica_port", new Pair<>(MessageArgCast.INT_ARG, worker_id_port.get(replicated_worker.getId())));
+
+            try {
+                synchronized (replica_out) {
+                    replica_out.reset();
+                    replica_out.writeObject(sync_msg);
+                    replica_out.flush();
+                }
+            }catch (IOException e){
+                e.printStackTrace();
+                replica_out = null;
             }
         }
 
+        for(int replica_id: replicated_worker.getReplicaIds()){
+            for(int to_sync_repl: replicated_worker.getReplicaIds()){
+                if(replica_id == to_sync_repl)
+                    continue;
+
+                Pair<ObjectOutputStream, ObjectInputStream> streams = worker_streams.get(replica_id);
+                if (streams == null)
+                    continue;
+
+                ObjectOutputStream replica_out = streams.first;
+                ObjectInputStream replica_in = streams.second;
+                if (replica_out == null || replica_in == null)
+                    continue;
+
+                Message sync_msg = new Message();
+
+                sync_msg.addArgument("command_ord", new Pair<>(MessageArgCast.INT_ARG, MessageType.SYNC_CHANGES.ordinal()));
+                sync_msg.addArgument("request_id", new Pair<>(MessageArgCast.LONG_ARG, SERVER_ID));
+                sync_msg.addArgument("worker_id", new Pair<>(MessageArgCast.INT_ARG, replicated_worker.getId()));
+                sync_msg.addArgument("replica_host", new Pair<>(MessageArgCast.STRING_CAST, worker_id_host.get(to_sync_repl)));
+                sync_msg.addArgument("replica_port", new Pair<>(MessageArgCast.INT_ARG, worker_id_port.get(to_sync_repl)));
+
+                try {
+                    synchronized (replica_out) {
+                        replica_out.reset();
+                        replica_out.writeObject(sync_msg);
+                        replica_out.flush();
+                    }
+                }catch (IOException e){
+                    e.printStackTrace();
+                    replica_out = null;
+                }
+            }
+        }
 
         System.out.println("New worker schema: {");
         replicated_worker_handlers.values().forEach(System.out::println);

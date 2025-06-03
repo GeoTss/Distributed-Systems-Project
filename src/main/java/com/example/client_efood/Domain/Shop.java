@@ -5,6 +5,7 @@ import com.example.client_efood.Filters.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class Shop implements Rateable, Categorisable, PriceCategory, Locatable, Serializable {
 
@@ -39,6 +40,31 @@ public class Shop implements Rateable, Categorisable, PriceCategory, Locatable, 
         this.noOfVotes = _noOfVotes;
         this.logoPath = _logoPath;
         this.products = new HashMap<>();
+    }
+
+    public Shop(Shop otherShop) {
+
+        this.id = otherShop.getId();
+        this.name = otherShop.getName();
+        this.foodCategory = otherShop.getCategory();
+        this.stars = otherShop.getStars();
+        this.noOfVotes = otherShop.getNoOfVotes();
+        this.logoPath = otherShop.getLogoPath();
+
+        if (otherShop.location != null) {
+            this.location = new Location(otherShop.location.getLatitude(), otherShop.location.getLongitude());
+        } else {
+            this.location = null;
+        }
+
+        if (otherShop.products != null) {
+            this.products = new HashMap<>();
+            for (Map.Entry<Integer, Product> entry : otherShop.products.entrySet())
+                this.products.put(entry.getKey(), new Product(entry.getValue()));
+
+        } else {
+            this.products = new HashMap<>();
+        }
     }
 
     public void addProduct(Product _product) {

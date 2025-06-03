@@ -34,6 +34,27 @@ public class Product implements Serializable {
         is_removed = false;
     }
 
+    public Product(Product otherProduct) {
+        if (otherProduct == null) {
+            this.id = -1;
+            this.name = "Unknown";
+            this.type = "Unknown";
+            this.availableAmount = 0;
+            this.price = 0.0f;
+            this.sold = 0;
+            this.is_removed = true;
+            return;
+        }
+
+        this.id = otherProduct.id;
+        this.name = otherProduct.name;
+        this.type = otherProduct.type;
+        this.availableAmount = otherProduct.availableAmount;
+        this.price = otherProduct.price;
+        this.sold = otherProduct.sold;
+        this.is_removed = otherProduct.is_removed;
+    }
+
     public void addAvailableAmount(int _amount) {
         if (_amount < 0) return;
         this.availableAmount += _amount;

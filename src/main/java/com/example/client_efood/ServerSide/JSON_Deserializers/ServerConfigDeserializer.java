@@ -17,15 +17,18 @@ public class ServerConfigDeserializer implements JsonDeserializer<ServerConfigIn
                 obj.get("ClientBatchStreamSize").getAsInt()
         );
 
+        ArrayList<String> worker_hosts = new ArrayList<>();
         ArrayList<Integer> worker_ports = new ArrayList<>();
 
         JsonArray worker_info_arr = obj.getAsJsonArray("WorkerInfo");
         for(JsonElement worker: worker_info_arr){
             JsonObject portObj = worker.getAsJsonObject();
+            String host = portObj.get("Host").getAsString();
             int port = portObj.get("Port").getAsInt();
             worker_ports.add(port);
         }
 
+        configInfo.setWorker_hosts(worker_hosts);
         configInfo.setWorker_ports(worker_ports);
 
         return configInfo;
